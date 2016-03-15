@@ -1,0 +1,15 @@
+<style type="text/css">
+
+</style>
+<div>
+  <h1>Widget view</h1>
+  <div ng-repeat="project in vm.data">
+      <p>Projektname:{{project.name}}</p>
+      <p>Lines of Code:
+        {{project.linesOfCode}}</p>
+      <p>Test Coverage:
+        {{project.coverage}}%</p>
+    <p>---------------</p>
+  </div>
+
+</div>
