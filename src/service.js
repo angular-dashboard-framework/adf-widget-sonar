@@ -11,24 +11,24 @@ function sonarApi($http) {
   }
 
   function generateArray(projects) {
-    var sonarProjects = [];
     var linesOfCode = 0;
+    var linesOfCodeSum = 0;
     var coverage = 0;
+    var avarageCoverage = 0;
     for (var i = 0; i < projects.length; i++) {
       if (projects[i].msr[0]) {
         linesOfCode = projects[i].msr[0].val;
+        linesOfCodeSum += linesOfCode;
       }
       if (projects[i].msr[1]) {
         coverage = projects[i].msr[1].val;
+        avarageCoverage += coverage;
       }
-      sonarProjects.push({
-        'id': projects[i].id,
-        'name': projects[i].lname,
-        'linesOfCode': linesOfCode,
-        'coverage': coverage
-      });
     }
-    return sonarProjects;
+    avarageCoverage = avarageCoverage/projects.length;
+    var stats ={'linesOfCode': linesOfCodeSum,
+    'coverage': avarageCoverage}
+    return stats;
   }
 
   function parseStuff(sonarUrl) {
