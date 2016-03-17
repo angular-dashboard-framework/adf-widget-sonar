@@ -7,7 +7,37 @@ factory('sonarApi', sonarApi);
 function sonarApi($http) {
 
   function createApiUrl(sonarUrl) {
-    return sonarUrl + '/api/resources?metrics=ncloc,coverage&limit=10';
+    return sonarUrl + '/api/resources?metrics=ncloc,coverage';
+  }
+  function getChartData(sonarUrl){
+    var apiUrl = sonarUrl+'/api/timemachine?resource=org.assertj:assertj-core&metrics=coveage,ncloc,sqale_index,coverage,tests';
+    return $http({
+      method: 'GET',
+      url: apiUrl,
+      headers: {
+        'Accept': 'application/json'
+      }
+    }).then(function(response) {
+      var cells = response.data[0].cells;
+      var linesOfCode = [];
+      var technicalDebt = [];
+      var coverage = [];
+      var dates = [];
+      var amountTest = [];
+      for (var i=0; i<cells.length;i++){
+        linesOfCode.push(cells[i].v[0]);
+        technicalDebt.push(cells[i].v[1]);
+        coverage.push(cells[i].v[2]);
+        amountTest.push(cells[i].v[3]);
+        var date = cells[i].d.split("T");
+        dates.push(date[0]);
+      }
+      var metrics = {'linesOfCode':linesOfCode,'technicalDebt':technicalDebt,'coverage':coverage,
+      'amountTest':amountTest,'dates':dates
+      }
+      return metrics;
+    })
+
   }
 
   function generateArray(projects) {
@@ -33,6 +63,7 @@ function sonarApi($http) {
 
   function parseStuff(sonarUrl) {
     var apiUrl = createApiUrl(sonarUrl);
+
     return $http({
       method: 'GET',
       url: apiUrl,
@@ -48,7 +79,8 @@ function sonarApi($http) {
   }
 
   return {
-    parseStuff: parseStuff
+    parseStuff: parseStuff,
+    getChartData: getChartData
   };
 
 }

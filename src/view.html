@@ -38,7 +38,7 @@
     <div class="col-md-12 linesOfCode">
       <span class="glyphicon glyphicon-pencil"></span>
 
-      <h1>{{vm.data.linesOfCode | number}}</h1>
+      <h1>{{(vm.data.linesOfCode | number)||0}}</h1>
       <h4>Lines of code</h4>
 
     </div>
@@ -46,7 +46,7 @@
     <div class="col-md-12 coverage">
       <span class="glyphicon glyphicon-tasks"></span>
 
-      <h1>{{vm.data.coverage | number:2}}%</h1>
+      <h1>{{(vm.data.coverage | number:2)||0}}%</h1>
       <h4>Average test coverage</h4>
 
     </div>
