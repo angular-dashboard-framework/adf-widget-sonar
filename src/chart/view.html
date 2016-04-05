@@ -1,18 +1,6 @@
 <style type="text/css"></style>
-<div>
 
-  {{vm.labels ||0}}
-  <p>-------</p>
-  {{vm.data||0}}
-    <p>-------</p>
-  {{vm.series||0}}
-</div>
-<!--
-<canvas id="line" class="chart chart-line" chart-data="vm.dataz"
-  chart-labels="vm.labelz" chart-legend="true" chart-series="vm.seriez"
-  chart-click="onClick" >
-</canvas>-->
-
-<canvas id="bar" class="chart chart-bar"
-  chart-data="" chart-labels="" chart-series="">
+<canvas id="line" class="chart chart-line" chart-data="vm.data"
+  chart-labels="vm.labels" chart-legend="true" chart-series="vm.series"
+  >
 </canvas>

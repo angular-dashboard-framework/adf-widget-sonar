@@ -9,8 +9,34 @@ function sonarApi($http) {
   function createApiUrl(sonarUrl) {
     return sonarUrl + '/api/resources?metrics=ncloc,coverage';
   }
-  function getChartData(sonarUrl){
-    var apiUrl = sonarUrl+'/api/timemachine?resource=org.assertj:assertj-core&metrics=coveage,ncloc,sqale_index,coverage,tests';
+
+  function createMetricsString(metrics) {
+    var metricsString = "";
+    if (metrics.linesOfCode) {
+      metricsString += "ncloc,";
+    }
+    if (metrics.technicalDebt) {
+      metricsString += "sqale_index,";
+    }
+    if (metrics.amountTest) {
+      metricsString += "tests,";
+    }
+    if (metrics.testCoverage) {
+      metricsString += "coverage,";
+    }
+    return metricsString.slice(0, -1);
+  }
+
+  function getChartData(sonarUrl, projectname, fromDateTime, toDateTime, metrics) {
+
+    var apiUrl = "";
+    var metricsString = createMetricsString(metrics);
+    if (fromDateTime && toDateTime) {
+      apiUrl = sonarUrl + '/api/timemachine?resource=' + projectname + '&metrics=ncloc,sqale_index,tests,coverage&fromDateTime=' + fromDateTime + '&toDateTime=' + toDateTime;
+    } else {
+      apiUrl = sonar + '/api/timemachine?resource=org.assertj:assertj-core&metrics=coveage,ncloc,sqale_index,coverage,tests';
+    }
+
     return $http({
       method: 'GET',
       url: apiUrl,
@@ -24,18 +50,31 @@ function sonarApi($http) {
       var coverage = [];
       var dates = [];
       var amountTest = [];
-      for (var i=0; i<cells.length;i++){
-        linesOfCode.push(cells[i].v[0]);
-        technicalDebt.push(cells[i].v[1]);
-        coverage.push(cells[i].v[2]);
-        amountTest.push(cells[i].v[3]);
+      for (var i = 0; i < cells.length; i++) {
+        if (metrics.linesOfCode) {
+          linesOfCode.push(cells[i].v[0]);
+        }
+        if (metrics.technicalDebt) {
+          technicalDebt.push(cells[i].v[1]);
+        }
+        if (metrics.amountTest) {
+          amountTest.push(cells[i].v[2]);
+        }
+        if (metrics.coverage) {
+          coverage.push(cells[i].v[3]);
+        }
         var date = cells[i].d.split("T");
         dates.push(date[0]);
       }
-      var metrics = {'linesOfCode':linesOfCode,'technicalDebt':technicalDebt,'coverage':coverage,
-      'amountTest':amountTest,'dates':dates
+
+      var metricsArray = {
+        'linesOfCode': linesOfCode,
+        'technicalDebt': technicalDebt,
+        'coverage': coverage,
+        'amountTest': amountTest,
+        'dates': dates
       }
-      return metrics;
+      return metricsArray;
     })
 
   }
@@ -55,9 +94,11 @@ function sonarApi($http) {
         avarageCoverage += coverage;
       }
     }
-    avarageCoverage = avarageCoverage/projects.length;
-    var stats ={'linesOfCode': linesOfCodeSum,
-    'coverage': avarageCoverage}
+    avarageCoverage = avarageCoverage / projects.length;
+    var stats = {
+      'linesOfCode': linesOfCodeSum,
+      'coverage': avarageCoverage
+    }
     return stats;
   }
 

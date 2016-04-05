@@ -1,10 +1,10 @@
 'use strict';
 
-var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider'])
+var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider','chart.js','ui.bootstrap','ui.bootstrap.datepicker'])
   .config(function(dashboardProvider) {
     dashboardProvider
       .widget('sonar', {
-        title: 'sonar',
+        title: 'Alle Projekte',
         description: 'widget to display sonar statistics',
         templateUrl: '{widgetsPath}/sonar/src/view.html',
         resolve: {
@@ -22,13 +22,13 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider'])
         }
       })
       .widget('', {
-        title: 'sonarLineChart',
+        title: 'Projekt-Statistiken',
         description: 'widget to display a linechart with different metrics',
         templateUrl: '{widgetsPath}/sonar/src/chart/view.html',
         resolve: {
           data: function(sonarApi, config) {
             if (config.apiUrl) {
-              return sonarApi.getChartData(config.apiUrl);
+              return sonarApi.getChartData(config.apiUrl,config.project,config.fromDateTime,config.toDateTime,config.metrics);
             }
             return 'Please Setup the Widget';
           }
@@ -36,7 +36,7 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider'])
         controller: 'sonarLineChart',
         controllerAs: 'vm',
         edit: {
-          templateUrl: '{widgetsPath}/sonar/src/edit.html'
+          templateUrl: '{widgetsPath}/sonar/src/chart/edit.html'
         }
       })
   });

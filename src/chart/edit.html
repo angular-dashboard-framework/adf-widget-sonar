@@ -1,0 +1,39 @@
+<style type="text/css"></style>
+<form role="form">
+  <div class="form-group" ng-controller="editController">
+    <label for="sample">API-URL</label> (*Pflichtfeld)
+    <p>
+      <input class="form-control" id="sample" ng-model="config.apiUrl" ng-required="true" placeholder="Sonar-URL" type="text">
+    </p>
+    <label for="sample">Projekt</label>
+    <input class="form-control" id="sample" ng-model="config.project" ng-required="true" placeholder="Projektbezeichnung" type="text">
+    <label for="sample">Zeitspanne</label>
+
+    <p class="input-group">
+           <input type="text" class="form-control" placeholder="von"uib-datepicker-popup="{{format}}" show-button-bar="false"ng-model="config.fromDateTime" is-open="popup1.opened" datepicker-options="dateOptions" close-text="Schließen"/>
+           <span class="input-group-btn">
+             <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+           </span>
+    </p>
+    <p class="input-group">
+           <input type="text" class="form-control" placeholder="bis" uib-datepicker-popup="{{format}}" show-button-bar="false" ng-model="config.toDateTime" is-open="popup2.opened" datepicker-options="dateOptions" close-text="Schließen"/>
+           <span class="input-group-btn">
+             <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+           </span>
+    </p>
+
+    <label for="sample">Kennzahlen Auswahl</label>
+    <div class="checkbox">
+      <label><input type="checkbox" ng-model="config.metrics.linesOfCode">Codezeilen</label>
+    </div>
+    <div class="checkbox">
+      <label><input type="checkbox" ng-model="config.metrics.technicalDebt">Technische Schuld</label>
+    </div>
+    <div class="checkbox">
+      <label><input type="checkbox" ng-model="config.metrics.amountTest">Anzahl Unit-Tests</label>
+    </div>
+    <div class="checkbox">
+      <label><input type="checkbox" ng-model="config.metrics.testCoverage">Test Abdeckung</label>
+    </div>
+  </div>
+</form>
