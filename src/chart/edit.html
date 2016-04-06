@@ -1,39 +1,56 @@
 <style type="text/css"></style>
 <form role="form">
   <div class="form-group" ng-controller="editController">
-    <label for="sample">API-URL</label> (*Pflichtfeld)
+    <label for="sample">API-URL</label>
+    (*Pflichtfeld)
     <p>
       <input class="form-control" id="sample" ng-model="config.apiUrl" ng-required="true" placeholder="Sonar-URL" type="text">
     </p>
     <label for="sample">Projekt</label>
-    <input class="form-control" id="sample" ng-model="config.project" ng-required="true" placeholder="Projektbezeichnung" type="text">
+    (*Pflichtfeld)
+    <p class="input-group">
+        <input class="form-control" id="sample" ng-model="config.project" ng-required="true" placeholder="Projektbezeichnung" type="text">
+      <span class="input-group-btn">
+        <button class="btn btn-default" ng-click="hello()" type="button">
+          <i class="glyphicon glyphicon-triangle-bottom"></i>
+        </button>
+      </span>
+    </p>
     <label for="sample">Zeitspanne</label>
 
     <p class="input-group">
-           <input type="text" class="form-control" placeholder="von"uib-datepicker-popup="{{format}}" show-button-bar="false"ng-model="config.fromDateTime" is-open="popup1.opened" datepicker-options="dateOptions" close-text="Schließen"/>
-           <span class="input-group-btn">
-             <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
-           </span>
+      <input class="form-control" datepicker-options="dateOptions" is-open="popup1.opened" ng-model="config.fromDateTime" placeholder="von" show-button-bar="false" type="text" uib-datepicker-popup="{{format}}"/>
+      <span class="input-group-btn">
+        <button class="btn btn-default" ng-click="open1()" type="button">
+          <i class="glyphicon glyphicon-calendar"></i>
+        </button>
+      </span>
     </p>
     <p class="input-group">
-           <input type="text" class="form-control" placeholder="bis" uib-datepicker-popup="{{format}}" show-button-bar="false" ng-model="config.toDateTime" is-open="popup2.opened" datepicker-options="dateOptions" close-text="Schließen"/>
-           <span class="input-group-btn">
-             <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
-           </span>
+      <input class="form-control" datepicker-options="dateOptions" is-open="popup2.opened" ng-model="config.toDateTime" placeholder="bis" show-button-bar="false" type="text" uib-datepicker-popup="{{format}}"/>
+      <span class="input-group-btn">
+        <button class="btn btn-default" ng-click="open2()" type="button">
+          <i class="glyphicon glyphicon-calendar"></i>
+        </button>
+      </span>
     </p>
-
+    <p ng-init="config.timespan=null">
+      <label class="radio-inline"><input name="timespan" ng-model="config.timespan.week" type="radio" value="1">letzte Woche</label>
+      <label class="radio-inline"><input name="timespan" ng-model="config.timespan.month" type="radio" value="1">letzter Monat</label>
+      <label class="radio-inline"><input name="timespan" ng-model="config.timespan.year" type="radio" value="1">letztes Jahr</label>
+    </p>
     <label for="sample">Kennzahlen Auswahl</label>
     <div class="checkbox">
-      <label><input type="checkbox" ng-model="config.metrics.linesOfCode">Codezeilen</label>
+      <label><input ng-model="config.metrics.linesOfCode" type="checkbox">Codezeilen</label>
     </div>
     <div class="checkbox">
-      <label><input type="checkbox" ng-model="config.metrics.technicalDebt">Technische Schuld</label>
+      <label><input ng-model="config.metrics.technicalDebt" type="checkbox">Technische Schuld</label>
     </div>
     <div class="checkbox">
-      <label><input type="checkbox" ng-model="config.metrics.amountTest">Anzahl Unit-Tests</label>
+      <label><input ng-model="config.metrics.amountTest" type="checkbox">Anzahl Unit-Tests</label>
     </div>
     <div class="checkbox">
-      <label><input type="checkbox" ng-model="config.metrics.testCoverage">Test Abdeckung</label>
+      <label><input ng-model="config.metrics.testCoverage" type="checkbox">Test Abdeckung</label>
     </div>
   </div>
 </form>

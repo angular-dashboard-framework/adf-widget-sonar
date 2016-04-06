@@ -28,7 +28,7 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider','chart.j
         resolve: {
           data: function(sonarApi, config) {
             if (config.apiUrl) {
-              return sonarApi.getChartData(config.apiUrl,config.project,config.fromDateTime,config.toDateTime,config.metrics);
+              return sonarApi.getChartData(config.apiUrl,config.project,config.fromDateTime,config.toDateTime,config.metrics,config.timespan);
             }
             return 'Please Setup the Widget';
           }

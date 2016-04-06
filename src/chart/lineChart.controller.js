@@ -14,17 +14,18 @@ function sonarLineChart(data) {
   var amountTest = data.amountTest;
 
   //setup the chart legend and labels
-  vm.series = ['Lines of code', 'Technial debt', 'Test-Coverage', 'Amount Unit-Tests'];
+  vm.series = ['Lines of code', 'Technial debt (h)', 'Test-Coverage(%)', 'Amount Unit-Tests'];
   vm.labels = data.dates;
   //setup the chart data
   vm.data = [linesOfCode, technicalDebt, coverage, amountTest];
 
 
 }
-
+//calendar
 sonarADFWidget.controller('editController', editController);
 
-function editController($scope) {
+function editController($scope, $http) {
+  //calendar
   $scope.today = function() {
       $scope.dt = new Date();
     };
@@ -111,5 +112,9 @@ function editController($scope) {
 
       return '';
     }
+
+
+    
+
 
 }

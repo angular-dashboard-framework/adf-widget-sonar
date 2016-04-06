@@ -27,15 +27,34 @@ function sonarApi($http) {
     return metricsString.slice(0, -1);
   }
 
-  function getChartData(sonarUrl, projectname, fromDateTime, toDateTime, metrics) {
+
+
+  function getChartData(sonarUrl, projectname, fromDateTime, toDateTime, metrics, timespanRadio) {
 
     var apiUrl = "";
     var metricsString = createMetricsString(metrics);
-    if (fromDateTime && toDateTime) {
-      apiUrl = sonarUrl + '/api/timemachine?resource=' + projectname + '&metrics=ncloc,sqale_index,tests,coverage&fromDateTime=' + fromDateTime + '&toDateTime=' + toDateTime;
-    } else {
-      apiUrl = sonar + '/api/timemachine?resource=org.assertj:assertj-core&metrics=coveage,ncloc,sqale_index,coverage,tests';
+
+    if (timespanRadio) {
+      var today = new Date();
+      console.log(timespanRadio);
+      if (timespanRadio.week) {
+        fromDateTime = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+      }
+      if (timespanRadio.month) {
+        fromDateTime = new Date(today.getFullYear(),today.getMonth()-1,today.getDay());
+      }
+      if (timespanRadio.year) {
+        fromDateTime = new Date(today.getFullYear()-1,today.getMonth(),today.getDay());
+      }
+      toDateTime = today;
+
     }
+    if ((fromDateTime && toDateTime)) {
+      apiUrl = sonarUrl + '/api/timemachine?resource=' + projectname + '&metrics=' + metricsString + '&fromDateTime=' + fromDateTime + '&toDateTime=' + toDateTime;
+    }else{
+      apiUrl = sonarUrl + '/api/timemachine?resource=' + projectname + '&metrics=' + metricsString;
+    }
+    console.log(apiUrl);
 
     return $http({
       method: 'GET',
@@ -55,7 +74,7 @@ function sonarApi($http) {
           linesOfCode.push(cells[i].v[0]);
         }
         if (metrics.technicalDebt) {
-          technicalDebt.push(cells[i].v[1]);
+          technicalDebt.push((cells[i].v[1] / 60 / 24).toFixed(2));
         }
         if (metrics.amountTest) {
           amountTest.push(cells[i].v[2]);
@@ -101,6 +120,21 @@ function sonarApi($http) {
     }
     return stats;
   }
+function getProjects(sonarUrl){
+  var apiUrl = createApiUrl(sonarUrl);
+
+  return $http({
+    method: 'GET',
+    url: apiUrl,
+    headers: {
+      'Accept': 'application/json'
+    }
+  }).then(function(response) {
+    var projects = response.data;
+
+    return sonarProjects;
+  })
+}
 
   function parseStuff(sonarUrl) {
     var apiUrl = createApiUrl(sonarUrl);
@@ -118,6 +152,7 @@ function sonarApi($http) {
     })
 
   }
+
 
   return {
     parseStuff: parseStuff,
