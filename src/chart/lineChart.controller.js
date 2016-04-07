@@ -21,7 +21,8 @@ function sonarLineChart(data) {
 
 
 }
-//calendar
+
+
 sonarADFWidget.controller('editController', editController);
 
 function editController($scope, $http) {
@@ -95,6 +96,8 @@ function editController($scope, $http) {
       }
     ];
 
+
+
     function getDayClass(data) {
       var date = data.date,
         mode = data.mode;
@@ -113,8 +116,11 @@ function editController($scope, $http) {
       return '';
     }
 
+$scope.hello = function(){
+  console.log("¯\_(ツ)_/¯");
+}
 
-    
+
 
 
 }

@@ -39,4 +39,23 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider','chart.j
           templateUrl: '{widgetsPath}/sonar/src/chart/edit.html'
         }
       })
+      .widget('compare', {
+        title: 'Projekt-Vergleich',
+        description: 'widget to compare two projects',
+        templateUrl: '{widgetsPath}/sonar/src/compare/view.html',
+        resolve: {
+          data: function(sonarApi, config) {
+            if (config.apiUrl) {
+              return sonarApi.getMetrics(config.apiUrl,config.projectname1,config.projectname2);
+            }
+            return 'Please Setup the Widget';
+          }
+        },
+        controller: 'compare',
+        controllerAs: 'vm',
+        edit: {
+          templateUrl: '{widgetsPath}/sonar/src/compare/edit.html'
+        }
+      })
+
   });
