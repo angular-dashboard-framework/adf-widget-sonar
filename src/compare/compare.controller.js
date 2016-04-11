@@ -5,5 +5,8 @@ controller('compare', compare);
 
 function compare(data) {
   var vm = this;
-  vm.result = data;
+
+  vm.projectLeft = data.projectLeft;
+  vm.projectRight = data.projectRight;
+
 }
