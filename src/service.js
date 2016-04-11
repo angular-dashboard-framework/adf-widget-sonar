@@ -4,14 +4,14 @@ sonarADFWidget.
 factory('sonarApi', sonarApi);
 
 //function factory sonar
-function sonarApi($http) {
+function sonarApi($http, $q) {
 
   function createApiUrlProjects(sonarUrl) {
     return sonarUrl + '/api/resources?metrics=ncloc,coverage';
   }
 
   function createApiUrlMetrics(sonarUrl, projectname) {
-    return sonarUrl + '/api/resources?resource=' + projectname + '&metrics=open_issues,coverage,ncloc,alert_status,public_documented_api_density,function_complexity,duplicated_lines_density,sqale_index';
+    return sonarUrl+'/api/resources?resource=' + projectname + '&metrics=open_issues,ncloc,public_documented_api_density,duplicated_lines_density,sqale_index';
   }
 
   function createMetricsString(metrics) {
@@ -28,8 +28,11 @@ function sonarApi($http) {
     if (metrics.testCoverage) {
       metricsString += "coverage,";
     }
-    if (metrics.isses) {
-      metricsString += "violations,";
+    if (metrics.issues) {
+      metricsString += "open_issues,";
+    }
+    if (metrics.rulesviolations) {
+      metricsString += "duplicated_lines_density,";
     }
     return metricsString.slice(0, -1);
   }
@@ -37,28 +40,48 @@ function sonarApi($http) {
 
 
   function getMetrics(sonarUrl, projectname1, projectname2) {
-    var apiUrlProject1 = createApiUrlMetrics(sonarUrl, projectname1);
+    var apiUrlProject1 = createApiUrlMetrics(sonarUrl,projectname1);
     var apiUrlProject2 = createApiUrlMetrics(sonarUrl, projectname2);
+    var api1 = $http.get(apiUrlProject1);
+    var api2 = $http.get(apiUrlProject2);
+    var responsesArray =  $q.all([api1, api2])
+        .then(function(response) {
+          var projectLeft = response[0].data[0].msr;
+          console.log(response[0].data[0].msr);
+          console.log(response[1].data[0].msr);
+          var projectRight = response[1].data[0].msr;
+          var projectMetrics = {'projectLeft': projectLeft, 'projectRight': projectRight};
+          return projectMetrics;
+        });
 
-    return $http({
+    return responsesArray;
+  }
+
+  /*var arrayLeft = function() {
+    return Promise.resolve($http({
       method: 'GET',
       url: apiUrlProject1,
       headers: {
         'Accept': 'application/json'
       }
     }).then(function(response) {
-        var cells = response.data[0].msr;
-        var metricsArray = [];
-        for (var i = 0; i < cells.length; i++) {
-          var key = cells[i].key;
-          var value = cells[i].val
-          metricsArray.push({key: key, value: value});
-        }
-        console.log(metricsArray);
-
+      var cells = response.data[0].msr;
+      var metricsArray = [];
+      for (var i = 0; i < cells.length; i++) {
+        var key = cells[i].key;
+        var value = cells[i].val
+        metricsArray.push({
+          key: key,
+          value: value
+        });
+      }
       return metricsArray;
-    })
-  }
+    }))
+  }*/
+
+
+
+
 
 
   function getChartData(sonarUrl, projectname, fromDateTime, toDateTime, metrics, timespanRadio) {
@@ -68,7 +91,6 @@ function sonarApi($http) {
 
     if (timespanRadio) {
       var today = new Date();
-      console.log(timespanRadio);
       if (timespanRadio.week) {
         fromDateTime = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
       }
@@ -79,7 +101,6 @@ function sonarApi($http) {
         fromDateTime = new Date(today.getFullYear() - 1, today.getMonth(), today.getDay());
       }
       toDateTime = today;
-
     }
     if ((fromDateTime && toDateTime)) {
       apiUrl = sonarUrl + '/api/timemachine?resource=' + projectname + '&metrics=' + metricsString + '&fromDateTime=' + fromDateTime + '&toDateTime=' + toDateTime;
@@ -87,7 +108,6 @@ function sonarApi($http) {
       apiUrl = sonarUrl + '/api/timemachine?resource=' + projectname + '&metrics=' + metricsString;
     }
     console.log(apiUrl);
-
     return $http({
       method: 'GET',
       url: apiUrl,
@@ -95,35 +115,25 @@ function sonarApi($http) {
         'Accept': 'application/json'
       }
     }).then(function(response) {
-      var cells = response.data[0].cells;
-      var linesOfCode = [];
-      var technicalDebt = [];
-      var coverage = [];
+      var metricsArray = [];
+      var response = response.data[0];
+      var cols = response.cols;
+      var cells = response.cells;
       var dates = [];
-      var amountTest = [];
-      for (var i = 0; i < cells.length; i++) {
-        if (metrics.linesOfCode) {
-          linesOfCode.push(cells[i].v[0]);
-        }
-        if (metrics.technicalDebt) {
-          technicalDebt.push((cells[i].v[1] / 60 / 24).toFixed(2));
-        }
-        if (metrics.amountTest) {
-          amountTest.push(cells[i].v[2]);
-        }
-        if (metrics.coverage) {
-          coverage.push(cells[i].v[3]);
-        }
-        var date = cells[i].d.split("T");
-        dates.push(date[0]);
-      }
+      for (var x = 0; x < cols.length; x++) {
+        var values = [];
+        var dates = [];
+        for (var y = 0; y < cells.length; y++) {
+          dates[y] = cells[y].d.split("T")[0];
+          values[y] = cells[y].v[x];
 
-      var metricsArray = {
-        'linesOfCode': linesOfCode,
-        'technicalDebt': technicalDebt,
-        'coverage': coverage,
-        'amountTest': amountTest,
-        'dates': dates
+        }
+        var metricsObj = {
+          'metric': cols[x].metric,
+          'values': values,
+          'dates': dates
+        };
+        metricsArray.push(metricsObj);
       }
       return metricsArray;
     })

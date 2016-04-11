@@ -44,16 +44,19 @@
       <label><input ng-model="config.metrics.linesOfCode" type="checkbox">Codezeilen</label>
     </div>
     <div class="checkbox">
-      <label><input ng-model="config.metrics.technicalDebt" type="checkbox">Technische Schuld</label>
+      <label><input ng-model="config.metrics.technicalDebt" type="checkbox">Technische Schuld (min)</label>
     </div>
     <div class="checkbox">
       <label><input ng-model="config.metrics.amountTest" type="checkbox">Anzahl Unit-Tests</label>
     </div>
     <div class="checkbox">
-      <label><input ng-model="config.metrics.testCoverage" type="checkbox">Test Abdeckung</label>
+      <label><input ng-model="config.metrics.testCoverage" type="checkbox">Test Abdeckung (%)</label>
     </div>
     <div class="checkbox">
-      <label><input ng-model="config.metrics.issues" type="checkbox">Issues</label>
+      <label><input ng-model="config.metrics.issues" type="checkbox">Offene Issues</label>
+    </div>
+    <div class="checkbox">
+      <label><input ng-model="config.metrics.rulesviolations" type="checkbox">Code Wiederholung (%)</label>
     </div>
   </div>
 </form>

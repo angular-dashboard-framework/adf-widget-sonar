@@ -6,18 +6,21 @@ controller('sonarLineChart', sonarLineChart);
 function sonarLineChart(data) {
   //initialize controller variable
   var vm = this;
-
+  var series = [];
+  var values = [];
+  for (var i=0; i < data.length; i++){
+    series.push(data[i].metric);
+    values.push(data[i].values);
+  }
   //problems if you put them in an array directly
   var linesOfCode = data.linesOfCode;
   var technicalDebt = data.technicalDebt;
   var coverage = data.coverage;
   var amountTest = data.amountTest;
-
   //setup the chart legend and labels
-  vm.series = ['Lines of code', 'Technial debt (h)', 'Test-Coverage(%)', 'Amount Unit-Tests'];
-  vm.labels = data.dates;
-  //setup the chart data
-  vm.data = [linesOfCode, technicalDebt, coverage, amountTest];
+  vm.series = series;
+  vm.labels = data[0].dates;
+  vm.values = values;
 
 
 }
