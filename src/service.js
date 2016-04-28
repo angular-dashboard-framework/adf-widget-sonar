@@ -47,8 +47,6 @@ function sonarApi($http, $q) {
     var responsesArray =  $q.all([api1, api2])
         .then(function(response) {
           var projectLeft = response[0].data[0].msr;
-          console.log(response[0].data[0].msr);
-          console.log(response[1].data[0].msr);
           var projectRight = response[1].data[0].msr;
           var projectMetrics = {'projectLeft': projectLeft, 'projectRight': projectRight};
           return projectMetrics;
@@ -56,32 +54,6 @@ function sonarApi($http, $q) {
 
     return responsesArray;
   }
-
-  /*var arrayLeft = function() {
-    return Promise.resolve($http({
-      method: 'GET',
-      url: apiUrlProject1,
-      headers: {
-        'Accept': 'application/json'
-      }
-    }).then(function(response) {
-      var cells = response.data[0].msr;
-      var metricsArray = [];
-      for (var i = 0; i < cells.length; i++) {
-        var key = cells[i].key;
-        var value = cells[i].val
-        metricsArray.push({
-          key: key,
-          value: value
-        });
-      }
-      return metricsArray;
-    }))
-  }*/
-
-
-
-
 
 
   function getChartData(sonarUrl, projectname, fromDateTime, toDateTime, metrics, timespanRadio) {
@@ -107,7 +79,6 @@ function sonarApi($http, $q) {
     } else {
       apiUrl = sonarUrl + '/api/timemachine?resource=' + projectname + '&metrics=' + metricsString;
     }
-    console.log(apiUrl);
     return $http({
       method: 'GET',
       url: apiUrl,

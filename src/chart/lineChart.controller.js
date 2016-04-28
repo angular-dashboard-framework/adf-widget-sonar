@@ -2,7 +2,7 @@
 
 sonarADFWidget.
 controller('sonarLineChart', sonarLineChart);
-
+//setup controller
 function sonarLineChart(data) {
   //initialize controller variable
   var vm = this;
@@ -119,9 +119,7 @@ function editController($scope, $http) {
       return '';
     }
 
-$scope.hello = function(){
-  console.log("¯\_(ツ)_/¯");
-}
+
 
 
 

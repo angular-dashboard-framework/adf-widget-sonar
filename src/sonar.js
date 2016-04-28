@@ -1,10 +1,11 @@
 'use strict';
-
+//app initialisation with dependencies
 var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider','chart.js','ui.bootstrap','ui.bootstrap.datepicker'])
   .config(function(dashboardProvider) {
     dashboardProvider
       .widget('sonar', {
-        title: 'Alle Projekte',
+        //setup adf widget
+        title: 'All projects statistics',
         description: 'widget to display sonar statistics',
         templateUrl: '{widgetsPath}/sonar/src/view.html',
         resolve: {
@@ -22,7 +23,7 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider','chart.j
         }
       })
       .widget('', {
-        title: 'Projekt-Statistiken',
+        title: 'project linechart',
         description: 'widget to display a linechart with different metrics',
         templateUrl: '{widgetsPath}/sonar/src/chart/view.html',
         resolve: {
@@ -40,7 +41,7 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider','chart.j
         }
       })
       .widget('compare', {
-        title: 'Projekt-Vergleich',
+        title: 'project-compare',
         description: 'widget to compare two projects',
         templateUrl: '{widgetsPath}/sonar/src/compare/view.html',
         resolve: {
