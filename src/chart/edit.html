@@ -2,16 +2,13 @@
 <form role="form">
   <div class="form-group" ng-controller="editController">
     <label for="sample">API-URL</label>
-    (*Pflichtfeld)
     <p>
-      <input class="form-control" id="sample" ng-model="config.apiUrl" ng-required="true" placeholder="Sonar-URL" type="text">
+      <input class="form-control" id="sample" ng-model="config.apiUrl" placeholder="Sonar-URL" type="text">
     </p>
     <label for="sample">Projekt</label>
     (*Pflichtfeld)
-    <p class="input-group">
+    <p>
         <input class="form-control" id="sample" ng-model="config.project" ng-required="true" placeholder="Projektbezeichnung" type="text">
-      <span class="input-group-btn">
-      </span>
     </p>
     <label for="sample">Zeitspanne</label>
 
