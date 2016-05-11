@@ -1,0 +1,35 @@
+<style>
+  .daysLeft{
+    text-align: center;
+
+  }
+  .info{
+    margin-top: -80%;
+    margin-bottom: 35%;
+  }
+</style>
+<div class="daysLeft">
+<div ng-init="progress=vm.progressProperties">
+<round-progress
+    max=progress.max
+    current=progress.current
+    color="{{ (current / max < 0.75) ? '#EF3939' : '#337AB7' }}"
+    bgcolor="#F5F5F5"
+    radius="360"
+    stroke="67"
+    semi="false"
+    rounded="true"
+    clockwise="false"
+    responsive="true"
+    duration=800
+    animation="easeInOutQuart"
+    animation-delay="0">
+
+</round-progress>
+</div>
+<div class="info">
+<h1>{{config.projectname}}</h1>
+<h1>{{vm.result.daysLeft}}/{{vm.result.maxDays}}</h1>
+<p>Projekttage</p>
+</div>
+</div>

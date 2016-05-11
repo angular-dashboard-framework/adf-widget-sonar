@@ -1,6 +1,6 @@
 'use strict';
 //app initialisation with dependencies
-var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.js', 'ui.bootstrap', 'ui.bootstrap.datepicker'])
+var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.js', 'ui.bootstrap', 'ui.bootstrap.datepicker','angular-svg-round-progressbar'])
 .constant("sonarEndpoint", {
   "url": "https://nemo.sonarqube.org"
 })
@@ -69,6 +69,24 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
         controllerAs: 'vm',
         edit: {
           templateUrl: '{widgetsPath}/sonar/src/compare/edit.html'
+        }
+      })
+      .widget('projectProgress', {
+        title: 'project-progress',
+        description: 'widget to check the project progress',
+        templateUrl: '{widgetsPath}/sonar/src/project-progress/view.html',
+        resolve: {
+          data: function(sonarApi, config, sonarEndpoint) {
+            if (config.projectBeginn){
+              return sonarApi.getProjectTime(config.projectBeginn, config.projectEnd);
+            }
+            return 'Please Setup the Widget';
+          }
+        },
+        controller: 'progress',
+        controllerAs: 'vm',
+        edit: {
+          templateUrl: '{widgetsPath}/sonar/src/project-progress/edit.html'
         }
       })
 
