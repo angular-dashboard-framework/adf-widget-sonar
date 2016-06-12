@@ -9,6 +9,4 @@ function progress(data, roundProgressConfig){
   roundProgressConfig.current = data.daysLeft;
   vm.result = data;
   vm.progressProperties=roundProgressConfig;
-
-
 }
