@@ -8,7 +8,7 @@ function sonarLineChart(data) {
   var vm = this;
   var series = [];
   var values = [];
-  for (var i=0; i < data.length; i++){
+  for (var i = 0; i < data.length; i++) {
     series.push(data[i].metric);
     values.push(data[i].values);
   }
@@ -21,107 +21,109 @@ function sonarLineChart(data) {
   vm.series = series;
   vm.labels = data[0].dates;
   vm.values = values;
-
-
 }
-
 
 sonarADFWidget.controller('editController', editController);
 
-function editController($scope, $http) {
+function editController($scope, $http, sonarApi) {
+  var vm = this;
+  $scope.updateProjects = function() {
+    var url;
+    if ($scope.config.apiUrl) {
+      url = $scope.config.apiUrl;
+    } else {
+      url = jenkinsEndpoint.url;
+    }
+    vm.projects = [];
+    sonarApi.getProjects(url).then(function(data) {
+      data.forEach(function(project) {
+        var proj = {
+          name: project.key
+        }
+        vm.projects.push(proj);
+      });
+    });
+  }
+  $scope.updateProjects();
+
   //calendar
   $scope.today = function() {
-      $scope.dt = new Date();
-    };
-    $scope.today();
+    $scope.dt = new Date();
+  };
+  $scope.today();
 
-    $scope.clear = function() {
-      $scope.dt = null;
-    };
+  $scope.clear = function() {
+    $scope.dt = null;
+  };
 
-    $scope.inlineOptions = {
-      customClass: getDayClass,
-      minDate: new Date(),
-      showWeeks: true
-    };
+  $scope.inlineOptions = {
+    customClass: getDayClass,
+    minDate: new Date(),
+    showWeeks: true
+  };
 
-    $scope.dateOptions = {
+  $scope.dateOptions = {
+    formatYear: 'yy',
+    startingDay: 1
+  };
 
-      formatYear: 'yy',
-      startingDay: 1
-    };
+  $scope.toggleMin = function() {
+    $scope.inlineOptions.minDate = $scope.inlineOptions.minDate ? null : new Date();
+    $scope.dateOptions.minDate = $scope.inlineOptions.minDate;
+  };
 
+  $scope.toggleMin();
 
+  $scope.open1 = function() {
+    $scope.popup1.opened = true;
+  };
 
-    $scope.toggleMin = function() {
-      $scope.inlineOptions.minDate = $scope.inlineOptions.minDate ? null : new Date();
-      $scope.dateOptions.minDate = $scope.inlineOptions.minDate;
-    };
+  $scope.open2 = function() {
+    $scope.popup2.opened = true;
+  };
 
-    $scope.toggleMin();
+  $scope.setDate = function(year, month, day) {
+    $scope.dt = new Date(year, month, day);
+  };
 
-    $scope.open1 = function() {
-      $scope.popup1.opened = true;
-    };
+  $scope.formats = ['yyyy-MM-dd', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  $scope.format = $scope.formats[0];
+  $scope.altInputFormats = ['M!/d!/yyyy'];
 
-    $scope.open2 = function() {
-      $scope.popup2.opened = true;
-    };
+  $scope.popup1 = {
+    opened: false
+  };
 
-    $scope.setDate = function(year, month, day) {
-      $scope.dt = new Date(year, month, day);
-    };
+  $scope.popup2 = {
+    opened: false
+  };
 
-    $scope.formats = ['yyyy-MM-dd', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-    $scope.format = $scope.formats[0];
-    $scope.altInputFormats = ['M!/d!/yyyy'];
+  var tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  var afterTomorrow = new Date(tomorrow);
+  afterTomorrow.setDate(tomorrow.getDate() + 1);
+  $scope.events = [{
+    date: tomorrow,
+    status: 'full'
+  }, {
+    date: afterTomorrow,
+    status: 'partially'
+  }];
 
-    $scope.popup1 = {
-      opened: false
-    };
+  function getDayClass(data) {
+    var date = data.date,
+      mode = data.mode;
+    if (mode === 'day') {
+      var dayToCheck = new Date(date).setHours(0, 0, 0, 0);
 
-    $scope.popup2 = {
-      opened: false
-    };
+      for (var i = 0; i < $scope.events.length; i++) {
+        var currentDay = new Date($scope.events[i].date).setHours(0, 0, 0, 0);
 
-    var tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    var afterTomorrow = new Date(tomorrow);
-    afterTomorrow.setDate(tomorrow.getDate() + 1);
-    $scope.events = [
-      {
-        date: tomorrow,
-        status: 'full'
-      },
-      {
-        date: afterTomorrow,
-        status: 'partially'
-      }
-    ];
-
-
-
-    function getDayClass(data) {
-      var date = data.date,
-        mode = data.mode;
-      if (mode === 'day') {
-        var dayToCheck = new Date(date).setHours(0,0,0,0);
-
-        for (var i = 0; i < $scope.events.length; i++) {
-          var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
-
-          if (dayToCheck === currentDay) {
-            return $scope.events[i].status;
-          }
+        if (dayToCheck === currentDay) {
+          return $scope.events[i].status;
         }
       }
-
-      return '';
     }
-
-
-
-
-
-
+    return '';
+  }
 }
