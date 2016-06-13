@@ -1,9 +1,10 @@
 <style>
   .daysLeft{
     text-align: center;
-
   }
   .info{
+    width: 65%;
+    margin-left: 17.5%;
     margin-top: -80%;
     margin-bottom: 35%;
   }
@@ -24,11 +25,10 @@
     duration=800
     animation="easeInOutQuart"
     animation-delay="0">
-
 </round-progress>
 </div>
 <div class="info">
-<h1>{{config.projectname}}</h1>
+<h1 style="font-size:2em">{{config.projectname}}</h1>
 <h1>{{vm.result.daysLeft}}/{{vm.result.maxDays}}</h1>
 <p>Projekttage</p>
 </div>
