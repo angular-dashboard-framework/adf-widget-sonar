@@ -25,14 +25,14 @@ function sonarLineChart(data) {
 
 sonarADFWidget.controller('editController', editController);
 
-function editController($scope, $http, sonarApi) {
+function editController($scope, $http, sonarApi, sonarEndpoint) {
   var vm = this;
   $scope.updateProjects = function() {
     var url;
     if ($scope.config.apiUrl) {
       url = $scope.config.apiUrl;
     } else {
-      url = jenkinsEndpoint.url;
+      url = sonarEndpoint.url;
     }
     vm.projects = [];
     sonarApi.getProjects(url).then(function(data) {
