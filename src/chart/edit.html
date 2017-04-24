@@ -7,9 +7,12 @@
     </p>
     <label for="sample">Projekt</label>
     (*Pflichtfeld)
-    <select name="project" id="project" class="form-control" ng-model="config.project">
-     <option ng-repeat="project in vm.projects | orderBy: 'name'">{{project.name}}</option>
-   </select>
+    <p>
+    <input id="project" name="project" type="text" class="form-control" autocomplete="off"
+           placeholder="Wähle Projekt" ng-model="config.project" required="true"
+           uib-typeahead="project.name for project in vm.projects | limitTo:10 | filter:$viewValue"/>
+    </p>
+
     <label for="sample">Zeitspanne</label>
 
     <p class="input-group">
