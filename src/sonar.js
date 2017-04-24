@@ -22,6 +22,7 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
             return 'Please Setup the Widget';
           }
         },
+        category: 'SonarQube',
         controller: 'sonarStatsCtrl',
         controllerAs: 'vm',
         edit: {
@@ -43,6 +44,7 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
             return 'Please Setup the Widget';
           }
         },
+        category: 'SonarQube',
         controller: 'sonarLineChart',
         controllerAs: 'vm',
         edit: {
@@ -65,6 +67,7 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
             return 'Please Setup the Widget';
           }
         },
+        category: 'SonarQube',
         controller: 'compare',
         controllerAs: 'vm',
         edit: {
