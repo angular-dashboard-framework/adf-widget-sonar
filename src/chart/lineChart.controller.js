@@ -38,7 +38,7 @@ function editController($scope, $http, sonarApi, sonarEndpoint) {
     sonarApi.getProjects(url).then(function(data) {
       data.forEach(function(project) {
         var proj = {
-          name: project.key
+          name: project.k
         }
         vm.projects.push(proj);
       });

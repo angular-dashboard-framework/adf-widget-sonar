@@ -2,7 +2,7 @@
 //app initialisation with dependencies
 var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.js', 'ui.bootstrap', 'ui.bootstrap.datepicker','angular-svg-round-progressbar'])
 .constant("sonarEndpoint", {
-  "url": "https://nemo.sonarqube.org"
+  "url": "https://sonarqube.com"
 })
   .config(function(dashboardProvider) {
     dashboardProvider

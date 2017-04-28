@@ -7,11 +7,11 @@ factory('sonarApi', sonarApi);
 function sonarApi($http, $q) {
 
   function createApiUrlProjects(sonarUrl) {
-    return sonarUrl + '/api/resources?metrics=ncloc,coverage';
+    return sonarUrl + '/api/projects/index?format=json';
   }
 
   function createApiUrlMetrics(sonarUrl, projectname) {
-    return sonarUrl + '/api/resources?resource=' + projectname + '&metrics=open_issues,ncloc,public_documented_api_density,duplicated_lines_density,sqale_index';
+    return sonarUrl + '/api/measures/component?componentKey=' + projectname + '&metricKeys=open_issues,ncloc,public_documented_api_density,duplicated_lines_density,sqale_index';
   }
 
   function createApiQualityGate(sonarUrl, projectname) {
@@ -233,9 +233,7 @@ function sonarApi($http, $q) {
         'Accept': 'application/json'
       }
     }).then(function(response) {
-      var sonarProjects = response.data;
-      console.log(sonarProjects);
-      return sonarProjects;
+      return response.data;
     })
   }
 
