@@ -145,23 +145,29 @@ function sonarApi($http, $q) {
   }
 
 
-  function getChartData(sonarUrl, projectname, fromDateTime, toDateTime, metrics, timespanRadio) {
+  function getChartData(sonarUrl, projectname, metrics, timespan) {
 
     var apiUrl = "";
+    var fromDateTime;
+    var toDateTime;
     var metricsString = createMetricsString(metrics);
-
-    if (timespanRadio) {
+    if (timespan.type === 'dynamic') {
       var today = new Date();
-      if (timespanRadio.week) {
-        fromDateTime = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
-      }
-      if (timespanRadio.month) {
-        fromDateTime = new Date(today.getFullYear(), today.getMonth() - 1, today.getDay());
-      }
-      if (timespanRadio.year) {
-        fromDateTime = new Date(today.getFullYear() - 1, today.getMonth(), today.getDay());
+      switch(timespan.dynamic) {
+        case 'week':
+          fromDateTime = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+          break;
+        case 'month':
+          fromDateTime = new Date(today.getFullYear(), today.getMonth() - 1, today.getDay());
+          break;
+        case 'year':
+          fromDateTime = new Date(today.getFullYear() - 1, today.getMonth(), today.getDay());
+          break;
       }
       toDateTime = today;
+    } else if (timespan.type === 'static') {
+      fromDateTime = timespan.fromDateTime;
+      toDateTime = timespan.toDateTime;
     }
     if ((fromDateTime && toDateTime)) {
       apiUrl = sonarUrl + '/api/timemachine?resource=' + projectname + '&metrics=' + metricsString + '&fromDateTime=' + fromDateTime + '&toDateTime=' + toDateTime;

@@ -27,6 +27,15 @@ sonarADFWidget.controller('editController', editController);
 
 function editController($scope, $http, sonarApi, sonarEndpoint) {
   var vm = this;
+  if(!$scope.config.timespan) {
+    $scope.config.timespan= {};
+  }
+
+  // convert strings to date objects
+  if($scope.config.timespan.fromDateTime){
+    $scope.config.timespan.fromDateTime = new Date($scope.config.timespan.fromDateTime);
+    $scope.config.timespan.toDateTime = new Date($scope.config.timespan.toDateTime);
+  }
   $scope.updateProjects = function() {
     var url;
     if ($scope.config.apiUrl) {
@@ -46,26 +55,17 @@ function editController($scope, $http, sonarApi, sonarEndpoint) {
   }
   $scope.updateProjects();
 
-  //calendar
-  $scope.today = function() {
-    $scope.dt = new Date();
-  };
-  $scope.today();
-
-  $scope.clear = function() {
-    $scope.dt = null;
-  };
-
   $scope.inlineOptions = {
     customClass: getDayClass,
     minDate: new Date(),
     showWeeks: true
   };
-
-  $scope.dateOptions = {
-    formatYear: 'yy',
-    startingDay: 1
-  };
+  if(!$scope.dateOptions){
+    $scope.dateOptions = {
+      formatYear: 'yy',
+      startingDay: 1
+    };
+  }
 
   $scope.toggleMin = function() {
     $scope.inlineOptions.minDate = $scope.inlineOptions.minDate ? null : new Date();
@@ -80,10 +80,6 @@ function editController($scope, $http, sonarApi, sonarEndpoint) {
 
   $scope.open2 = function() {
     $scope.popup2.opened = true;
-  };
-
-  $scope.setDate = function(year, month, day) {
-    $scope.dt = new Date(year, month, day);
   };
 
   $scope.formats = ['yyyy-MM-dd', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];

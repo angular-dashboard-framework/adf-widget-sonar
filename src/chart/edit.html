@@ -3,41 +3,55 @@
   <div class="form-group" ng-controller="editController as vm">
     <label for="sample">API-URL</label>
     <p>
-      <input class="form-control" id="sample" ng-model="config.apiUrl" placeholder="Sonar-URL" type="text" ng-change="updateProjects()">
+      <input class="form-control" id="sample" ng-model="config.apiUrl" placeholder="Sonar-URL" type="text"
+             ng-change="updateProjects()">
     </p>
     <label for="sample">Projekt</label>
     (*Pflichtfeld)
     <p>
-    <input id="project" name="project" type="text" class="form-control" autocomplete="off"
-           placeholder="Wähle Projekt" ng-model="config.project" required="true"
-           uib-typeahead="project.name for project in vm.projects | limitTo:10 | filter:$viewValue"/>
+      <input id="project" name="project" type="text" class="form-control" autocomplete="off"
+             placeholder="Wähle Projekt" ng-model="config.project" required="true"
+             uib-typeahead="project.name for project in vm.projects | limitTo:10 | filter:$viewValue"/>
     </p>
 
     <label for="sample">Zeitspanne</label>
-
-    <p class="input-group">
-      <input class="form-control" datepicker-options="dateOptions" is-open="popup1.opened" ng-model="config.fromDateTime" placeholder="von" show-button-bar="false" type="text" uib-datepicker-popup="{{format}}" />
-      <span class="input-group-btn">
+    <p>
+      <label class="radio-inline">
+        <input name="timespan" ng-model="config.timespan.type" type="radio" value="dynamic">Dynamisch</label>
+      <label class="radio-inline">
+        <input name="timespan" ng-model="config.timespan.type" type="radio" value="static">Statisch</label>
+      <label class="radio-inline">
+        <input name="timespan" ng-model="config.timespan.type" type="radio" value="no">Keine</label>
+    </p>
+    <div ng-if="config.timespan.type=='static'">
+      <p class="input-group">
+        <input class="form-control" datepicker-options="dateOptions" is-open="popup1.opened"
+               ng-model="config.timespan.fromDateTime" placeholder="von" show-button-bar="false" type="text"
+               uib-datepicker-popup="{{format}}"/>
+        <span class="input-group-btn">
         <button class="btn btn-default" ng-click="open1()" type="button">
           <i class="glyphicon glyphicon-calendar"></i>
         </button>
       </span>
-    </p>
-    <p class="input-group">
-      <input class="form-control" datepicker-options="dateOptions" is-open="popup2.opened" ng-model="config.toDateTime" placeholder="bis" show-button-bar="false" type="text" uib-datepicker-popup="{{format}}" />
-      <span class="input-group-btn">
+      </p>
+      <p class="input-group">
+        <input class="form-control" datepicker-options="dateOptions" is-open="popup2.opened"
+               ng-model="config.timespan.toDateTime" placeholder="bis" show-button-bar="false" type="text"
+               uib-datepicker-popup="{{format}}"/>
+        <span class="input-group-btn">
         <button class="btn btn-default" ng-click="open2()" type="button">
           <i class="glyphicon glyphicon-calendar"></i>
         </button>
       </span>
-    </p>
-    <p ng-init="config.timespan=null">
+      </p>
+    </div>
+    <p ng-if="config.timespan.type=='dynamic'">
       <label class="radio-inline">
-        <input name="timespan" ng-model="config.timespan.week" type="radio" value="1">letzte Woche</label>
+        <input name="timespan.dynamic" ng-model="config.timespan.dynamic" type="radio" value="week">letzte Woche</label>
       <label class="radio-inline">
-        <input name="timespan" ng-model="config.timespan.month" type="radio" value="1">letzter Monat</label>
+        <input name="timespan.dynamic" ng-model="config.timespan.dynamic" type="radio" value="month">letzter Monat</label>
       <label class="radio-inline">
-        <input name="timespan" ng-model="config.timespan.year" type="radio" value="1">letztes Jahr</label>
+        <input name="timespan.dynamic" ng-model="config.timespan.dynamic" type="radio" value="year">letztes Jahr</label>
     </p>
     <label for="sample">Kennzahlen Auswahl</label>
     <div class="checkbox">
