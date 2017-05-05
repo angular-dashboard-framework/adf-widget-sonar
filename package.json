@@ -8,7 +8,6 @@
     "adf-widget"
   ],
   "description": "widget to display sonar statistics",
-  "dependencies": {},
   "devDependencies": {
     "gulp": "^3.8.11",
     "gulp-angular-filesort": "^1.1.1",

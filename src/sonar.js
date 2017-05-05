@@ -3,7 +3,21 @@
 var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.js', 'ui.bootstrap', 'ui.bootstrap.datepicker','angular-svg-round-progressbar'])
 .constant("sonarEndpoint", {
   "url": "https://sonarqube.com"
-})
+}).config(['ChartJsProvider', function (ChartJsProvider) {
+    // Configure all charts
+    ChartJsProvider.setOptions({
+      chartColors: ['#16688d', '#fdb45c'],
+      responsive: false,
+      maintainAspectRatio: true,
+      legend:{
+        display:true
+      }
+    });
+    // Configure all line charts
+    ChartJsProvider.setOptions('line', {
+      showLines: true
+    });
+  }])
   .config(function(dashboardProvider) {
     dashboardProvider
       .widget('sonar', {
@@ -35,13 +49,17 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
         templateUrl: '{widgetsPath}/sonar/src/chart/view.html',
         resolve: {
           data: function(sonarApi, config, sonarEndpoint) {
+            var apiUrl;
             if (config.apiUrl) {
-              return sonarApi.getChartData(config.apiUrl, config.project, config.fromDateTime, config.toDateTime, config.metrics, config.timespan);
+              apiUrl = config.apiUrl;
+            } else {
+              apiUrl = sonarEndpoint.url;
             }
-            else if (sonarEndpoint.url && config.project && config.metrics){
-              return sonarApi.getChartData(sonarEndpoint.url,config.project, config.fromDateTime, config.toDateTime, config.metrics, config.timespan);
+            if (apiUrl && config.project && config.metrics){
+              return sonarApi.getChartData(config.apiUrl, config.project, config.metrics, config.timespan);
+            } else{
+              return 'Please Setup the Widget';
             }
-            return 'Please Setup the Widget';
           }
         },
         category: 'SonarQube',
