@@ -23,7 +23,7 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
       .widget('allProjects', {
         title: 'Sonar Statistics of all Projects ',
         description: 'Displays all SonarQube statistics',
-        templateUrl: '{widgetsPath}/sonar/src/view.html',
+        templateUrl: '{widgetsPath}/sonar/src/allProjects/view.html',
         resolve: {
           data: function(sonarApi, config, sonarEndpoint) {
             if (config.apiUrl) {
@@ -39,7 +39,7 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
         controller: 'sonarStatsCtrl',
         controllerAs: 'vm',
         edit: {
-          templateUrl: '{widgetsPath}/sonar/src/edit.html'
+          templateUrl: '{widgetsPath}/sonar/src/allProjects/edit.html'
         }
       })
       .widget('linechart', {
