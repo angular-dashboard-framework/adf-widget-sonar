@@ -20,10 +20,9 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
   }])
   .config(function(dashboardProvider) {
     dashboardProvider
-      .widget('sonar', {
-        //setup adf widget
-        title: 'All projects statistics',
-        description: 'widget to display sonar statistics',
+      .widget('allProjects', {
+        title: 'Sonar Statistics of all Projects ',
+        description: 'Displays all SonarQube statistics',
         templateUrl: '{widgetsPath}/sonar/src/view.html',
         resolve: {
           data: function(sonarApi, config, sonarEndpoint) {
@@ -43,9 +42,9 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
           templateUrl: '{widgetsPath}/sonar/src/edit.html'
         }
       })
-      .widget('', {
-        title: 'project linechart',
-        description: 'widget to display a linechart with different metrics',
+      .widget('linechart', {
+        title: 'Sonar Linechart of a Project',
+        description: 'Displays a linechart with different metrics',
         templateUrl: '{widgetsPath}/sonar/src/chart/view.html',
         resolve: {
           data: function(sonarApi, config, sonarEndpoint) {
@@ -70,8 +69,8 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
         }
       })
       .widget('compare', {
-        title: 'project-compare',
-        description: 'widget to compare two projects',
+        title: 'Sonar Project Compare',
+        description: 'Displays a table to compare two projects',
         templateUrl: '{widgetsPath}/sonar/src/compare/view.html',
         resolve: {
           data: function(sonarApi, config, sonarEndpoint) {
@@ -92,9 +91,9 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
           templateUrl: '{widgetsPath}/sonar/src/compare/edit.html'
         }
       })
-      .widget('projectProgress', {
-        title: 'project-progress',
-        description: 'widget to check the project progress',
+      .widget('progress', {
+        title: 'Project Progress',
+        description: 'Visualizes the progress of a project',
         templateUrl: '{widgetsPath}/sonar/src/project-progress/view.html',
         resolve: {
           data: function(sonarApi, config, sonarEndpoint) {
