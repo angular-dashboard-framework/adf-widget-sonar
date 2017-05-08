@@ -53,9 +53,7 @@ function sonarApi($http, $q) {
 
     var maxDays = workingDaysBetweenDates(beginn, end);
     var daysLeft = workingDaysBetweenDates(today, end)
-    console.log(end);
-    console.log(today);
-    console.log(beginn);
+
     var result = {
       'maxDays': maxDays,
       'daysLeft': daysLeft
@@ -132,8 +130,8 @@ function sonarApi($http, $q) {
     var api2 = $http.get(apiUrlProject2);
     var responsesArray = $q.all([api1, api2])
       .then(function(response) {
-        var projectLeft = response[0].data[0].msr;
-        var projectRight = response[1].data[0].msr;
+        var projectLeft = response[0];
+        var projectRight = response[1];
         var projectMetrics = {
           'projectLeft': projectLeft,
           'projectRight': projectRight
@@ -212,12 +210,13 @@ function sonarApi($http, $q) {
     var coverage = 0;
     var avarageCoverage = 0;
     for (var i = 0; i < projects.length; i++) {
-      if (projects[i].msr[0]) {
-        linesOfCode = projects[i].msr[0].val;
+      console.log(projects);
+      if (projects[i].measures[0]) {
+        linesOfCode = projects[i].measures[0].val;
         linesOfCodeSum += linesOfCode;
       }
-      if (projects[i].msr[1]) {
-        coverage = projects[i].msr[1].val;
+      if (projects[i].measures[1]) {
+        coverage = projects[i].measures[1].val;
         avarageCoverage += coverage;
       }
     }
