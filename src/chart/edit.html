@@ -6,22 +6,22 @@
       <input class="form-control" id="sample" ng-model="config.apiUrl" placeholder="Sonar-URL" type="text"
              ng-change="updateProjects()">
     </p>
-    <label for="sample">Projekt</label>
-    (*Pflichtfeld)
+    <label for="sample">Project</label>
+    (*Required)
     <p>
       <input id="project" name="project" type="text" class="form-control" autocomplete="off"
-             placeholder="Wähle Projekt" ng-model="config.project" required="true"
+             placeholder="Choose project" ng-model="config.project" required="true"
              uib-typeahead="project.name for project in vm.projects | limitTo:10 | filter:$viewValue"/>
     </p>
 
-    <label for="sample">Zeitspanne</label>
+    <label for="sample">Timespan</label>
     <p>
       <label class="radio-inline">
-        <input name="timespan" ng-model="config.timespan.type" type="radio" value="dynamic">Dynamisch</label>
+        <input name="timespan" ng-model="config.timespan.type" type="radio" value="dynamic">Dynamic</label>
       <label class="radio-inline">
-        <input name="timespan" ng-model="config.timespan.type" type="radio" value="static">Statisch</label>
+        <input name="timespan" ng-model="config.timespan.type" type="radio" value="static">Static</label>
       <label class="radio-inline">
-        <input name="timespan" ng-model="config.timespan.type" type="radio" value="no">Keine</label>
+        <input name="timespan" ng-model="config.timespan.type" type="radio" value="no">None</label>
     </p>
     <div ng-if="config.timespan.type=='static'">
       <p class="input-group">
@@ -47,36 +47,36 @@
     </div>
     <p ng-if="config.timespan.type=='dynamic'">
       <label class="radio-inline">
-        <input name="timespan.dynamic" ng-model="config.timespan.dynamic" type="radio" value="week">letzte Woche</label>
+        <input name="timespan.dynamic" ng-model="config.timespan.dynamic" type="radio" value="week">last week</label>
       <label class="radio-inline">
-        <input name="timespan.dynamic" ng-model="config.timespan.dynamic" type="radio" value="month">letzter Monat</label>
+        <input name="timespan.dynamic" ng-model="config.timespan.dynamic" type="radio" value="month">last month</label>
       <label class="radio-inline">
-        <input name="timespan.dynamic" ng-model="config.timespan.dynamic" type="radio" value="year">letztes Jahr</label>
+        <input name="timespan.dynamic" ng-model="config.timespan.dynamic" type="radio" value="year">last year</label>
     </p>
-    <label for="sample">Kennzahlen Auswahl</label>
+    <label for="sample">Metric Selection</label>
     <div class="checkbox">
       <label>
-        <input ng-model="config.metrics.linesOfCode" type="checkbox">Codezeilen</label>
+        <input ng-model="config.metrics.linesOfCode" type="checkbox">Lines of Code</label>
     </div>
     <div class="checkbox">
       <label>
-        <input ng-model="config.metrics.technicalDebt" type="checkbox">Technische Schuld (min)</label>
+        <input ng-model="config.metrics.technicalDebt" type="checkbox">Technical Debt</label>
     </div>
     <div class="checkbox">
       <label>
-        <input ng-model="config.metrics.amountTest" type="checkbox">Anzahl Unit-Tests</label>
+        <input ng-model="config.metrics.amountTest" type="checkbox">Number Unit-Tests</label>
     </div>
     <div class="checkbox">
       <label>
-        <input ng-model="config.metrics.testCoverage" type="checkbox">Test Abdeckung (%)</label>
+        <input ng-model="config.metrics.testCoverage" type="checkbox">Test Coverage</label>
     </div>
     <div class="checkbox">
       <label>
-        <input ng-model="config.metrics.issues" type="checkbox">Offene Issues</label>
+        <input ng-model="config.metrics.issues" type="checkbox">Open Issues</label>
     </div>
     <div class="checkbox">
       <label>
-        <input ng-model="config.metrics.rulesviolations" type="checkbox">Code Wiederholung (%)</label>
+        <input ng-model="config.metrics.rulesviolations" type="checkbox">Duplicate Code (%)</label>
     </div>
   </div>
 </form>
