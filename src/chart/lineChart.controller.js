@@ -3,13 +3,14 @@
 sonarADFWidget.
 controller('sonarLineChart', sonarLineChart);
 //setup controller
-function sonarLineChart(data) {
+function sonarLineChart(data, METRIC_NAMES) {
   //initialize controller variable
   var vm = this;
   var series = [];
   var values = [];
   for (var i = 0; i < data.length; i++) {
-    series.push(data[i].metric);
+    console.log(data[i].metric);
+    series.push(METRIC_NAMES[data[i].metric]);
     values.push(data[i].values);
   }
   //problems if you put them in an array directly

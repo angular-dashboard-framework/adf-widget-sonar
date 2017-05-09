@@ -12,7 +12,6 @@ function sonarApi($http, $q) {
 
   function createApiUrlAllProjectsStatistics(sonarUrl) {
     return sonarUrl + '/api/resources?metrics=ncloc,coverage';
-    //return sonarUrl + '/api/measures/component_tree?metricKeys=ncloc,coverage&baseComponentKey=sonar.projectKey';
   }
 
   function createApiUrlMetrics(sonarUrl, projectname) {

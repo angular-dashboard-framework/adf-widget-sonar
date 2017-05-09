@@ -2,9 +2,10 @@
 
 sonarADFWidget.controller('compare', compare);
 
-function compare(data) {
+function compare(data,METRIC_NAMES) {
   var vm = this;
 
+  vm.METRIC_NAMES = METRIC_NAMES;
   vm.projectLeft = data.projectLeft;
   vm.projectRight = data.projectRight;
 

@@ -8,7 +8,7 @@
       <th>{{vm.projectRight.data.component.name}}</th>
     </tr>
     <tr ng-repeat="metric in vm.projectLeft.data.component.measures">
-      <td>{{metric.metric}}</td>
+      <td>{{vm.METRIC_NAMES[metric.metric]}}</td>
       <td>{{vm.projectLeft.data.component.measures[$index].value}}</td>
       <td>{{vm.projectRight.data.component.measures[$index].value}}</td>
     </tr>
