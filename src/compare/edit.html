@@ -1,12 +1,12 @@
 <form role="form">
-  <div class="form-group">
-    <label for="sample">API-URL</label>
-    <input type="text" class="form-control" id="sample" ng-model="config.apiUrl" placeholder="Sonar-URL">
-    <label for="sample">Choose Project 1</label>
-    <input type="text" class="form-control" id="sample" ng-model="config.projectname1" ng-required="true"
-           placeholder="Project 1">
-    <label for="sample">Choose Project 2</label>
-    <input type="text" class="form-control" id="sample" ng-model="config.projectname2" ng-required="true"
-           placeholder="Project 2">
+  <div class="form-group" ng-controller="editController as vm">
+    <label for="url">API-URL</label>
+    <input type="text" class="form-control" id="url" ng-model="config.apiUrl" placeholder="Sonar-URL" ng-change="updateProjects()">
+    <label for="project1">Choose Project 1</label>
+    <input type="text" class="form-control" id="project1" ng-model="config.projectname1" ng-required="true"
+           placeholder="Project 1" uib-typeahead="project.name for project in vm.projects | limitTo:10 | filter:$viewValue"/>
+    <label for="project2">Choose Project 2</label>
+    <input type="text" class="form-control" id="project2" ng-model="config.projectname2" ng-required="true"
+           placeholder="Project 2" uib-typeahead="project.name for project in vm.projects | limitTo:10 | filter:$viewValue"/>
   </div>
 </form>
