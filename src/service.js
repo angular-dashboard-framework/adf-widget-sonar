@@ -10,40 +10,17 @@ function sonarApi($http, $q) {
     return sonarUrl + '/api/projects/index?format=json';
   }
 
+  function createApiUrlAllProjectsStatistics(sonarUrl) {
+    return sonarUrl + '/api/resources?metrics=ncloc,coverage';
+    //return sonarUrl + '/api/measures/component_tree?metricKeys=ncloc,coverage&baseComponentKey=sonar.projectKey';
+  }
+
   function createApiUrlMetrics(sonarUrl, projectname) {
     return sonarUrl + '/api/measures/component?componentKey=' + projectname + '&metricKeys=open_issues,ncloc,public_documented_api_density,duplicated_lines_density,sqale_index';
   }
 
   function createApiQualityGate(sonarUrl, projectname) {
     return sonarUrl + '/api/qualitygates/project_status?projectKey=' + projectname;
-  }
-
-  function getQualityGateStatus(sonarUrl, projectname) {
-    var apiUrl = createApiQualityGate(sonarUrl, projectname);
-    return $http({
-      method: 'GET',
-      url: apiUrl,
-      headers: {
-        'Accept': 'application/json'
-      }
-    }).then(function(response) {
-      var status = respsone[0].projectStatus;
-      var result;
-      if (status = "NONE") {
-        result = "grey";
-      }
-      if (status = "WARN") {
-        result = "orange";
-      }
-      if (status = "OK") {
-        result = "green";
-      }
-      if (status = "ERROR") {
-        result = "red";
-      }
-
-      return result;
-    });
   }
 
   function getProjectTime(projectBeginn, projectEnd) {
@@ -120,8 +97,6 @@ function sonarApi($http, $q) {
     }
     return metricsString.slice(0, -1);
   }
-
-
 
   function getMetrics(sonarUrl, projectname1, projectname2) {
     var apiUrlProject1 = createApiUrlMetrics(sonarUrl, projectname1);
@@ -200,7 +175,7 @@ function sonarApi($http, $q) {
         metricsArray.push(metricsObj);
       }
       return metricsArray;
-    })
+    });
 
   }
 
@@ -210,13 +185,12 @@ function sonarApi($http, $q) {
     var coverage = 0;
     var avarageCoverage = 0;
     for (var i = 0; i < projects.length; i++) {
-      console.log(projects);
-      if (projects[i].measures[0]) {
-        linesOfCode = projects[i].measures[0].val;
+      if (projects[i].msr[0]) {
+        linesOfCode = projects[i].msr[0].val;
         linesOfCodeSum += linesOfCode;
       }
-      if (projects[i].measures[1]) {
-        coverage = projects[i].measures[1].val;
+      if (projects[i].msr[1]) {
+        coverage = projects[i].msr[1].val;
         avarageCoverage += coverage;
       }
     }
@@ -239,11 +213,11 @@ function sonarApi($http, $q) {
       }
     }).then(function(response) {
       return response.data;
-    })
+    });
   }
 
-  function parseStuff(sonarUrl) {
-    var apiUrl = createApiUrlProjects(sonarUrl);
+  function getAllProjectsStatistics(sonarUrl){
+    var apiUrl = createApiUrlAllProjectsStatistics(sonarUrl);
 
     return $http({
       method: 'GET',
@@ -255,14 +229,12 @@ function sonarApi($http, $q) {
       var projects = response.data;
       var sonarProjects = generateArray(projects);
       return sonarProjects;
-    })
-
+    });
   }
-
 
   return {
     getProjects: getProjects,
-    parseStuff: parseStuff,
+    getAllProjectsStatistics: getAllProjectsStatistics,
     getChartData: getChartData,
     getMetrics: getMetrics,
     getProjectTime: getProjectTime

@@ -20,17 +20,17 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
   }])
   .config(function(dashboardProvider) {
     dashboardProvider
-      .widget('allProjects', {
+      .widget('sonar-all-projects-statistics', {
         title: 'Sonar Statistics of all Projects ',
         description: 'Displays all SonarQube statistics',
         templateUrl: '{widgetsPath}/sonar/src/allProjects/view.html',
         resolve: {
           data: function(sonarApi, config, sonarEndpoint) {
             if (config.apiUrl) {
-              return sonarApi.parseStuff(config.apiUrl);
+              return sonarApi.getAllProjectsStatistics(config.apiUrl);
             }
             else if (sonarEndpoint.url){
-              return sonarApi.parseStuff(sonarEndpoint.url);
+              return sonarApi.getAllProjectsStatistics(sonarEndpoint.url);
             }
             return 'Please Setup the Widget';
           }
@@ -42,7 +42,7 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
           templateUrl: '{widgetsPath}/sonar/src/allProjects/edit.html'
         }
       })
-      .widget('linechart', {
+      .widget('sonar-linechart', {
         title: 'Sonar Linechart of a Project',
         description: 'Displays a linechart with different metrics',
         templateUrl: '{widgetsPath}/sonar/src/chart/view.html',
@@ -68,7 +68,7 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
           templateUrl: '{widgetsPath}/sonar/src/chart/edit.html'
         }
       })
-      .widget('compare', {
+      .widget('sonar-compare', {
         title: 'Sonar Project Compare',
         description: 'Displays a table to compare two projects',
         templateUrl: '{widgetsPath}/sonar/src/compare/view.html',
@@ -91,7 +91,7 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
           templateUrl: '{widgetsPath}/sonar/src/compare/edit.html'
         }
       })
-      .widget('progress', {
+      .widget('project-progress', {
         title: 'Project Progress',
         description: 'Visualizes the progress of a project',
         templateUrl: '{widgetsPath}/sonar/src/project-progress/view.html',
@@ -108,6 +108,6 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
         edit: {
           templateUrl: '{widgetsPath}/sonar/src/project-progress/edit.html'
         }
-      })
+      });
 
   });
