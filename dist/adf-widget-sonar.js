@@ -100,7 +100,7 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
         description: 'Visualizes the progress of a project',
         templateUrl: '{widgetsPath}/sonar/src/project-progress/view.html',
         resolve: {
-          data: ["sonarApi", "config", "sonarEndpoint", function(sonarApi, config, sonarEndpoint) {
+          data: ["sonarApi", "config", function(sonarApi, config) {
             if (config.projectBeginn){
               return sonarApi.getProjectTime(config.projectBeginn, config.projectEnd);
             }
@@ -119,11 +119,11 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
 angular.module("adf.widget.sonar").run(["$templateCache", function($templateCache) {$templateCache.put("{widgetsPath}/sonar/src/allProjects/edit.html","<form role=form><div class=form-group><label for=sample>API-URL</label> <input type=text class=form-control id=sample ng-model=config.apiUrl placeholder=Sonar-URL></div></form>");
 $templateCache.put("{widgetsPath}/sonar/src/allProjects/view.html","<style type=text/css>\n  .content {\n    text-align: right;\n    color: white;\n  }\n  .coverage {\n    background-color: #f0ad4e;\n    border-radius: 8px;\n  }\n  .linesOfCode {\n    background-color: #337ab7;\n    margin-bottom: 2%;\n    border-radius: 8px;\n  }\n  .linesOfCodePencil {\n    float: left;\n    font-size: 3em;\n    margin-top: 25px;\n  }\n  .coverageTask {\n    float: left;\n    font-size: 3em;\n    margin-top: 25px;\n  }\n</style><div><div class=\"content col-md-12\"><div class=\"col-md-12 linesOfCode\"><span class=\"glyphicon glyphicon-pencil linesOfCodePencil\"></span><h1>{{(vm.data.linesOfCode | number)||0}}</h1><h4>Lines of code</h4></div><div class=\"col-md-12 coverage\"><span class=\"glyphicon glyphicon-tasks coverageTask\"></span><h1>{{(vm.data.coverage | number:2)||0}}%</h1><h4>Average test coverage</h4></div></div></div>");
 $templateCache.put("{widgetsPath}/sonar/src/chart/edit.html","<style type=text/css></style><form role=form><div class=form-group ng-controller=\"editController as vm\"><label for=sample>API-URL</label><p><input class=form-control id=sample ng-model=config.apiUrl placeholder=Sonar-URL type=text ng-change=updateProjects()></p><label for=sample>Project</label> (*Required)<p><input id=project name=project type=text class=form-control autocomplete=off placeholder=\"Choose project\" ng-model=config.project required uib-typeahead=\"project.name for project in vm.projects | limitTo:10 | filter:$viewValue\"></p><label for=sample>Timespan</label><p><label class=radio-inline><input name=timespan ng-model=config.timespan.type type=radio value=dynamic>Dynamic</label> <label class=radio-inline><input name=timespan ng-model=config.timespan.type type=radio value=static>Static</label> <label class=radio-inline><input name=timespan ng-model=config.timespan.type type=radio value=no>None</label></p><div ng-if=\"config.timespan.type==\'static\'\"><p class=input-group><input class=form-control datepicker-options=dateOptions is-open=popup1.opened ng-model=config.timespan.fromDateTime placeholder=von show-button-bar=false type=text uib-datepicker-popup={{format}}> <span class=input-group-btn><button class=\"btn btn-default\" ng-click=open1() type=button><i class=\"glyphicon glyphicon-calendar\"></i></button></span></p><p class=input-group><input class=form-control datepicker-options=dateOptions is-open=popup2.opened ng-model=config.timespan.toDateTime placeholder=bis show-button-bar=false type=text uib-datepicker-popup={{format}}> <span class=input-group-btn><button class=\"btn btn-default\" ng-click=open2() type=button><i class=\"glyphicon glyphicon-calendar\"></i></button></span></p></div><p ng-if=\"config.timespan.type==\'dynamic\'\"><label class=radio-inline><input name=timespan.dynamic ng-model=config.timespan.dynamic type=radio value=week>last week</label> <label class=radio-inline><input name=timespan.dynamic ng-model=config.timespan.dynamic type=radio value=month>last month</label> <label class=radio-inline><input name=timespan.dynamic ng-model=config.timespan.dynamic type=radio value=year>last year</label></p><label for=sample>Metric Selection</label><div class=checkbox><label><input ng-model=config.metrics.linesOfCode type=checkbox>Lines of Code</label></div><div class=checkbox><label><input ng-model=config.metrics.technicalDebt type=checkbox>Technical Debt</label></div><div class=checkbox><label><input ng-model=config.metrics.amountTest type=checkbox>Number Unit-Tests</label></div><div class=checkbox><label><input ng-model=config.metrics.testCoverage type=checkbox>Test Coverage</label></div><div class=checkbox><label><input ng-model=config.metrics.issues type=checkbox>Open Issues</label></div><div class=checkbox><label><input ng-model=config.metrics.rulesviolations type=checkbox>Duplicate Code (%)</label></div></div></form>");
-$templateCache.put("{widgetsPath}/sonar/src/chart/view.html","<style type=text/css></style><canvas id=line class=\"chart chart-line\" chart-data=vm.values chart-labels=vm.labels chart-series=vm.series chart-options=options chart-dataset-override=datasetOverride style=\"width: 100%\"></canvas>");
+$templateCache.put("{widgetsPath}/sonar/src/chart/view.html","<canvas id=line class=\"chart chart-line\" chart-data=vm.values chart-labels=vm.labels chart-series=vm.series chart-options=options chart-dataset-override=datasetOverride style=\"width: 100%\"></canvas>");
 $templateCache.put("{widgetsPath}/sonar/src/compare/edit.html","<form role=form><div class=form-group ng-controller=\"editController as vm\"><label for=url>API-URL</label> <input type=text class=form-control id=url ng-model=config.apiUrl placeholder=Sonar-URL ng-change=updateProjects()> <label for=project1>Choose Project 1</label> <input type=text class=form-control id=project1 ng-model=config.projectname1 ng-required=true placeholder=\"Project 1\" uib-typeahead=\"project.name for project in vm.projects | limitTo:10 | filter:$viewValue\"> <label for=project2>Choose Project 2</label> <input type=text class=form-control id=project2 ng-model=config.projectname2 ng-required=true placeholder=\"Project 2\" uib-typeahead=\"project.name for project in vm.projects | limitTo:10 | filter:$viewValue\"></div></form>");
-$templateCache.put("{widgetsPath}/sonar/src/compare/view.html","<div class=\"col-md-12 centerText\"><table class=table><tr><th>Metric</th><th>{{vm.projectLeft.data.component.name}}</th><th>{{vm.projectRight.data.component.name}}</th></tr><tr ng-repeat=\"metric in vm.projectLeft.data.component.measures\"><td>{{vm.METRIC_NAMES[metric.metric]}}</td><td>{{vm.projectLeft.data.component.measures[$index].value}}</td><td>{{vm.projectRight.data.component.measures[$index].value}}</td></tr></table></div>");
+$templateCache.put("{widgetsPath}/sonar/src/compare/view.html","<div class=\"alert alert-info\" ng-if=!vm.projectLeft>Please configure the widget</div><div ng-if=vm.projectLeft class=\"col-md-12 centerText\"><table class=table><tr><th>Metric</th><th>{{vm.projectLeft.data.component.name}}</th><th>{{vm.projectRight.data.component.name}}</th></tr><tr ng-repeat=\"metric in vm.projectLeft.data.component.measures\"><td>{{vm.METRIC_NAMES[metric.metric]}}</td><td>{{vm.projectLeft.data.component.measures[$index].value}}</td><td>{{vm.projectRight.data.component.measures[$index].value}}</td></tr></table></div>");
 $templateCache.put("{widgetsPath}/sonar/src/project-progress/edit.html","<form role=form><div class=form-group ng-controller=editController><label for=sample>Project</label> <input type=text class=form-control id=sample ng-model=config.projectname ng-required=true placeholder=\"Project name\"> <label for=sample>Project Timespan</label><p class=input-group><input class=form-control datepicker-options=dateOptions is-open=popup1.opened ng-model=config.projectBeginn placeholder=from show-button-bar=false type=text uib-datepicker-popup={{format}}> <span class=input-group-btn><button class=\"btn btn-default\" ng-click=open1() type=button><i class=\"glyphicon glyphicon-calendar\"></i></button></span></p><p class=input-group><input class=form-control datepicker-options=dateOptions is-open=popup2.opened ng-model=config.projectEnd placeholder=to show-button-bar=false type=text uib-datepicker-popup={{format}}> <span class=input-group-btn><button class=\"btn btn-default\" ng-click=open2() type=button><i class=\"glyphicon glyphicon-calendar\"></i></button></span></p></div></form>");
-$templateCache.put("{widgetsPath}/sonar/src/project-progress/view.html","<style>\n  .daysLeft {\n    text-align: center;\n  }\n\n  .info {\n    width: 65%;\n    margin-left: 17.5%;\n    margin-top: -80%;\n    margin-bottom: 35%;\n  }\n</style><div class=daysLeft><div ng-init=\"progress=vm.progressProperties\"><round-progress max=progress.max current=progress.current color=\"{{ (current / max < 0.75) ? \'#EF3939\' : \'#337AB7\' }}\" bgcolor=#F5F5F5 radius=360 stroke=67 semi=false rounded=true clockwise=false responsive=true duration=800 animation=easeInOutQuart animation-delay=0></round-progress></div><div class=info><h1 style=font-size:2em>{{config.projectname}}</h1><h1>{{vm.result.daysLeft}}/{{vm.result.maxDays}}</h1><p>Projekttage</p></div></div>");}]);
+$templateCache.put("{widgetsPath}/sonar/src/project-progress/view.html","<style>\n  .daysLeft {\n    text-align: center;\n    max-height: 700px;\n  }\n\n  .info {\n    width: 65%;\n    margin-left: 17.5%;\n    margin-top: -80%;\n    margin-bottom: 35%;\n  }\n\n</style><div class=\"alert alert-info\" ng-if=!vm.result.daysLeft>Please configure the widget</div><div ng-if=vm.result.daysLeft class=daysLeft><div ng-init=\"progress=vm.progressProperties\"><round-progress max=progress.max current=progress.current color=\"{{ (current / max < 0.75) ? \'#EF3939\' : \'#337AB7\' }}\" bgcolor=#F5F5F5 radius=360 stroke=67 semi=false rounded=true clockwise=true responsive=true duration=800 animation=easeInOutQuart animation-delay=0></round-progress></div><div class=info><h1 style=font-size:2em>{{config.projectname}}</h1><h1>{{vm.result.daysLeft}}/{{vm.result.maxDays}}</h1><p>Projekttage</p></div></div>");}]);
 
 
 sonarADFWidget.
@@ -188,15 +188,10 @@ function sonarLineChart(data, METRIC_NAMES) {
   var series = [];
   var values = [];
   for (var i = 0; i < data.length; i++) {
-    console.log(data[i].metric);
     series.push(METRIC_NAMES[data[i].metric]);
     values.push(data[i].values);
   }
-  //problems if you put them in an array directly
-  var linesOfCode = data.linesOfCode;
-  var technicalDebt = data.technicalDebt;
-  var coverage = data.coverage;
-  var amountTest = data.amountTest;
+
   //setup the chart legend and labels
   vm.series = series;
   vm.labels = data[0].dates;
@@ -206,7 +201,7 @@ sonarLineChart.$inject = ["data", "METRIC_NAMES"];
 
 sonarADFWidget.controller('editController', editController);
 
-function editController($scope, $http, sonarApi, sonarEndpoint) {
+function editController($scope, sonarApi, sonarEndpoint) {
   var vm = this;
   if(!$scope.config.timespan) {
     $scope.config.timespan= {};
@@ -229,11 +224,11 @@ function editController($scope, $http, sonarApi, sonarEndpoint) {
       data.forEach(function(project) {
         var proj = {
           name: project.k
-        }
+        };
         vm.projects.push(proj);
       });
     });
-  }
+  };
   $scope.updateProjects();
 
   $scope.inlineOptions = {
@@ -304,7 +299,7 @@ function editController($scope, $http, sonarApi, sonarEndpoint) {
     return '';
   }
 }
-editController.$inject = ["$scope", "$http", "sonarApi", "sonarEndpoint"];
+editController.$inject = ["$scope", "sonarApi", "sonarEndpoint"];
 
 
 
@@ -337,10 +332,6 @@ function sonarApi($http, $q) {
     return sonarUrl + '/api/measures/component?componentKey=' + projectname + '&metricKeys=open_issues,ncloc,public_documented_api_density,duplicated_lines_density,sqale_index';
   }
 
-  function createApiQualityGate(sonarUrl, projectname) {
-    return sonarUrl + '/api/qualitygates/project_status?projectKey=' + projectname;
-  }
-
   function getProjectTime(projectBeginn, projectEnd) {
     var beginn = new Date(projectBeginn);
     var end = new Date(projectEnd);
@@ -349,18 +340,19 @@ function sonarApi($http, $q) {
     var maxDays = workingDaysBetweenDates(beginn, end);
     var daysLeft = workingDaysBetweenDates(today, end)
 
-    var result = {
+    return {
       'maxDays': maxDays,
       'daysLeft': daysLeft
     };
-    return result;
+
   }
 
   function workingDaysBetweenDates(startDate, endDate) {
 
     // Validate input
-    if (endDate < startDate)
+    if (endDate < startDate){
       return 0;
+    }
 
     // Calculate days between dates
     var millisecondsPerDay = 86400 * 1000; // Day in milliseconds
@@ -379,15 +371,20 @@ function sonarApi($http, $q) {
 
     // Remove weekend not previously removed.
     if (startDay - endDay > 1)
+    {
       days = days - 2;
+    }
 
     // Remove start day if span starts on Sunday but ends before Saturday
-    if (startDay == 0 && endDay != 6)
-      days = days - 1
+    if (startDay === 0 && endDay != 6){
+      days = days - 1;
+    }
 
     // Remove end day if span ends on Saturday but starts after Sunday
-    if (endDay == 6 && startDay != 0)
-      days = days - 1
+    if (endDay === 6 && startDay != 0)
+    {
+      days = days - 1;
+    }
 
     return days;
   }
@@ -438,7 +435,7 @@ function sonarApi($http, $q) {
 
   function getChartData(sonarUrl, projectname, metrics, timespan) {
 
-    var apiUrl = "";
+    var apiUrl;
     var fromDateTime;
     var toDateTime;
     var metricsString = createMetricsString(metrics);
@@ -473,10 +470,9 @@ function sonarApi($http, $q) {
       }
     }).then(function(response) {
       var metricsArray = [];
-      var response = response.data[0];
-      var cols = response.cols;
-      var cells = response.cells;
-      var dates = [];
+      var responseData = response.data[0];
+      var cols = responseData.cols;
+      var cells = responseData.cells;
       for (var x = 0; x < cols.length; x++) {
         var values = [];
         var dates = [];
@@ -498,26 +494,23 @@ function sonarApi($http, $q) {
   }
 
   function generateArray(projects) {
-    var linesOfCode = 0;
     var linesOfCodeSum = 0;
-    var coverage = 0;
     var avarageCoverage = 0;
     for (var i = 0; i < projects.length; i++) {
       if (projects[i].msr[0]) {
-        linesOfCode = projects[i].msr[0].val;
+        var linesOfCode = projects[i].msr[0].val;
         linesOfCodeSum += linesOfCode;
       }
       if (projects[i].msr[1]) {
-        coverage = projects[i].msr[1].val;
+        var coverage = projects[i].msr[1].val;
         avarageCoverage += coverage;
       }
     }
     avarageCoverage = avarageCoverage / projects.length;
-    var stats = {
+    return {
       'linesOfCode': linesOfCodeSum,
       'coverage': avarageCoverage
-    }
-    return stats;
+    };
   }
 
   function getProjects(sonarUrl) {
@@ -545,8 +538,7 @@ function sonarApi($http, $q) {
       }
     }).then(function(response) {
       var projects = response.data;
-      var sonarProjects = generateArray(projects);
-      return sonarProjects;
+      return generateArray(projects);
     });
   }
 
