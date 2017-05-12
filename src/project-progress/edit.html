@@ -1,10 +1,13 @@
 <form role="form">
   <div class="form-group" ng-controller="editController">
-    <label for="sample">Projekt</label>
-    <input type="text" class="form-control" id="sample" ng-model="config.projectname" ng-required="true" placeholder="Projektname">
-    <label for="sample">Projekt Zeitraum</label>
+    <label for="sample">Project</label>
+    <input type="text" class="form-control" id="sample" ng-model="config.projectname" ng-required="true"
+           placeholder="Project name">
+    <label for="sample">Project Timespan</label>
     <p class="input-group">
-      <input class="form-control" datepicker-options="dateOptions" is-open="popup1.opened" ng-model="config.projectBeginn" placeholder="von" show-button-bar="false" type="text" uib-datepicker-popup="{{format}}"/>
+      <input class="form-control" datepicker-options="dateOptions" is-open="popup1.opened"
+             ng-model="config.projectBeginn" placeholder="from" show-button-bar="false" type="text"
+             uib-datepicker-popup="{{format}}"/>
       <span class="input-group-btn">
         <button class="btn btn-default" ng-click="open1()" type="button">
           <i class="glyphicon glyphicon-calendar"></i>
@@ -12,7 +15,9 @@
       </span>
     </p>
     <p class="input-group">
-      <input class="form-control" datepicker-options="dateOptions" is-open="popup2.opened" ng-model="config.projectEnd" placeholder="bis" show-button-bar="false" type="text" uib-datepicker-popup="{{format}}"/>
+      <input class="form-control" datepicker-options="dateOptions" is-open="popup2.opened"
+             ng-model="config.projectEnd" placeholder="to" show-button-bar="false" type="text"
+             uib-datepicker-popup="{{format}}"/>
       <span class="input-group-btn">
         <button class="btn btn-default" ng-click="open2()" type="button">
           <i class="glyphicon glyphicon-calendar"></i>

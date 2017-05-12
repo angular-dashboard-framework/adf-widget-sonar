@@ -1,35 +1,41 @@
 <style>
-  .daysLeft{
+  .daysLeft {
     text-align: center;
+    max-height: 700px;
   }
-  .info{
+
+  .info {
     width: 65%;
     margin-left: 17.5%;
     margin-top: -80%;
     margin-bottom: 35%;
   }
+
 </style>
-<div class="daysLeft">
-<div ng-init="progress=vm.progressProperties">
-<round-progress
-    max=progress.max
-    current=progress.current
-    color="{{ (current / max < 0.75) ? '#EF3939' : '#337AB7' }}"
-    bgcolor="#F5F5F5"
-    radius="360"
-    stroke="67"
-    semi="false"
-    rounded="true"
-    clockwise="false"
-    responsive="true"
-    duration=800
-    animation="easeInOutQuart"
-    animation-delay="0">
-</round-progress>
+<div class="alert alert-info" ng-if="!vm.result.daysLeft">
+  Please configure the widget
 </div>
-<div class="info">
-<h1 style="font-size:2em">{{config.projectname}}</h1>
-<h1>{{vm.result.daysLeft}}/{{vm.result.maxDays}}</h1>
-<p>Projekttage</p>
-</div>
+<div ng-if="vm.result.daysLeft" class="daysLeft">
+  <div ng-init="progress=vm.progressProperties">
+    <round-progress
+      max=progress.max
+      current=progress.current
+      color="{{ (current / max < 0.75) ? '#EF3939' : '#337AB7' }}"
+      bgcolor="#F5F5F5"
+      radius="360"
+      stroke="67"
+      semi="false"
+      rounded="true"
+      clockwise="true"
+      responsive="true"
+      duration=800
+      animation="easeInOutQuart"
+      animation-delay="0">
+    </round-progress>
+  </div>
+  <div class="info">
+    <h1 style="font-size:2em">{{config.projectname}}</h1>
+    <h1>{{vm.result.daysLeft}}/{{vm.result.maxDays}}</h1>
+    <p>Projekttage</p>
+  </div>
 </div>

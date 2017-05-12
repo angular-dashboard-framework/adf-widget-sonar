@@ -3,20 +3,16 @@
 sonarADFWidget.
 controller('sonarLineChart', sonarLineChart);
 //setup controller
-function sonarLineChart(data) {
+function sonarLineChart(data, METRIC_NAMES) {
   //initialize controller variable
   var vm = this;
   var series = [];
   var values = [];
   for (var i = 0; i < data.length; i++) {
-    series.push(data[i].metric);
+    series.push(METRIC_NAMES[data[i].metric]);
     values.push(data[i].values);
   }
-  //problems if you put them in an array directly
-  var linesOfCode = data.linesOfCode;
-  var technicalDebt = data.technicalDebt;
-  var coverage = data.coverage;
-  var amountTest = data.amountTest;
+
   //setup the chart legend and labels
   vm.series = series;
   vm.labels = data[0].dates;
@@ -25,8 +21,17 @@ function sonarLineChart(data) {
 
 sonarADFWidget.controller('editController', editController);
 
-function editController($scope, $http, sonarApi, sonarEndpoint) {
+function editController($scope, sonarApi, sonarEndpoint) {
   var vm = this;
+  if(!$scope.config.timespan) {
+    $scope.config.timespan= {};
+  }
+
+  // convert strings to date objects
+  if($scope.config.timespan.fromDateTime){
+    $scope.config.timespan.fromDateTime = new Date($scope.config.timespan.fromDateTime);
+    $scope.config.timespan.toDateTime = new Date($scope.config.timespan.toDateTime);
+  }
   $scope.updateProjects = function() {
     var url;
     if ($scope.config.apiUrl) {
@@ -38,34 +43,25 @@ function editController($scope, $http, sonarApi, sonarEndpoint) {
     sonarApi.getProjects(url).then(function(data) {
       data.forEach(function(project) {
         var proj = {
-          name: project.key
-        }
+          name: project.k
+        };
         vm.projects.push(proj);
       });
     });
-  }
+  };
   $scope.updateProjects();
-
-  //calendar
-  $scope.today = function() {
-    $scope.dt = new Date();
-  };
-  $scope.today();
-
-  $scope.clear = function() {
-    $scope.dt = null;
-  };
 
   $scope.inlineOptions = {
     customClass: getDayClass,
     minDate: new Date(),
     showWeeks: true
   };
-
-  $scope.dateOptions = {
-    formatYear: 'yy',
-    startingDay: 1
-  };
+  if(!$scope.dateOptions){
+    $scope.dateOptions = {
+      formatYear: 'yy',
+      startingDay: 1
+    };
+  }
 
   $scope.toggleMin = function() {
     $scope.inlineOptions.minDate = $scope.inlineOptions.minDate ? null : new Date();
@@ -80,10 +76,6 @@ function editController($scope, $http, sonarApi, sonarEndpoint) {
 
   $scope.open2 = function() {
     $scope.popup2.opened = true;
-  };
-
-  $scope.setDate = function(year, month, day) {
-    $scope.dt = new Date(year, month, day);
   };
 
   $scope.formats = ['yyyy-MM-dd', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
