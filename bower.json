@@ -23,8 +23,6 @@
   "dependencies": {
     "angular-dashboard-framework": ">=0.10",
     "angular-chart.js": "^1.1.1",
-    "bower": "*",
-    "install": "^1.0.4",
     "angular-svg-round-progressbar": "^0.4.4"
   },
   "devDependencies": {
