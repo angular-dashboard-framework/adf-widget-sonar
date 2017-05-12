@@ -9,7 +9,6 @@ function sonarLineChart(data, METRIC_NAMES) {
   var series = [];
   var values = [];
   for (var i = 0; i < data.length; i++) {
-    console.log(data[i].metric);
     series.push(METRIC_NAMES[data[i].metric]);
     values.push(data[i].values);
   }
