@@ -1,40 +1,17 @@
 
-<style>
-  .border{
-    border: 2px solid black;
-    padding: 0px;
-  }
-  .metricText{
-    text-align: left;
-  }
-  .centerText{
-    text-align: center;
-  }
-  .tableHead{
-    background-color: #F5F5F5;
-  }
-</style>
-
 <div class="col-md-12 centerText">
 
-<div class="col-md-4 border ">
-  <div class="border metricText tableHead"><h4>Metrik</h4></div>
-  <div ng-repeat="metric in vm.projectLeft">
-  <div class="metricText">{{metric.key}}</div>
-  </div>
-</div>
-
-<div class="col-md-4 border">
-  <div class="border tableHead"><h4>{{config.projectname1}}</h4></div>
-  <div class="table-responsive" ng-repeat="projectLeft in vm.projectLeft">
-    <div>{{projectLeft.frmt_val}}</div>
-    </div>
-</div>
-
-<div class="col-md-4 border">
-  <div class="border tableHead"><h4>{{config.projectname2}}<h4></div>
-  <div class="table-responsive" ng-repeat="projectRight in vm.projectRight">
-    <div>{{projectRight.frmt_val}}</div>
-</div>
+  <table class="table">
+    <tr>
+      <th>Metric</th>
+      <th>{{vm.projectLeft.data.component.name}}</th>
+      <th>{{vm.projectRight.data.component.name}}</th>
+    </tr>
+    <tr ng-repeat="metric in vm.projectLeft.data.component.measures">
+      <td>{{vm.METRIC_NAMES[metric.metric]}}</td>
+      <td>{{vm.projectLeft.data.component.measures[$index].value}}</td>
+      <td>{{vm.projectRight.data.component.measures[$index].value}}</td>
+    </tr>
+  </table>
 
 </div>

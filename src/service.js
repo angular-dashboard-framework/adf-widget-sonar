@@ -7,43 +7,19 @@ factory('sonarApi', sonarApi);
 function sonarApi($http, $q) {
 
   function createApiUrlProjects(sonarUrl) {
+    return sonarUrl + '/api/projects/index?format=json';
+  }
+
+  function createApiUrlAllProjectsStatistics(sonarUrl) {
     return sonarUrl + '/api/resources?metrics=ncloc,coverage';
   }
 
   function createApiUrlMetrics(sonarUrl, projectname) {
-    return sonarUrl + '/api/resources?resource=' + projectname + '&metrics=open_issues,ncloc,public_documented_api_density,duplicated_lines_density,sqale_index';
+    return sonarUrl + '/api/measures/component?componentKey=' + projectname + '&metricKeys=open_issues,ncloc,public_documented_api_density,duplicated_lines_density,sqale_index';
   }
 
   function createApiQualityGate(sonarUrl, projectname) {
     return sonarUrl + '/api/qualitygates/project_status?projectKey=' + projectname;
-  }
-
-  function getQualityGateStatus(sonarUrl, projectname) {
-    var apiUrl = createApiQualityGate(sonarUrl, projectname);
-    return $http({
-      method: 'GET',
-      url: apiUrl,
-      headers: {
-        'Accept': 'application/json'
-      }
-    }).then(function(response) {
-      var status = respsone[0].projectStatus;
-      var result;
-      if (status = "NONE") {
-        result = "grey";
-      }
-      if (status = "WARN") {
-        result = "orange";
-      }
-      if (status = "OK") {
-        result = "green";
-      }
-      if (status = "ERROR") {
-        result = "red";
-      }
-
-      return result;
-    });
   }
 
   function getProjectTime(projectBeginn, projectEnd) {
@@ -53,9 +29,7 @@ function sonarApi($http, $q) {
 
     var maxDays = workingDaysBetweenDates(beginn, end);
     var daysLeft = workingDaysBetweenDates(today, end)
-    console.log(end);
-    console.log(today);
-    console.log(beginn);
+
     var result = {
       'maxDays': maxDays,
       'daysLeft': daysLeft
@@ -123,8 +97,6 @@ function sonarApi($http, $q) {
     return metricsString.slice(0, -1);
   }
 
-
-
   function getMetrics(sonarUrl, projectname1, projectname2) {
     var apiUrlProject1 = createApiUrlMetrics(sonarUrl, projectname1);
     var apiUrlProject2 = createApiUrlMetrics(sonarUrl, projectname2);
@@ -132,8 +104,8 @@ function sonarApi($http, $q) {
     var api2 = $http.get(apiUrlProject2);
     var responsesArray = $q.all([api1, api2])
       .then(function(response) {
-        var projectLeft = response[0].data[0].msr;
-        var projectRight = response[1].data[0].msr;
+        var projectLeft = response[0];
+        var projectRight = response[1];
         var projectMetrics = {
           'projectLeft': projectLeft,
           'projectRight': projectRight
@@ -145,23 +117,29 @@ function sonarApi($http, $q) {
   }
 
 
-  function getChartData(sonarUrl, projectname, fromDateTime, toDateTime, metrics, timespanRadio) {
+  function getChartData(sonarUrl, projectname, metrics, timespan) {
 
     var apiUrl = "";
+    var fromDateTime;
+    var toDateTime;
     var metricsString = createMetricsString(metrics);
-
-    if (timespanRadio) {
+    if (timespan.type === 'dynamic') {
       var today = new Date();
-      if (timespanRadio.week) {
-        fromDateTime = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
-      }
-      if (timespanRadio.month) {
-        fromDateTime = new Date(today.getFullYear(), today.getMonth() - 1, today.getDay());
-      }
-      if (timespanRadio.year) {
-        fromDateTime = new Date(today.getFullYear() - 1, today.getMonth(), today.getDay());
+      switch(timespan.dynamic) {
+        case 'week':
+          fromDateTime = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+          break;
+        case 'month':
+          fromDateTime = new Date(today.getFullYear(), today.getMonth() - 1, today.getDay());
+          break;
+        case 'year':
+          fromDateTime = new Date(today.getFullYear() - 1, today.getMonth(), today.getDay());
+          break;
       }
       toDateTime = today;
+    } else if (timespan.type === 'static') {
+      fromDateTime = timespan.fromDateTime;
+      toDateTime = timespan.toDateTime;
     }
     if ((fromDateTime && toDateTime)) {
       apiUrl = sonarUrl + '/api/timemachine?resource=' + projectname + '&metrics=' + metricsString + '&fromDateTime=' + fromDateTime + '&toDateTime=' + toDateTime;
@@ -196,7 +174,7 @@ function sonarApi($http, $q) {
         metricsArray.push(metricsObj);
       }
       return metricsArray;
-    })
+    });
 
   }
 
@@ -233,14 +211,12 @@ function sonarApi($http, $q) {
         'Accept': 'application/json'
       }
     }).then(function(response) {
-      var sonarProjects = response.data;
-      console.log(sonarProjects);
-      return sonarProjects;
-    })
+      return response.data;
+    });
   }
 
-  function parseStuff(sonarUrl) {
-    var apiUrl = createApiUrlProjects(sonarUrl);
+  function getAllProjectsStatistics(sonarUrl){
+    var apiUrl = createApiUrlAllProjectsStatistics(sonarUrl);
 
     return $http({
       method: 'GET',
@@ -252,14 +228,12 @@ function sonarApi($http, $q) {
       var projects = response.data;
       var sonarProjects = generateArray(projects);
       return sonarProjects;
-    })
-
+    });
   }
-
 
   return {
     getProjects: getProjects,
-    parseStuff: parseStuff,
+    getAllProjectsStatistics: getAllProjectsStatistics,
     getChartData: getChartData,
     getMetrics: getMetrics,
     getProjectTime: getProjectTime
