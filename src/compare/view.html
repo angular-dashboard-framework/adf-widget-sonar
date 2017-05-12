@@ -1,5 +1,7 @@
-
-<div class="col-md-12 centerText">
+<div class="alert alert-info" ng-if="!vm.projectLeft">
+  Please configure the widget
+</div>
+<div ng-if="vm.projectLeft" class="col-md-12 centerText">
 
   <table class="table">
     <tr>

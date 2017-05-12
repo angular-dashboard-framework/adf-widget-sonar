@@ -1,6 +1,7 @@
 <style>
   .daysLeft {
     text-align: center;
+    max-height: 700px;
   }
 
   .info {
@@ -9,8 +10,12 @@
     margin-top: -80%;
     margin-bottom: 35%;
   }
+
 </style>
-<div class="daysLeft">
+<div class="alert alert-info" ng-if="!vm.result.daysLeft">
+  Please configure the widget
+</div>
+<div ng-if="vm.result.daysLeft" class="daysLeft">
   <div ng-init="progress=vm.progressProperties">
     <round-progress
       max=progress.max
@@ -21,7 +26,7 @@
       stroke="67"
       semi="false"
       rounded="true"
-      clockwise="false"
+      clockwise="true"
       responsive="true"
       duration=800
       animation="easeInOutQuart"

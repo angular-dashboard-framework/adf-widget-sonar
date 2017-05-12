@@ -12,11 +12,7 @@ function sonarLineChart(data, METRIC_NAMES) {
     series.push(METRIC_NAMES[data[i].metric]);
     values.push(data[i].values);
   }
-  //problems if you put them in an array directly
-  var linesOfCode = data.linesOfCode;
-  var technicalDebt = data.technicalDebt;
-  var coverage = data.coverage;
-  var amountTest = data.amountTest;
+
   //setup the chart legend and labels
   vm.series = series;
   vm.labels = data[0].dates;
@@ -25,7 +21,7 @@ function sonarLineChart(data, METRIC_NAMES) {
 
 sonarADFWidget.controller('editController', editController);
 
-function editController($scope, $http, sonarApi, sonarEndpoint) {
+function editController($scope, sonarApi, sonarEndpoint) {
   var vm = this;
   if(!$scope.config.timespan) {
     $scope.config.timespan= {};
@@ -48,11 +44,11 @@ function editController($scope, $http, sonarApi, sonarEndpoint) {
       data.forEach(function(project) {
         var proj = {
           name: project.k
-        }
+        };
         vm.projects.push(proj);
       });
     });
-  }
+  };
   $scope.updateProjects();
 
   $scope.inlineOptions = {
