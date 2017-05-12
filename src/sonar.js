@@ -99,7 +99,7 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
         description: 'Visualizes the progress of a project',
         templateUrl: '{widgetsPath}/sonar/src/project-progress/view.html',
         resolve: {
-          data: function(sonarApi, config, sonarEndpoint) {
+          data: function(sonarApi, config) {
             if (config.projectBeginn){
               return sonarApi.getProjectTime(config.projectBeginn, config.projectEnd);
             }

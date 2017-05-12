@@ -18,10 +18,6 @@ function sonarApi($http, $q) {
     return sonarUrl + '/api/measures/component?componentKey=' + projectname + '&metricKeys=open_issues,ncloc,public_documented_api_density,duplicated_lines_density,sqale_index';
   }
 
-  function createApiQualityGate(sonarUrl, projectname) {
-    return sonarUrl + '/api/qualitygates/project_status?projectKey=' + projectname;
-  }
-
   function getProjectTime(projectBeginn, projectEnd) {
     var beginn = new Date(projectBeginn);
     var end = new Date(projectEnd);
@@ -30,18 +26,19 @@ function sonarApi($http, $q) {
     var maxDays = workingDaysBetweenDates(beginn, end);
     var daysLeft = workingDaysBetweenDates(today, end)
 
-    var result = {
+    return {
       'maxDays': maxDays,
       'daysLeft': daysLeft
     };
-    return result;
+
   }
 
   function workingDaysBetweenDates(startDate, endDate) {
 
     // Validate input
-    if (endDate < startDate)
+    if (endDate < startDate){
       return 0;
+    }
 
     // Calculate days between dates
     var millisecondsPerDay = 86400 * 1000; // Day in milliseconds
@@ -60,15 +57,20 @@ function sonarApi($http, $q) {
 
     // Remove weekend not previously removed.
     if (startDay - endDay > 1)
+    {
       days = days - 2;
+    }
 
     // Remove start day if span starts on Sunday but ends before Saturday
-    if (startDay == 0 && endDay != 6)
-      days = days - 1
+    if (startDay === 0 && endDay != 6){
+      days = days - 1;
+    }
 
     // Remove end day if span ends on Saturday but starts after Sunday
-    if (endDay == 6 && startDay != 0)
-      days = days - 1
+    if (endDay === 6 && startDay != 0)
+    {
+      days = days - 1;
+    }
 
     return days;
   }
@@ -119,7 +121,7 @@ function sonarApi($http, $q) {
 
   function getChartData(sonarUrl, projectname, metrics, timespan) {
 
-    var apiUrl = "";
+    var apiUrl;
     var fromDateTime;
     var toDateTime;
     var metricsString = createMetricsString(metrics);
@@ -154,10 +156,9 @@ function sonarApi($http, $q) {
       }
     }).then(function(response) {
       var metricsArray = [];
-      var response = response.data[0];
-      var cols = response.cols;
-      var cells = response.cells;
-      var dates = [];
+      var responseData = response.data[0];
+      var cols = responseData.cols;
+      var cells = responseData.cells;
       for (var x = 0; x < cols.length; x++) {
         var values = [];
         var dates = [];
@@ -179,26 +180,23 @@ function sonarApi($http, $q) {
   }
 
   function generateArray(projects) {
-    var linesOfCode = 0;
     var linesOfCodeSum = 0;
-    var coverage = 0;
     var avarageCoverage = 0;
     for (var i = 0; i < projects.length; i++) {
       if (projects[i].msr[0]) {
-        linesOfCode = projects[i].msr[0].val;
+        var linesOfCode = projects[i].msr[0].val;
         linesOfCodeSum += linesOfCode;
       }
       if (projects[i].msr[1]) {
-        coverage = projects[i].msr[1].val;
+        var coverage = projects[i].msr[1].val;
         avarageCoverage += coverage;
       }
     }
     avarageCoverage = avarageCoverage / projects.length;
-    var stats = {
+    return {
       'linesOfCode': linesOfCodeSum,
       'coverage': avarageCoverage
-    }
-    return stats;
+    };
   }
 
   function getProjects(sonarUrl) {
@@ -226,8 +224,7 @@ function sonarApi($http, $q) {
       }
     }).then(function(response) {
       var projects = response.data;
-      var sonarProjects = generateArray(projects);
-      return sonarProjects;
+      return generateArray(projects);
     });
   }
 
