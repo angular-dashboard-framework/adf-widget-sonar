@@ -13,6 +13,10 @@ function sonarApi($http, $q) {
   function createApiUrlAllProjectsStatistics(sonarUrl) {
     return sonarUrl + '/api/resources?metrics=ncloc,coverage';
   }
+  
+  function createApiUrlAllMyIssues(sonarUrl) {
+    return sonarUrl + '/api/issues/search?assignees=pczora';//___me__'; //--> nur zum Testen, eigentlich ist es __me__!
+  }
 
   function createApiUrlMetrics(sonarUrl, projectname) {
     return sonarUrl + '/api/measures/component?componentKey=' + projectname + '&metricKeys=open_issues,ncloc,public_documented_api_density,duplicated_lines_density,sqale_index';
@@ -227,13 +231,28 @@ function sonarApi($http, $q) {
       return generateArray(projects);
     });
   }
+  
+  function getAllMyIssues(sonarUrl){
+    var apiUrl = createApiUrlAllMyIssues(sonarUrl);
+
+    return $http({
+      method: 'GET',
+      url: apiUrl,
+      headers: {
+        'Accept': 'application/json'
+      }
+    }).then(function(response) {
+      return response.data.issues;
+    });
+  }
 
   return {
     getProjects: getProjects,
     getAllProjectsStatistics: getAllProjectsStatistics,
     getChartData: getChartData,
     getMetrics: getMetrics,
-    getProjectTime: getProjectTime
+    getProjectTime: getProjectTime,
+    getAllMyIssues: getAllMyIssues
   };
 
 }

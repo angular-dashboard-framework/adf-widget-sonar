@@ -1,0 +1,60 @@
+<style type="text/css">
+    .content{
+        text-align: left;
+        color: black;
+    }
+    .linesOfCode {
+        background-color:#F0F0F0;
+        margin-bottom: 0.5%;
+        border-radius: 1px;
+    }
+    .heading {
+        color: #1874CD;
+        font-size: small;
+        margin-top:  1%;
+    }
+</style>
+
+<div>
+    <div ng-if="!vm.projects" class="alert alert-info">
+        You don't have any issues.
+    </div>
+
+    <div ng-repeat="project in vm.projects">
+        <div class="heading">
+            <span class="glyphicon glyphicon-folder-open"></span>
+            {{project.project}}
+            <span class="glyphicon glyphicon-folder-open"></span>
+            {{project.subProject}}
+            <span class="glyphicon glyphicon-file"></span>
+            {{project.component}}</br>
+        </div>
+        <div class="content col-md-20">
+            <div class="col-md-20 linesOfCode" ng-repeat="issue in project.projectIssue track by $index">
+
+                <table width="1000">
+                    <tr>
+                        <td width=80% colspan="4"><b>{{issue.message}}</b></td>
+                        <td ng-if="issue.line">L{{issue.line}}</td>
+                    </tr>
+                    <tr>
+                        <td>{{issue.type}}</td>
+                        <td>
+                            <span ng-if="issue.severity == 'major'" class="glyphicon glyphicon-chevron-up"></span>
+                            <span ng-if="issue.severity == 'minor'" class="glyphicon glyphicon-chevron-down"></span>
+                            <span ng-if="issue.severity == 'info'" class="glyphicon glyphicon-arrow-down"></span>
+                            <span ng-if="issue.severity == 'critical'" class="glyphicon glyphicon-arrow-up"></span>
+                            <span ng-if="issue.severity == 'blocker'" class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{issue.severity}}
+                        </td>
+                        <td>{{issue.status}}</td>
+                        <td ng-if="issue.effort" width="200"><span class="glyphicon glyphicon-time"></span> {{issue.effort}} effort</td>
+                        <td ng-if="!issue.effort" width="200"></td>
+                        <td><span ng-if="issue.tag" class="glyphicon glyphicon-tags"></span> {{issue.tag}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
