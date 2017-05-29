@@ -1,0 +1,18 @@
+<div class="form-group">
+<form role="form">
+    <div class="form-group">
+        <label for="sample">API-URL</label>
+        <input type="text" class="form-control" id="sample" ng-model="config.apiUrl" placeholder="Sonar-URL">
+    </div>
+</form>
+<form role="form">
+    <div class="form-group">
+        <label for="sample">Sorting</label>
+        <select class="form-control" id="sample" ng-model="config.sorting" placeholder="Test">
+            <option value="" disabled selected>Select your option</option>
+            <option value="sortByEffort">Sorting by Effort</option>
+            <option value="sortBySeverity">Sorting by Severity</option>
+        </select>
+    </div>
+</form>
+</div>

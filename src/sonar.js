@@ -124,12 +124,37 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
             else if (sonarEndpoint.url){
               return sonarApi.getAllMyIssues(sonarEndpoint.url);
             }
-            return 'Error'; //hier noch vernuenftige Fehlermeldung!
+            return 'Please Setup the Widget';
           }
         },
         category: 'SonarQube',
         controller: 'sonarIssueCtrl',
-        controllerAs: 'vm'
+        controllerAs: 'vm',
+        edit: {
+             templateUrl: '{widgetsPath}/sonar/src/issues/edit.html'
+        }
+      })
+      .widget('sonar-projectquality', {
+        title: 'Sonar: Projectquality of a project',
+        description: 'Displays status of the qualitygate, code coverage and blocker issues',
+        templateUrl: '{widgetsPath}/sonar/src/projectquality/view.html',
+        resolve: {
+          data: function(sonarApi, config, sonarEndpoint) {
+            if (config.apiUrl && config.project) {
+              return sonarApi.getProjectquality(config.apiUrl, config.project);
+            }
+            else if (sonarEndpoint.url && config.project){
+              return sonarApi.getProjectquality(sonarEndpoint.url, config.project);
+            }
+            return 'Please Setup the Widget';
+          }
+        },
+        category: 'SonarQube',
+        controller: 'qualityCtrl',
+        controllerAs: 'vm',
+        edit: {
+             templateUrl: '{widgetsPath}/sonar/src/projectquality/edit.html'
+        }
       });
 
   });

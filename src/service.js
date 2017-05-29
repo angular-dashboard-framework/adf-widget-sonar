@@ -21,6 +21,10 @@ function sonarApi($http, $q) {
   function createApiUrlMetrics(sonarUrl, projectname) {
     return sonarUrl + '/api/measures/component?componentKey=' + projectname + '&metricKeys=open_issues,ncloc,public_documented_api_density,duplicated_lines_density,sqale_index';
   }
+  
+  function createApiUrlQuality(sonarUrl, projectname) {
+    return sonarUrl + '/api/measures/component?componentKey=' + projectname + '&metricKeys=open_issues,ncloc,public_documented_api_density,duplicated_lines_density,sqale_index';
+  }
 
   function getProjectTime(projectBeginn, projectEnd) {
     var beginn = new Date(projectBeginn);
@@ -245,6 +249,20 @@ function sonarApi($http, $q) {
       return response.data.issues;
     });
   }
+  
+  function getProjectquality(sonarUrl, project){
+    var apiUrl = createApiUrlQuality(sonarUrl, project);
+
+    return $http({
+      method: 'GET',
+      url: apiUrl,
+      headers: {
+        'Accept': 'application/json'
+      }
+    }).then(function(response) {
+      return response.data.issues;
+    });
+  }
 
   return {
     getProjects: getProjects,
@@ -252,7 +270,8 @@ function sonarApi($http, $q) {
     getChartData: getChartData,
     getMetrics: getMetrics,
     getProjectTime: getProjectTime,
-    getAllMyIssues: getAllMyIssues
+    getAllMyIssues: getAllMyIssues,
+    getProjectquality: getProjectquality
   };
 
 }
