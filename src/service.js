@@ -15,7 +15,7 @@ function sonarApi($http, $q) {
   }
   
   function createApiUrlAllMyIssues(sonarUrl) {
-    return sonarUrl + '/api/issues/search?assignees=pczora';//___me__'; //--> nur zum Testen, eigentlich ist es __me__!
+    return sonarUrl + '/api/issues/search?assignees=__me__';//--> nur zum Testen, eigentlich ist es __me__!
   }
 
   function createApiUrlMetrics(sonarUrl, projectname) {
@@ -23,7 +23,7 @@ function sonarApi($http, $q) {
   }
   
   function createApiUrlQuality(sonarUrl, projectname) {
-    return sonarUrl + '/api/measures/component?componentKey=' + projectname + '&metricKeys=open_issues,ncloc,public_documented_api_density,duplicated_lines_density,sqale_index';
+       return sonarUrl + '/api/resources?resource=' + projectname + '&metrics=coverage,blocker_violations,quality_gate_details';
   }
 
   function getProjectTime(projectBeginn, projectEnd) {
@@ -32,13 +32,13 @@ function sonarApi($http, $q) {
     var today = new Date();
 
     var maxDays = workingDaysBetweenDates(beginn, end);
-    var daysLeft = workingDaysBetweenDates(today, end)
+    var daysLeft = workingDaysBetweenDates(today, end);
 
     return {
       'maxDays': maxDays,
       'daysLeft': daysLeft
     };
-
+    
   }
 
   function workingDaysBetweenDates(startDate, endDate) {
@@ -260,7 +260,7 @@ function sonarApi($http, $q) {
         'Accept': 'application/json'
       }
     }).then(function(response) {
-      return response.data.issues;
+      return response.data[0];
     });
   }
 

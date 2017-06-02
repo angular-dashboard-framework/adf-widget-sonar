@@ -34,4 +34,5 @@ function editController($scope, $http, sonarApi, sonarEndpoint) {
     });
   }
   $scope.updateProjects();
+
 }

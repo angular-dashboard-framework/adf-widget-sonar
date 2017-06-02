@@ -135,8 +135,8 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
         }
       })
       .widget('sonar-projectquality', {
-        title: 'Sonar: Projectquality of a project',
-        description: 'Displays status of the qualitygate, code coverage and blocker issues',
+        title: 'Sonar: Projectquality of a Project',
+        description: 'Displays Status of the Quality Gate, Code Coverage and Blocker Issues',
         templateUrl: '{widgetsPath}/sonar/src/projectquality/view.html',
         resolve: {
           data: function(sonarApi, config, sonarEndpoint) {
