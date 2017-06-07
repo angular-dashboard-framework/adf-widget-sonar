@@ -1,0 +1,97 @@
+<style type="text/css">
+    .content {
+        text-align: right;
+        color: black;
+    }
+
+    .statusQualitygate {
+        border-radius: 8px;
+        margin-bottom: 2%;
+    }
+
+    .codeCoverage {
+        border-radius: 8px;
+        background-color: #f0ad4e;
+        margin-bottom: 2%;
+    }
+
+    .blockerIssues {
+        border-radius: 8px;
+        background-color: #1B7DAA;
+    }
+
+    .glyphiconStyle {
+        float: left;
+        font-size: 3em;
+        margin-top: 25px;
+    }
+
+    .error {
+        background-color: #E43B53;
+    }
+
+    .warning {
+        background-color: #DD7800;
+    }
+
+    .ok {
+        background-color: #B5CA00;
+    }
+
+    .unknown {
+        background-color: #777777;
+    }
+</style>
+
+
+<div class="alert alert-info" ng-if="!vm.name">
+    Please configure the widget
+</div>
+
+<div class="content col-md-12" ng-if="vm.name">
+    
+    <div ng-switch on="vm.qualityGateStatus">
+        <div ng-switch-when="OK">
+            <div class="ok col-md-12 statusQualitygate">
+                <span class="glyphicon glyphicon-ok glyphiconStyle"></span>
+                <h1>Passed</h1>
+                <h4>Quality Gate</h4>
+            </div>
+        </div>
+        <div ng-switch-when="ERROR">
+            <div class="error col-md-12 statusQualitygate">
+                <span class="glyphicon glyphicon-remove glyphiconStyle"></span>
+                <h1>Error</h1>
+                <h4>Quality Gate</h4>
+            </div>
+        </div>
+        <div ng-switch-when="WARNING">
+            <div class="warning col-md-12 statusQualitygate">
+                <span class="glyphicon glyphicon-info-sign glyphiconStyle"></span>
+                <h1>Warning</h1>
+                <h4>Quality Gate</h4>
+            </div>
+        </div>
+
+        <div ng-switch-default>
+            <div class="unknown col-md-12 statusQualitygate">
+                <span class="glyphicon glyphicon-question-sign glyphiconStyle"></span>
+                <h1>unknown</h1>
+                <h4>Quality Gate</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12 codeCoverage">
+        <span class="glyphicon glyphicon-tasks glyphiconStyle"></span>
+        <h1>{{vm.coverage||"unknown"}}</h1>
+        <h4>Code Coverage</h4>
+    </div>
+    <div class="col-md-12 blockerIssues">
+        <span class="glyphicon glyphicon-exclamation-sign glyphiconStyle"></span>
+        <h1>{{vm.blocker||"unknown"}}</h1>
+        <h4>Blocker Issues</h4>
+    </div>
+
+</div>
+

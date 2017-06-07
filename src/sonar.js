@@ -2,7 +2,7 @@
 //app initialisation with dependencies
 var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.js', 'ui.bootstrap', 'ui.bootstrap.datepicker','angular-svg-round-progressbar'])
 .constant("sonarEndpoint", {
-  "url": "https://sonarqube.com"
+  "url": "https://ecosystem.cloudogu.com/sonar"//https://sonarqube.com"
 }).constant("METRIC_NAMES", {"open_issues":"Open Issues","ncloc":"Lines of Code",
 "public_documented_api_density": "Public documented API density","duplicated_lines_density": "Duplicated Lines (%)",
 "sqale_index":"SQALE index", "coverage": "Coverage (%)", "tests": "Tests" })
@@ -110,6 +110,50 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
         controllerAs: 'vm',
         edit: {
           templateUrl: '{widgetsPath}/sonar/src/project-progress/edit.html'
+        }
+      })
+      .widget('sonar-my-issues', {
+        title: 'Sonar: My Issues',
+        description: 'Displays all issues of yourself',
+        templateUrl: '{widgetsPath}/sonar/src/issues/view.html',
+        resolve: {
+          data: function(sonarApi, config, sonarEndpoint) {
+            if (config.apiUrl) {
+              return sonarApi.getAllMyIssues(config.apiUrl);
+            }
+            else if (sonarEndpoint.url){
+              return sonarApi.getAllMyIssues(sonarEndpoint.url);
+            }
+            return 'Please Setup the Widget';
+          }
+        },
+        category: 'SonarQube',
+        controller: 'sonarIssueCtrl',
+        controllerAs: 'vm',
+        edit: {
+             templateUrl: '{widgetsPath}/sonar/src/issues/edit.html'
+        }
+      })
+      .widget('sonar-projectquality', {
+        title: 'Sonar: Projectquality of a Project',
+        description: 'Displays Status of the Quality Gate, Code Coverage and Blocker Issues',
+        templateUrl: '{widgetsPath}/sonar/src/projectquality/view.html',
+        resolve: {
+          data: function(sonarApi, config, sonarEndpoint) {
+            if (config.apiUrl && config.project) {
+              return sonarApi.getProjectquality(config.apiUrl, config.project);
+            }
+            else if (sonarEndpoint.url && config.project){
+              return sonarApi.getProjectquality(sonarEndpoint.url, config.project);
+            }
+            return 'Please Setup the Widget';
+          }
+        },
+        category: 'SonarQube',
+        controller: 'qualityCtrl',
+        controllerAs: 'vm',
+        edit: {
+             templateUrl: '{widgetsPath}/sonar/src/projectquality/edit.html'
         }
       });
 

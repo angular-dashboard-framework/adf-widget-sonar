@@ -1,0 +1,64 @@
+<style type="text/css">
+    .content{
+        text-align: left;
+        color: black;
+    }
+    .tagContent{
+        color: grey;
+        text-align: right;
+    }
+    .linesOfCode {
+        background-color:#F0F0F0;
+        margin-bottom: 0.5%;
+        border-radius: 1px;
+    }
+    .heading {
+        color: #1874CD;
+        font-size: small;
+        margin-top:  1%;
+    }
+</style>
+<div ng-if="!vm.projects" class="alert alert-info">
+    You don't have any issues.
+</div>
+<div ng-if="vm.projects">
+    
+    <div ng-repeat="project in vm.projects | orderBy: vm.sorting"> <!--(config.sorting?sortBySeverity:sortByEffort)-->
+        <div class="heading">
+            <span ng-if="project.project" class="glyphicon glyphicon-folder-open"></span>
+            {{project.project}}
+            <span ng-if="project.subProject" class="glyphicon glyphicon-folder-open"></span>
+            {{project.subProject}}
+            <span ng-if="project.component" class="glyphicon glyphicon-file"></span>
+            {{project.component}}</br>
+        </div>
+        <div class="content col-md-20">
+            <div class="col-md-20 linesOfCode" ng-repeat="issue in project.projectIssue track by $index">
+
+                <table width="100%">
+                    <tr>
+                        <td width="80%" colspan="4"><b>{{issue.message}}</b></td>
+                        <td ng-if="issue.line">L{{issue.line}}</td> 
+                    </tr>
+                </table><table width="100%">
+                    <tr>
+                        <td width="15%">{{issue.type | lowercase}}</td>
+                        <td width="15%">
+                            <span ng-if="issue.severity == 'MAJOR'" class="glyphicon glyphicon-chevron-up"></span>
+                            <span ng-if="issue.severity == 'MINOR'" class="glyphicon glyphicon-chevron-down"></span>
+                            <span ng-if="issue.severity == 'INFO'" class="glyphicon glyphicon-arrow-down"></span>
+                            <span ng-if="issue.severity == 'CRITICAL'" class="glyphicon glyphicon-arrow-up"></span>
+                            <span ng-if="issue.severity == 'BLOCKER'" class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{issue.severity | lowercase}}
+                        </td>
+                        <td width="15%">{{issue.status | lowercase}}</td>
+                        <td width="15%" ng-if="issue.effort"><span class="glyphicon glyphicon-time"></span> {{issue.effort}} effort</td>
+
+                        <td class="tagContent"><span ng-if="issue.tag" class="glyphicon glyphicon-tags"></span>  {{issue.tag}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>

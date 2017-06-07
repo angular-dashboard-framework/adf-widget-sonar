@@ -1,0 +1,17 @@
+<style type="text/css"></style>
+<form role="form">
+    <div class="form-group" ng-controller="editController as vm">
+        <label for="sample">API-URL</label>
+        <p>
+            <input class="form-control" id="sample" ng-model="config.apiUrl" placeholder="Sonar-URL" type="text"
+                   ng-change="updateProjects()">
+        </p>
+        <label for="sample">Project</label>
+        (*Required)
+        <p>
+            <input id="project" name="project" type="text" class="form-control" autocomplete="off"
+                   placeholder="Choose project" ng-model="config.project" required="true"
+                   uib-typeahead="project.name for project in vm.projects | limitTo:10 | filter:$viewValue"/>
+        </p>
+    </div>
+</form>
