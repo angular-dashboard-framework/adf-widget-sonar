@@ -1,14 +1,14 @@
 <style type="text/css">
-  .content {
+  div.sonar-content {
     text-align: right;
     color: white;
   }
   .coverage {
-    background-color: #f0ad4e;
+    background-color: #fcc700;
     border-radius: 8px;
   }
   .linesOfCode {
-    background-color: #337ab7;
+    background-color: #1B7DAA;
     margin-bottom: 2%;
     border-radius: 8px;
   }
@@ -25,7 +25,7 @@
 </style>
 
 <div>
-  <div class="content col-md-12">
+  <div class="sonar-content col-md-12">
     <div class="col-md-12 linesOfCode">
       <span class="glyphicon glyphicon-pencil linesOfCodePencil"></span>
       <h1>{{(vm.data.linesOfCode | number)||0}}</h1>

@@ -13,15 +13,15 @@ function sonarApi($http, $q) {
   function createApiUrlAllProjectsStatistics(sonarUrl) {
     return sonarUrl + '/api/resources?metrics=ncloc,coverage';
   }
-  
+
   function createApiUrlAllMyIssues(sonarUrl) {
-    return sonarUrl + '/api/issues/search?assignees=__me__';//--> nur zum Testen, eigentlich ist es __me__!
+    return sonarUrl + '/api/issues/search?assignees=pczora';//--> nur zum Testen, eigentlich ist es __me__!
   }
 
   function createApiUrlMetrics(sonarUrl, projectname) {
     return sonarUrl + '/api/measures/component?componentKey=' + projectname + '&metricKeys=open_issues,ncloc,public_documented_api_density,duplicated_lines_density,sqale_index';
   }
-  
+
   function createApiUrlQuality(sonarUrl, projectname) {
        return sonarUrl + '/api/resources?resource=' + projectname + '&metrics=coverage,blocker_violations,quality_gate_details';
   }
@@ -38,7 +38,7 @@ function sonarApi($http, $q) {
       'maxDays': maxDays,
       'daysLeft': daysLeft
     };
-    
+
   }
 
   function workingDaysBetweenDates(startDate, endDate) {
@@ -235,7 +235,7 @@ function sonarApi($http, $q) {
       return generateArray(projects);
     });
   }
-  
+
   function getAllMyIssues(sonarUrl){
     var apiUrl = createApiUrlAllMyIssues(sonarUrl);
 
@@ -249,7 +249,7 @@ function sonarApi($http, $q) {
       return response.data.issues;
     });
   }
-  
+
   function getProjectquality(sonarUrl, project){
     var apiUrl = createApiUrlQuality(sonarUrl, project);
 
