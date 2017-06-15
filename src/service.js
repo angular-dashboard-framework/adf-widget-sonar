@@ -15,7 +15,7 @@ function sonarApi($http, $q) {
   }
 
   function createApiUrlAllMyIssues(sonarUrl) {
-    return sonarUrl + '/api/issues/search?assignees=pczora';//--> nur zum Testen, eigentlich ist es __me__!
+    return sonarUrl + '/api/issues/search?assignees=__me__';
   }
 
   function createApiUrlMetrics(sonarUrl, projectname) {
