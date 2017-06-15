@@ -95,7 +95,7 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
         }
       })
       .widget('project-progress', {
-        title: 'Project Progress',
+        title: 'Sonar Project Progress',
         description: 'Visualizes the progress of a project',
         templateUrl: '{widgetsPath}/sonar/src/project-progress/view.html',
         resolve: {
@@ -113,7 +113,7 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
         }
       })
       .widget('sonar-my-issues', {
-        title: 'Sonar: My Issues',
+        title: 'Sonar My Issues',
         description: 'Displays all issues of yourself',
         templateUrl: '{widgetsPath}/sonar/src/issues/view.html',
         resolve: {
@@ -135,7 +135,7 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
         }
       })
       .widget('sonar-projectquality', {
-        title: 'Sonar: Projectquality of a Project',
+        title: 'Sonar Projectquality of a Project',
         description: 'Displays Status of the Quality Gate, Code Coverage and Blocker Issues',
         templateUrl: '{widgetsPath}/sonar/src/projectquality/view.html',
         resolve: {
