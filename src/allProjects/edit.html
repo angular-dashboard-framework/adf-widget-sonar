@@ -1,6 +1,6 @@
-<form role="form">
+<form role="form" ng-controller="editController as vm">
   <div class="form-group">
-    <label for="sample">API-URL</label>
-    <input type="text" class="form-control" id="sample" ng-model="config.apiUrl" placeholder="Sonar-URL">
+    <label ng-if="!vm.url" for="sample">API-URL</label>
+    <input ng-if="!vm.url" type="text" class="form-control" id="sample" ng-model="config.apiUrl" placeholder="Sonar-URL">
   </div>
 </form>

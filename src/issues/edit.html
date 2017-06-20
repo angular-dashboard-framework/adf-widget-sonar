@@ -1,8 +1,8 @@
 <div class="form-group">
 <form role="form">
-    <div class="form-group">
-        <label for="sample">API-URL</label>
-        <input type="text" class="form-control" id="sample" ng-model="config.apiUrl" placeholder="Sonar-URL">
+    <div class="form-group" ng-controller="editController as vm">
+        <label ng-if="!vm.url" for="sample">API-URL</label>
+        <input ng-if="!vm.url" type="text" class="form-control" ng-model="config.apiUrl" placeholder="Sonar-URL">
     </div>
 </form>
 <form role="form">

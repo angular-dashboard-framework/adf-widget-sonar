@@ -26,6 +26,7 @@ function editController($scope, sonarApi, sonarEndpoint) {
   if(!$scope.config.timespan) {
     $scope.config.timespan= {};
   }
+  vm.url = sonarEndpoint.url;
 
   // convert strings to date objects
   if($scope.config.timespan.fromDateTime){

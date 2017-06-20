@@ -2,7 +2,7 @@
 //app initialisation with dependencies
 var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.js', 'ui.bootstrap', 'ui.bootstrap.datepicker','angular-svg-round-progressbar'])
 .constant("sonarEndpoint", {
-  "url": "https://ecosystem.cloudogu.com/sonar"//https://sonarqube.com"
+  "url": "https://sonarcloud.io"
 }).constant("METRIC_NAMES", {"open_issues":"Open Issues","ncloc":"Lines of Code",
 "public_documented_api_density": "Public documented API density","duplicated_lines_density": "Duplicated Lines (%)",
 "sqale_index":"SQALE index", "coverage": "Coverage (%)", "tests": "Tests" })

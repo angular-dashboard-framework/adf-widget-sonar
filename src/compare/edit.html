@@ -1,7 +1,7 @@
 <form role="form">
   <div class="form-group" ng-controller="editController as vm">
-    <label for="url">API-URL</label>
-    <input type="text" class="form-control" id="url" ng-model="config.apiUrl" placeholder="Sonar-URL" ng-change="updateProjects()">
+    <label ng-if="!vm.url" for="url">API-URL</label>
+    <input ng-if="!vm.url" type="text" class="form-control" id="url" ng-model="config.apiUrl" placeholder="Sonar-URL" ng-change="updateProjects()">
     <label for="project1">Choose Project 1</label>
     <input type="text" class="form-control" id="project1" ng-model="config.projectname1" ng-required="true"
            placeholder="Project 1" uib-typeahead="project.name for project in vm.projects | limitTo:10 | filter:$viewValue"/>

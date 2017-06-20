@@ -1,8 +1,8 @@
 <style type="text/css"></style>
 <form role="form">
   <div class="form-group" ng-controller="editController as vm">
-    <label for="sample">API-URL</label>
-    <p>
+    <label ng-if="!vm.url" for="sample">API-URL</label>
+    <p ng-if="!vm.url">
       <input class="form-control" id="sample" ng-model="config.apiUrl" placeholder="Sonar-URL" type="text"
              ng-change="updateProjects()">
     </p>
