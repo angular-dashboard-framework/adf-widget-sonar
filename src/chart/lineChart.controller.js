@@ -1,38 +1,56 @@
 'use strict';
 
 sonarADFWidget.
-controller('sonarLineChart', sonarLineChart);
+  controller('sonarLineChart', sonarLineChart);
 //setup controller
 function sonarLineChart(data, METRIC_NAMES) {
   //initialize controller variable
   var vm = this;
-  var series = [];
-  var values = [];
-  for (var i = 0; i < data.length; i++) {
-    series.push(METRIC_NAMES[data[i].metric]);
-    values.push(data[i].values);
+  if (data) {
+    vm.chart = createChart();
   }
 
-  //setup the chart legend and labels
-  vm.series = series;
-  vm.labels = data[0].dates;
-  vm.values = values;
+  function createChart() {
+    var options = {
+        legend:{
+          display:true,
+          position: "bottom"
+        },
+      responsive: true
+    };
+    var chart = {
+      labels: [],
+      data: [],
+      series: [],
+      class: "chart-line",
+      options: options
+    };
+
+    for (var i = 0; i < data.length; i++) {
+      chart.series.push(METRIC_NAMES[data[i].metric]);
+      chart.data.push(data[i].values);
+    }
+
+    chart.labels = data[0].dates;
+
+    return chart;
+  }
 }
 
 sonarADFWidget.controller('editController', editController);
 
 function editController($scope, sonarApi, sonarEndpoint) {
   var vm = this;
-  if(!$scope.config.timespan) {
-    $scope.config.timespan= {};
+  if (!$scope.config.timespan) {
+    $scope.config.timespan = {};
   }
 
   // convert strings to date objects
-  if($scope.config.timespan.fromDateTime){
+  if ($scope.config.timespan.fromDateTime) {
     $scope.config.timespan.fromDateTime = new Date($scope.config.timespan.fromDateTime);
     $scope.config.timespan.toDateTime = new Date($scope.config.timespan.toDateTime);
   }
-  $scope.updateProjects = function() {
+  $scope.updateProjects = function () {
     var url;
     if ($scope.config.apiUrl) {
       url = $scope.config.apiUrl;
@@ -40,8 +58,8 @@ function editController($scope, sonarApi, sonarEndpoint) {
       url = sonarEndpoint.url;
     }
     vm.projects = [];
-    sonarApi.getProjects(url).then(function(data) {
-      data.forEach(function(project) {
+    sonarApi.getProjects(url).then(function (data) {
+      data.forEach(function (project) {
         var proj = {
           name: project.k
         };
@@ -56,25 +74,25 @@ function editController($scope, sonarApi, sonarEndpoint) {
     minDate: new Date(),
     showWeeks: true
   };
-  if(!$scope.dateOptions){
+  if (!$scope.dateOptions) {
     $scope.dateOptions = {
       formatYear: 'yy',
       startingDay: 1
     };
   }
 
-  $scope.toggleMin = function() {
+  $scope.toggleMin = function () {
     $scope.inlineOptions.minDate = $scope.inlineOptions.minDate ? null : new Date();
     $scope.dateOptions.minDate = $scope.inlineOptions.minDate;
   };
 
   $scope.toggleMin();
 
-  $scope.open1 = function() {
+  $scope.open1 = function () {
     $scope.popup1.opened = true;
   };
 
-  $scope.open2 = function() {
+  $scope.open2 = function () {
     $scope.popup2.opened = true;
   };
 
