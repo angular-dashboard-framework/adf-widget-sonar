@@ -6,21 +6,6 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
 }).constant("METRIC_NAMES", {"open_issues":"Open Issues","ncloc":"Lines of Code",
 "public_documented_api_density": "Public documented API density","duplicated_lines_density": "Duplicated Lines (%)",
 "sqale_index":"SQALE index", "coverage": "Coverage (%)", "tests": "Tests" })
-  .config(['ChartJsProvider', function (ChartJsProvider) {
-    // Configure all charts
-    ChartJsProvider.setOptions({
-      chartColors: ['#16688d', '#fdb45c'],
-      responsive: false,
-      maintainAspectRatio: true,
-      legend:{
-        display:true
-      }
-    });
-    // Configure all line charts
-    ChartJsProvider.setOptions('line', {
-      showLines: true
-    });
-  }])
   .config(function(dashboardProvider) {
     dashboardProvider
       .widget('sonar-all-projects-statistics', {
@@ -58,7 +43,7 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
               apiUrl = sonarEndpoint.url;
             }
             if (apiUrl && config.project && config.metrics){
-              return sonarApi.getChartData(config.apiUrl, config.project, config.metrics, config.timespan);
+              return sonarApi.getChartData(apiUrl, config.project, config.metrics, config.timespan);
             } else{
               return 'Please Setup the Widget';
             }
@@ -95,7 +80,7 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
         }
       })
       .widget('project-progress', {
-        title: 'Sonar Project Progress',
+        title: 'Project Progress',
         description: 'Visualizes the progress of a project',
         templateUrl: '{widgetsPath}/sonar/src/project-progress/view.html',
         resolve: {
