@@ -20,7 +20,7 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
             else if (sonarEndpoint.url){
               return sonarApi.getAllProjectsStatistics(sonarEndpoint.url);
             }
-            return 'Please Setup the Widget';
+            return 'Please setup the widget';
           }
         },
         category: 'SonarQube',
@@ -45,7 +45,7 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
             if (apiUrl && config.project && config.metrics){
               return sonarApi.getChartData(apiUrl, config.project, config.metrics, config.timespan);
             } else{
-              return 'Please Setup the Widget';
+              return 'Please setup the widget';
             }
           }
         },
@@ -69,7 +69,7 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
             else if (sonarEndpoint.url && config.projectname1 && config.projectname2){
               return sonarApi.getMetrics(sonarEndpoint.url, config.projectname1,config.projectname2);
             }
-            return 'Please Setup the Widget';
+            return 'Please setup the widget';
           }
         },
         category: 'SonarQube',
@@ -80,7 +80,7 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
         }
       })
       .widget('project-progress', {
-        title: 'Project Progress',
+        title: 'Sonar Project Progress',
         description: 'Visualizes the progress of a project',
         templateUrl: '{widgetsPath}/sonar/src/project-progress/view.html',
         resolve: {
@@ -88,7 +88,7 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
             if (config.projectBeginn){
               return sonarApi.getProjectTime(config.projectBeginn, config.projectEnd);
             }
-            return 'Please Setup the Widget';
+            return 'Please setup the widget';
           }
         },
         controller: 'progress',
@@ -98,7 +98,7 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
         }
       })
       .widget('sonar-my-issues', {
-        title: 'Sonar My Issues',
+        title: 'Sonar Issues of Myself',
         description: 'Displays all issues of yourself',
         templateUrl: '{widgetsPath}/sonar/src/issues/view.html',
         resolve: {
@@ -109,7 +109,7 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
             else if (sonarEndpoint.url){
               return sonarApi.getAllMyIssues(sonarEndpoint.url);
             }
-            return 'Please Setup the Widget';
+            return 'Please setup the widget';
           }
         },
         category: 'SonarQube',
@@ -120,8 +120,8 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
         }
       })
       .widget('sonar-projectquality', {
-        title: 'Sonar Projectquality of a Project',
-        description: 'Displays Status of the Quality Gate, Code Coverage and Blocker Issues',
+        title: 'Sonar Project Quality of a Project',
+        description: 'Displays status of the quality gate, code coverage and blocker issues',
         templateUrl: '{widgetsPath}/sonar/src/projectquality/view.html',
         resolve: {
           data: function(sonarApi, config, sonarEndpoint) {
@@ -131,7 +131,7 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
             else if (sonarEndpoint.url && config.project){
               return sonarApi.getProjectquality(sonarEndpoint.url, config.project);
             }
-            return 'Please Setup the Widget';
+            return 'Please setup the widget';
           }
         },
         category: 'SonarQube',
