@@ -4,7 +4,39 @@ sonarADFWidget.
 factory('sonarApi', sonarApi);
 
 //function factory sonar
-function sonarApi($http, $q) {
+function sonarApi($http, $q, sonarEndpoint) {
+
+  // make a compatibility check set requiredVersion to the last version the api is supported with
+  // eg. Endpoint is removed in v6.1 than set requiredServerVersion to 6.0
+  function isAPISupported(requiredServerVersion){
+    getServerVersion(sonarEndpoint.url).then(function(serverVersion){
+      return checkVersionCompatibilityLowerThan(requiredServerVersion, String(serverVersion));
+    });
+  }
+
+  function checkVersionCompatibilityLowerThan(requiredVersion, actualVersion){
+    var ver1 = requiredVersion.split('.');
+    var ver2 = actualVersion.split('.');
+    if (ver1[0] < ver2[0]){
+      return false;
+    }else if (ver1[0] === ver2[0] && ver1[1] <= ver2[1]){
+      return false
+    }
+    return true;
+  }
+
+  function getServerVersion(sonarUrl){
+    var serverVersionReqUrl = sonarUrl + "/api/server/version";
+    return $http({
+      method: 'GET',
+      url: serverVersionReqUrl,
+      headers: {
+        'Accept': 'application/json'
+      }
+    }).then(function(response) {
+      return response.data;
+    });
+  }
 
   function createApiUrlProjects(sonarUrl) {
     return sonarUrl + '/api/projects/index?format=json';
@@ -23,7 +55,7 @@ function sonarApi($http, $q) {
   }
 
   function createApiUrlQuality(sonarUrl, projectname) {
-       return sonarUrl + '/api/resources?resource=' + projectname + '&metrics=coverage,blocker_violations,quality_gate_details';
+       return sonarUrl + '/api/measures/component?componentKey=' + projectname + '&metricKeys=coverage,blocker_violations,alert_status,sqale_index,vulnerabilities';
   }
 
   function getProjectTime(projectBeginn, projectEnd) {
@@ -112,7 +144,7 @@ function sonarApi($http, $q) {
     var apiUrlProject2 = createApiUrlMetrics(sonarUrl, projectname2);
     var api1 = $http.get(apiUrlProject1);
     var api2 = $http.get(apiUrlProject2);
-    var responsesArray = $q.all([api1, api2])
+    return $q.all([api1, api2])
       .then(function(response) {
         var projectLeft = response[0];
         var projectRight = response[1];
@@ -120,70 +152,72 @@ function sonarApi($http, $q) {
           'projectLeft': projectLeft,
           'projectRight': projectRight
         };
-        return projectMetrics;
+        return {resp: projectMetrics,projectLeft: projectname1, projectRight: projectname2};
       });
-
-    return responsesArray;
   }
 
 
   function getChartData(sonarUrl, projectname, metrics, timespan) {
-
+    var requiredAPIVersion = "6.2";
     var apiUrl;
     var fromDateTime;
     var toDateTime;
     var metricsString = createMetricsString(metrics);
-    if (timespan.type === 'dynamic') {
-      var today = new Date();
-      switch(timespan.dynamic) {
-        case 'week':
-          fromDateTime = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
-          break;
-        case 'month':
-          fromDateTime = new Date(today.getFullYear(), today.getMonth() - 1, today.getDay());
-          break;
-        case 'year':
-          fromDateTime = new Date(today.getFullYear() - 1, today.getMonth(), today.getDay());
-          break;
-      }
-      toDateTime = today;
-    } else if (timespan.type === 'static') {
-      fromDateTime = timespan.fromDateTime;
-      toDateTime = timespan.toDateTime;
-    }
-    if ((fromDateTime && toDateTime)) {
-      apiUrl = sonarUrl + '/api/timemachine?resource=' + projectname + '&metrics=' + metricsString + '&fromDateTime=' + fromDateTime + '&toDateTime=' + toDateTime;
-    } else {
-      apiUrl = sonarUrl + '/api/timemachine?resource=' + projectname + '&metrics=' + metricsString;
-    }
-    return $http({
-      method: 'GET',
-      url: apiUrl,
-      headers: {
-        'Accept': 'application/json'
-      }
-    }).then(function(response) {
-      var metricsArray = [];
-      var responseData = response.data[0];
-      var cols = responseData.cols;
-      var cells = responseData.cells;
-      for (var x = 0; x < cols.length; x++) {
-        var values = [];
-        var dates = [];
-        for (var y = 0; y < cells.length; y++) {
-          dates[y] = cells[y].d.split("T")[0];
-          values[y] = cells[y].v[x];
-
+    if(isAPISupported(requiredAPIVersion)){
+      if (timespan.type === 'dynamic') {
+        var today = new Date();
+        switch(timespan.dynamic) {
+          case 'week':
+            fromDateTime = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+            break;
+          case 'month':
+            fromDateTime = new Date(today.getFullYear(), today.getMonth() - 1, today.getDay());
+            break;
+          case 'year':
+            fromDateTime = new Date(today.getFullYear() - 1, today.getMonth(), today.getDay());
+            break;
         }
-        var metricsObj = {
-          'metric': cols[x].metric,
-          'values': values,
-          'dates': dates
-        };
-        metricsArray.push(metricsObj);
+        toDateTime = today;
+      } else if (timespan.type === 'static') {
+        fromDateTime = timespan.fromDateTime;
+        toDateTime = timespan.toDateTime;
       }
-      return metricsArray;
-    });
+      if ((fromDateTime && toDateTime)) {
+        apiUrl = sonarUrl + '/api/timemachine?resource=' + projectname + '&metrics=' + metricsString + '&fromDateTime=' + fromDateTime + '&toDateTime=' + toDateTime;
+      } else {
+        apiUrl = sonarUrl + '/api/timemachine?resource=' + projectname + '&metrics=' + metricsString;
+      }
+      return $http({
+        method: 'GET',
+        url: apiUrl,
+        headers: {
+          'Accept': 'application/json'
+        }
+      }).then(function(response) {
+        var metricsArray = [];
+        var responseData = response.data[0];
+        var cols = responseData.cols;
+        var cells = responseData.cells;
+        for (var x = 0; x < cols.length; x++) {
+          var values = [];
+          var dates = [];
+          for (var y = 0; y < cells.length; y++) {
+            dates[y] = cells[y].d.split("T")[0];
+            values[y] = cells[y].v[x];
+
+          }
+          var metricsObj = {
+            'metric': cols[x].metric,
+            'values': values,
+            'dates': dates
+          };
+          metricsArray.push(metricsObj);
+        }
+        return metricsArray;
+      });
+    }else{
+      return {support: false, message: "this widget is only compatible with sonar v"+requiredAPIVersion+ " or lower"}
+    }
 
   }
 
@@ -221,19 +255,26 @@ function sonarApi($http, $q) {
     });
   }
 
-  function getAllProjectsStatistics(sonarUrl){
-    var apiUrl = createApiUrlAllProjectsStatistics(sonarUrl);
 
-    return $http({
-      method: 'GET',
-      url: apiUrl,
-      headers: {
-        'Accept': 'application/json'
-      }
-    }).then(function(response) {
-      var projects = response.data;
-      return generateArray(projects);
-    });
+  function getAllProjectsStatistics(sonarUrl){
+    var requiredAPIVersion = '6.2';
+
+    if(isAPISupported(requiredAPIVersion)) {
+      var apiUrl = createApiUrlAllProjectsStatistics(sonarUrl);
+
+      return $http({
+        method: 'GET',
+        url: apiUrl,
+        headers: {
+          'Accept': 'application/json'
+        }
+      }).then(function (response) {
+        var projects = response.data;
+        return generateArray(projects);
+      });
+    }else{
+      return {support: false, message: "this widget is only compatible with sonar v"+requiredAPIVersion+ " or lower"}
+    }
   }
 
   function getAllMyIssues(sonarUrl){
@@ -252,7 +293,6 @@ function sonarApi($http, $q) {
 
   function getProjectquality(sonarUrl, project){
     var apiUrl = createApiUrlQuality(sonarUrl, project);
-
     return $http({
       method: 'GET',
       url: apiUrl,
@@ -260,7 +300,7 @@ function sonarApi($http, $q) {
         'Accept': 'application/json'
       }
     }).then(function(response) {
-      return response.data[0];
+      return {"project":project,"quality_index":response.data.component.measures, "url":sonarUrl};
     });
   }
 
@@ -271,7 +311,8 @@ function sonarApi($http, $q) {
     getMetrics: getMetrics,
     getProjectTime: getProjectTime,
     getAllMyIssues: getAllMyIssues,
-    getProjectquality: getProjectquality
+    getProjectquality: getProjectquality,
+    getServerVersion: getServerVersion
   };
 
 }
