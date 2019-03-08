@@ -6,10 +6,12 @@ sonarADFWidget.
 function sonarLineChart(data, METRIC_NAMES) {
   //initialize controller variable
   var vm = this;
-  if (data) {
-    vm.chart = createChart();
-  }
 
+  if (!data.support){
+    vm.support = data;
+  }else{
+      vm.chart = createChart();
+  }
   function createChart() {
     var options = {
         legend:{
