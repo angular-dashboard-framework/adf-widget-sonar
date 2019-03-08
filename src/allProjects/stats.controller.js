@@ -5,5 +5,10 @@ controller('sonarStatsCtrl', sonarStatsCtrl);
 
 function sonarStatsCtrl(data){
   var vm = this;
-  vm.data = data;
+  if (!data.support){
+    vm.support = data;
+  }else{
+    vm.data = data;
+  }
+
 }
