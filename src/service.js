@@ -306,7 +306,7 @@ function sonarApi($http, $q, sonarEndpoint) {
         return generateArray(projects);
       });
     }else{
-      return {support: false, message: "this widget is only compatible with sonar v"+requiredAPIVersion+ " or lower"}
+      return {support: false, message: "This widget is only compatible with sonar v"+requiredAPIVersion+ " or lower."}
     }
   }
 
@@ -333,7 +333,7 @@ function sonarApi($http, $q, sonarEndpoint) {
         'Accept': 'application/json'
       }
     }).then(function(response) {
-      return {"project":project,"quality_index":response.data.component.measures, "url":sonarUrl};
+      return {"project":project,"quality_index":response.data.component.measures, "url":sonarEndpoint};
     });
   }
 

@@ -162,9 +162,9 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
 angular.module("adf.widget.sonar").run(["$templateCache", function($templateCache) {$templateCache.put("{widgetsPath}/sonar/src/allProjects/edit.html","<form role=form ng-controller=\"editController as vm\"><div class=form-group><label ng-if=!vm.url for=sample>API-URL</label> <input ng-if=!vm.url type=text class=form-control id=sample ng-model=config.apiUrl placeholder=Sonar-URL></div></form>");
 $templateCache.put("{widgetsPath}/sonar/src/allProjects/view.html","<style type=text/css>\n\n  div.sonar-content, div.sonar-content h1, div.sonar-content h4 {\n    text-align: right;\n    color: white;\n  }\n\n  .coverage {\n    background-color: #fcc700;\n    border-radius: 8px;\n  }\n  .linesOfCode {\n    background-color: #1B7DAA;\n    margin-bottom: 2%;\n    border-radius: 8px;\n  }\n  .linesOfCodePencil {\n    float: left;\n    font-size: 3em;\n    margin-top: 25px;\n  }\n  .coverageTask {\n    float: left;\n    font-size: 3em;\n    margin-top: 25px;\n  }\n</style><div><div class=\"sonar-content col-md-12\"><div ng-if=vm.data.linesOfCode class=\"col-md-12 linesOfCode\"><span class=\"glyphicon glyphicon-pencil linesOfCodePencil\"></span><h1>{{(vm.data.linesOfCode | number)||0}}</h1><h4>Lines of code</h4></div><div ng-if=vm.data.linesOfCode class=\"col-md-12 coverage\"><span class=\"glyphicon glyphicon-tasks coverageTask\"></span><h1>{{(vm.data.coverage | number:2)||0}}%</h1><h4>Average test coverage</h4></div></div><div class=\"alert alert-warning\" ng-if=vm.support>{{vm.support.message}}</div></div>");
 $templateCache.put("{widgetsPath}/sonar/src/chart/edit.html","<style type=text/css></style><form role=form><div class=form-group ng-controller=\"editController as vm\"><label ng-if=!vm.url for=sample>API-URL</label><p ng-if=!vm.url><input class=form-control id=sample ng-model=config.apiUrl placeholder=Sonar-URL type=text ng-change=updateProjects()></p><label for=sample>Project</label> (*Required)<p><input id=project name=project type=text class=form-control autocomplete=off placeholder=\"Choose project\" ng-model=config.project required uib-typeahead=\"project.name for project in vm.projects | limitTo:10 | filter:$viewValue\"></p><label for=sample>Timespan</label><p><label class=radio-inline><input name=timespan ng-model=config.timespan.type type=radio value=dynamic>Dynamic</label> <label class=radio-inline><input name=timespan ng-model=config.timespan.type type=radio value=static>Static</label> <label class=radio-inline><input name=timespan ng-model=config.timespan.type type=radio value=no>None</label></p><div ng-if=\"config.timespan.type==\'static\'\"><p class=input-group><input class=form-control datepicker-options=dateOptions is-open=popup1.opened ng-model=config.timespan.fromDateTime placeholder=von show-button-bar=false type=text uib-datepicker-popup={{format}}> <span class=input-group-btn><button class=\"btn btn-default\" ng-click=open1() type=button><i class=\"glyphicon glyphicon-calendar\"></i></button></span></p><p class=input-group><input class=form-control datepicker-options=dateOptions is-open=popup2.opened ng-model=config.timespan.toDateTime placeholder=bis show-button-bar=false type=text uib-datepicker-popup={{format}}> <span class=input-group-btn><button class=\"btn btn-default\" ng-click=open2() type=button><i class=\"glyphicon glyphicon-calendar\"></i></button></span></p></div><p ng-if=\"config.timespan.type==\'dynamic\'\"><label class=radio-inline><input name=timespan.dynamic ng-model=config.timespan.dynamic type=radio value=week>last week</label> <label class=radio-inline><input name=timespan.dynamic ng-model=config.timespan.dynamic type=radio value=month>last month</label> <label class=radio-inline><input name=timespan.dynamic ng-model=config.timespan.dynamic type=radio value=year>last year</label></p><label for=sample>Metric Selection</label><div class=checkbox><label><input ng-model=config.metrics.linesOfCode type=checkbox>Lines of Code</label></div><div class=checkbox><label><input ng-model=config.metrics.technicalDebt type=checkbox>Technical Debt</label></div><div class=checkbox><label><input ng-model=config.metrics.amountTest type=checkbox>Number Unit-Tests</label></div><div class=checkbox><label><input ng-model=config.metrics.testCoverage type=checkbox>Test Coverage</label></div><div class=checkbox><label><input ng-model=config.metrics.issues type=checkbox>Open Issues</label></div><div class=checkbox><label><input ng-model=config.metrics.rulesviolations type=checkbox>Duplicate Code (%)</label></div></div></form>");
-$templateCache.put("{widgetsPath}/sonar/src/chart/view.html","<div class=\"alert alert-info\" ng-if=\"!vm.chart && !vm.support\">Please configure the widget</div><div class=\"alert alert-warning\" ng-if=vm.support>{{vm.support.message}}</div><div ng-if=vm.chart><canvas id=line class=\"chart chart-line\" chart-data=vm.chart.data chart-labels=vm.chart.labels chart-series=vm.chart.series chart-options=vm.chart.options></canvas></div>");
+$templateCache.put("{widgetsPath}/sonar/src/chart/view.html","<div class=\"alert alert-info\" ng-if=!vm.chart>Please configure the widget</div><div ng-if=vm.chart><canvas id=line class=\"chart chart-line\" chart-data=vm.chart.data chart-labels=vm.chart.labels chart-series=vm.chart.series chart-options=vm.chart.options></canvas></div>");
 $templateCache.put("{widgetsPath}/sonar/src/compare/edit.html","<form role=form><div class=form-group ng-controller=\"editController as vm\"><label ng-if=!vm.url for=url>API-URL</label> <input ng-if=!vm.url type=text class=form-control id=url ng-model=config.apiUrl placeholder=Sonar-URL ng-change=updateProjects()> <label for=project1>Choose Project 1</label> <input type=text class=form-control id=project1 ng-model=config.projectname1 ng-required=true placeholder=\"Project 1\" uib-typeahead=\"project.name for project in vm.projects | limitTo:10 | filter:$viewValue\"> <label for=project2>Choose Project 2</label> <input type=text class=form-control id=project2 ng-model=config.projectname2 ng-required=true placeholder=\"Project 2\" uib-typeahead=\"project.name for project in vm.projects | limitTo:10 | filter:$viewValue\"></div></form>");
-$templateCache.put("{widgetsPath}/sonar/src/compare/view.html","<div class=\"alert alert-info\" ng-if=!vm.compareTable>Please configure the widget</div><div class=\"col-md-12 centerText\"><table class=table><tr><th>Metric</th><th>{{vm.projectLeft}}</th><th>{{vm.projectRight}}</th></tr><tr ng-repeat=\"entry in vm.compareTable\"><td>{{entry.metricName}}</td><td>{{entry.projectValLeft}}</td><td>{{entry.projectValRight}}</td></tr></table></div>");
+$templateCache.put("{widgetsPath}/sonar/src/compare/view.html","<div class=\"alert alert-info\" ng-if=!vm.compareTable>Please configure the widget</div><div ng-if=vm.compareTable class=\"col-md-12 centerText\"><table class=table><tr><th>Metric</th><th>{{vm.projectLeft}}</th><th>{{vm.projectRight}}</th></tr><tr ng-repeat=\"entry in vm.compareTable\"><td>{{entry.metricName}}</td><td>{{entry.projectValLeft}}</td><td>{{entry.projectValRight}}</td></tr></table></div>");
 $templateCache.put("{widgetsPath}/sonar/src/issues/edit.html","<div class=form-group><form role=form><div class=form-group ng-controller=\"editController as vm\"><label ng-if=!vm.url for=sample>API-URL</label> <input ng-if=!vm.url type=text class=form-control ng-model=config.apiUrl placeholder=Sonar-URL></div></form><form role=form><div class=form-group><label for=sample>Sorting</label><select class=form-control id=sample ng-model=config.sorting><option disabled>Select your option</option><option value=sortByEffort>Sorting by Effort</option><option value=sortBySeverity>Sorting by Severity</option></select></div></form></div>");
 $templateCache.put("{widgetsPath}/sonar/src/issues/view.html","<style type=text/css>\n    .content {\n        text-align: left;\n        color: black;\n    }\n\n    .tagContent {\n        color: grey;\n        text-align: right;\n    }\n\n    .sonarIssue {\n        background-color: #F0F0F0;\n        margin-bottom: 20px;\n        border: 1px solid black;\n        padding: 2px;\n        border-radius: 1px;\n    }\n\n    .heading {\n        color: #1874CD;\n        font-size: small;\n        margin-top: 1%;\n    }\n\n    .pre-scrollable.content {\n        max-height: 500px;\n        overflow:scroll;\n    }\n\n</style><div ng-if=!vm.projects class=\"alert alert-info\">You don\'t have any issues.</div><div ng-if=vm.projects class=\"pre-scrollable content\"><div class=\"content col-md-12\"><div ng-repeat=\"project in vm.projects| orderBy: vm.sorting\"><div class=heading><span ng-if=project.project class=\"glyphicon glyphicon-folder-open\"></span> {{project.project}} <span ng-if=project.subProject class=\"glyphicon glyphicon-folder-open\"></span> {{project.subProject}} <span ng-if=project.component class=\"glyphicon glyphicon-file\"></span> {{project.component}}<br></div><div class=sonarIssue ng-repeat=\"issue in project.projectIssue track by $index\"><table width=100%><tr><td width=80% colspan=4><b>{{issue.message}}</b></td><td ng-if=issue.line>L{{issue.line}}</td></tr></table><table width=100% style=min-width:450px><tr><td width=15%>{{issue.type| lowercase}}</td><td width=15%><span ng-if=\"issue.severity == \'MAJOR\'\" class=\"glyphicon glyphicon-chevron-up\"></span> <span ng-if=\"issue.severity == \'MINOR\'\" class=\"glyphicon glyphicon-chevron-down\"></span> <span ng-if=\"issue.severity == \'INFO\'\" class=\"glyphicon glyphicon-arrow-down\"></span> <span ng-if=\"issue.severity == \'CRITICAL\'\" class=\"glyphicon glyphicon-arrow-up\"></span> <span ng-if=\"issue.severity == \'BLOCKER\'\" class=\"glyphicon glyphicon-exclamation-sign\"></span> {{issue.severity| lowercase}}</td><td width=15%>{{issue.status| lowercase}}</td><td width=15% ng-if=issue.effort><span class=\"glyphicon glyphicon-time\"></span> {{issue.effort}} effort</td><td class=tagContent><span ng-if=issue.tag class=\"glyphicon glyphicon-tags\"></span> {{issue.tag}}</td></tr></table></div></div></div></div>");
 $templateCache.put("{widgetsPath}/sonar/src/project-progress/edit.html","<form role=form><div class=form-group ng-controller=editController><label for=sample>Project</label> <input type=text class=form-control id=sample ng-model=config.projectname ng-required=true placeholder=\"Project name\"> <label for=sample>Project Timespan</label><p class=input-group><input class=form-control datepicker-options=dateOptions is-open=popup1.opened ng-model=config.projectBeginn placeholder=from show-button-bar=false type=text uib-datepicker-popup={{format}}> <span class=input-group-btn><button class=\"btn btn-default\" ng-click=open1() type=button><i class=\"glyphicon glyphicon-calendar\"></i></button></span></p><p class=input-group><input class=form-control datepicker-options=dateOptions is-open=popup2.opened ng-model=config.projectEnd placeholder=to show-button-bar=false type=text uib-datepicker-popup={{format}}> <span class=input-group-btn><button class=\"btn btn-default\" ng-click=open2() type=button><i class=\"glyphicon glyphicon-calendar\"></i></button></span></p></div></form>");
@@ -384,10 +384,11 @@ sonarADFWidget.
 function sonarLineChart(data, METRIC_NAMES) {
   //initialize controller variable
   var vm = this;
+  console.log(data);
+  console.log(METRIC_NAMES);
 
-  if (!data.support){
-    vm.support = data;
-  }else{
+  if (data){
+      console.log("test123");
       vm.chart = createChart();
   }
   function createChart() {
@@ -412,6 +413,7 @@ function sonarLineChart(data, METRIC_NAMES) {
     }
 
     chart.labels = data[0].dates;
+    console.log(chart);
 
     return chart;
   }
@@ -701,26 +703,28 @@ function sonarApi($http, $q, sonarEndpoint) {
     var apiUrl;
     var fromDateTime;
     var toDateTime;
+    var metricsArray = [];
     var metricsString = createMetricsString(metrics);
-    if(isAPISupported(requiredAPIVersion)){
-      if (timespan.type === 'dynamic') {
-        var today = new Date();
-        switch(timespan.dynamic) {
-          case 'week':
-            fromDateTime = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
-            break;
-          case 'month':
-            fromDateTime = new Date(today.getFullYear(), today.getMonth() - 1, today.getDay());
-            break;
-          case 'year':
-            fromDateTime = new Date(today.getFullYear() - 1, today.getMonth(), today.getDay());
-            break;
-        }
-        toDateTime = today;
-      } else if (timespan.type === 'static') {
-        fromDateTime = timespan.fromDateTime;
-        toDateTime = timespan.toDateTime;
+    if (timespan.type === 'dynamic') {
+      var today = new Date();
+      switch(timespan.dynamic) {
+        case 'week':
+          fromDateTime = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+          break;
+        case 'month':
+          fromDateTime = new Date(today.getFullYear(), today.getMonth() - 1, today.getDay());
+          break;
+        case 'year':
+          fromDateTime = new Date(today.getFullYear() - 1, today.getMonth(), today.getDay());
+          break;
       }
+      toDateTime = today;
+    } else if (timespan.type === 'static') {
+      fromDateTime = timespan.fromDateTime;
+      toDateTime = timespan.toDateTime;
+    }
+    // implementation for api version 6.2 or lower
+    if(isAPISupported(requiredAPIVersion)){
       if ((fromDateTime && toDateTime)) {
         apiUrl = sonarUrl + '/api/timemachine?resource=' + projectname + '&metrics=' + metricsString + '&fromDateTime=' + fromDateTime + '&toDateTime=' + toDateTime;
       } else {
@@ -733,7 +737,6 @@ function sonarApi($http, $q, sonarEndpoint) {
           'Accept': 'application/json'
         }
       }).then(function(response) {
-        var metricsArray = [];
         var responseData = response.data[0];
         var cols = responseData.cols;
         var cells = responseData.cells;
@@ -743,7 +746,6 @@ function sonarApi($http, $q, sonarEndpoint) {
           for (var y = 0; y < cells.length; y++) {
             dates[y] = cells[y].d.split("T")[0];
             values[y] = cells[y].v[x];
-
           }
           var metricsObj = {
             'metric': cols[x].metric,
@@ -754,8 +756,41 @@ function sonarApi($http, $q, sonarEndpoint) {
         }
         return metricsArray;
       });
-    }else{
-      return {support: false, message: "this widget is only compatible with sonar v"+requiredAPIVersion+ " or lower"}
+    // implementation vor api version 6.3 or higher
+    }else {
+
+      if ((fromDateTime && toDateTime)) {
+        //convert for api request YEAR-MONTH-DAY
+        fromDateTime = fromDateTime.toISOString().replace(/T.*/,'').split('-').join('-');
+        toDateTime = toDateTime.toISOString().replace(/T.*/,'').split('-').join('-');
+
+        apiUrl = sonarUrl + '/api/measures/search_history?component=' + projectname + '&metrics=' + metricsString + '&from=' + fromDateTime + '&to=' + toDateTime;
+      }else{
+        apiUrl = sonarUrl + '/api/measures/search_history?component=' + projectname + '&metrics=' + metricsString;
+      }
+      return $http({
+        method: 'GET',
+        url: apiUrl,
+        headers: {
+          'Accept': 'application/json'
+        }
+      }).then(function (response) {
+        response.data.measures.forEach(function(element) {
+          var dates= [];
+          var values = [];
+          element.history.forEach(function(data){
+            dates.push(data.date.split("T")[0]);
+            values.push(data.value);
+          });
+          var metricsObj = {
+            'metric': element.metric,
+            'values': values,
+            'dates': dates
+          };
+          metricsArray.push(metricsObj);
+        });
+        return metricsArray
+      });
     }
 
   }
@@ -812,7 +847,7 @@ function sonarApi($http, $q, sonarEndpoint) {
         return generateArray(projects);
       });
     }else{
-      return {support: false, message: "this widget is only compatible with sonar v"+requiredAPIVersion+ " or lower"}
+      return {support: false, message: "This widget is only compatible with sonar v"+requiredAPIVersion+ " or lower."}
     }
   }
 
@@ -839,7 +874,7 @@ function sonarApi($http, $q, sonarEndpoint) {
         'Accept': 'application/json'
       }
     }).then(function(response) {
-      return {"project":project,"quality_index":response.data.component.measures, "url":sonarUrl};
+      return {"project":project,"quality_index":response.data.component.measures, "url":sonarEndpoint};
     });
   }
 
