@@ -1,9 +1,5 @@
-<div class="alert alert-info" ng-if="!vm.chart && !vm.support">
+<div class="alert alert-info" ng-if="!vm.chart">
   Please configure the widget
-</div>
-
-<div class="alert alert-warning" ng-if="vm.support">
-  {{vm.support.message}}
 </div>
 
 <div ng-if="vm.chart">

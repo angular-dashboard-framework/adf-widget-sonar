@@ -162,26 +162,28 @@ function sonarApi($http, $q, sonarEndpoint) {
     var apiUrl;
     var fromDateTime;
     var toDateTime;
+    var metricsArray = [];
     var metricsString = createMetricsString(metrics);
-    if(isAPISupported(requiredAPIVersion)){
-      if (timespan.type === 'dynamic') {
-        var today = new Date();
-        switch(timespan.dynamic) {
-          case 'week':
-            fromDateTime = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
-            break;
-          case 'month':
-            fromDateTime = new Date(today.getFullYear(), today.getMonth() - 1, today.getDay());
-            break;
-          case 'year':
-            fromDateTime = new Date(today.getFullYear() - 1, today.getMonth(), today.getDay());
-            break;
-        }
-        toDateTime = today;
-      } else if (timespan.type === 'static') {
-        fromDateTime = timespan.fromDateTime;
-        toDateTime = timespan.toDateTime;
+    if (timespan.type === 'dynamic') {
+      var today = new Date();
+      switch(timespan.dynamic) {
+        case 'week':
+          fromDateTime = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+          break;
+        case 'month':
+          fromDateTime = new Date(today.getFullYear(), today.getMonth() - 1, today.getDay());
+          break;
+        case 'year':
+          fromDateTime = new Date(today.getFullYear() - 1, today.getMonth(), today.getDay());
+          break;
       }
+      toDateTime = today;
+    } else if (timespan.type === 'static') {
+      fromDateTime = timespan.fromDateTime;
+      toDateTime = timespan.toDateTime;
+    }
+    // implementation for api version 6.2 or lower
+    if(isAPISupported(requiredAPIVersion)){
       if ((fromDateTime && toDateTime)) {
         apiUrl = sonarUrl + '/api/timemachine?resource=' + projectname + '&metrics=' + metricsString + '&fromDateTime=' + fromDateTime + '&toDateTime=' + toDateTime;
       } else {
@@ -194,7 +196,6 @@ function sonarApi($http, $q, sonarEndpoint) {
           'Accept': 'application/json'
         }
       }).then(function(response) {
-        var metricsArray = [];
         var responseData = response.data[0];
         var cols = responseData.cols;
         var cells = responseData.cells;
@@ -204,7 +205,6 @@ function sonarApi($http, $q, sonarEndpoint) {
           for (var y = 0; y < cells.length; y++) {
             dates[y] = cells[y].d.split("T")[0];
             values[y] = cells[y].v[x];
-
           }
           var metricsObj = {
             'metric': cols[x].metric,
@@ -215,8 +215,41 @@ function sonarApi($http, $q, sonarEndpoint) {
         }
         return metricsArray;
       });
-    }else{
-      return {support: false, message: "this widget is only compatible with sonar v"+requiredAPIVersion+ " or lower"}
+    // implementation vor api version 6.3 or higher
+    }else {
+
+      if ((fromDateTime && toDateTime)) {
+        //convert for api request YEAR-MONTH-DAY
+        fromDateTime = fromDateTime.toISOString().replace(/T.*/,'').split('-').join('-');
+        toDateTime = toDateTime.toISOString().replace(/T.*/,'').split('-').join('-');
+
+        apiUrl = sonarUrl + '/api/measures/search_history?component=' + projectname + '&metrics=' + metricsString + '&from=' + fromDateTime + '&to=' + toDateTime;
+      }else{
+        apiUrl = sonarUrl + '/api/measures/search_history?component=' + projectname + '&metrics=' + metricsString;
+      }
+      return $http({
+        method: 'GET',
+        url: apiUrl,
+        headers: {
+          'Accept': 'application/json'
+        }
+      }).then(function (response) {
+        response.data.measures.forEach(function(element) {
+          var dates= [];
+          var values = [];
+          element.history.forEach(function(data){
+            dates.push(data.date.split("T")[0]);
+            values.push(data.value);
+          });
+          var metricsObj = {
+            'metric': element.metric,
+            'values': values,
+            'dates': dates
+          };
+          metricsArray.push(metricsObj);
+        });
+        return metricsArray
+      });
     }
 
   }
