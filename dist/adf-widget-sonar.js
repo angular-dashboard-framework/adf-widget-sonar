@@ -159,10 +159,10 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
 
   }]);
 
-angular.module("adf.widget.sonar").run(["$templateCache", function($templateCache) {$templateCache.put("{widgetsPath}/sonar/src/chart/edit.html","<style type=text/css></style><form role=form><div class=form-group ng-controller=\"editController as vm\"><label ng-if=!vm.url for=sample>API-URL</label><p ng-if=!vm.url><input class=form-control id=sample ng-model=config.apiUrl placeholder=Sonar-URL type=text ng-change=updateProjects()></p><label for=sample>Project</label> (*Required)<p><input id=project name=project type=text class=form-control autocomplete=off placeholder=\"Choose project\" ng-model=config.project required uib-typeahead=\"project.name for project in vm.projects | limitTo:10 | filter:$viewValue\"></p><label for=sample>Timespan</label><p><label class=radio-inline><input name=timespan ng-model=config.timespan.type type=radio value=dynamic>Dynamic</label> <label class=radio-inline><input name=timespan ng-model=config.timespan.type type=radio value=static>Static</label> <label class=radio-inline><input name=timespan ng-model=config.timespan.type type=radio value=no>None</label></p><div ng-if=\"config.timespan.type==\'static\'\"><p class=input-group><input class=form-control datepicker-options=dateOptions is-open=popup1.opened ng-model=config.timespan.fromDateTime placeholder=von show-button-bar=false type=text uib-datepicker-popup={{format}}> <span class=input-group-btn><button class=\"btn btn-default\" ng-click=open1() type=button><i class=\"glyphicon glyphicon-calendar\"></i></button></span></p><p class=input-group><input class=form-control datepicker-options=dateOptions is-open=popup2.opened ng-model=config.timespan.toDateTime placeholder=bis show-button-bar=false type=text uib-datepicker-popup={{format}}> <span class=input-group-btn><button class=\"btn btn-default\" ng-click=open2() type=button><i class=\"glyphicon glyphicon-calendar\"></i></button></span></p></div><p ng-if=\"config.timespan.type==\'dynamic\'\"><label class=radio-inline><input name=timespan.dynamic ng-model=config.timespan.dynamic type=radio value=week>last week</label> <label class=radio-inline><input name=timespan.dynamic ng-model=config.timespan.dynamic type=radio value=month>last month</label> <label class=radio-inline><input name=timespan.dynamic ng-model=config.timespan.dynamic type=radio value=year>last year</label></p><label for=sample>Metric Selection</label><div class=checkbox><label><input ng-model=config.metrics.linesOfCode type=checkbox>Lines of Code</label></div><div class=checkbox><label><input ng-model=config.metrics.technicalDebt type=checkbox>Technical Debt</label></div><div class=checkbox><label><input ng-model=config.metrics.amountTest type=checkbox>Number Unit-Tests</label></div><div class=checkbox><label><input ng-model=config.metrics.testCoverage type=checkbox>Test Coverage</label></div><div class=checkbox><label><input ng-model=config.metrics.issues type=checkbox>Open Issues</label></div><div class=checkbox><label><input ng-model=config.metrics.rulesviolations type=checkbox>Duplicate Code (%)</label></div></div></form>");
-$templateCache.put("{widgetsPath}/sonar/src/chart/view.html","<div class=\"alert alert-info\" ng-if=!vm.chart>Please configure the widget</div><div ng-if=vm.chart><canvas id=line class=\"chart chart-line\" chart-data=vm.chart.data chart-labels=vm.chart.labels chart-series=vm.chart.series chart-options=vm.chart.options></canvas></div>");
-$templateCache.put("{widgetsPath}/sonar/src/allProjects/edit.html","<form role=form ng-controller=\"editController as vm\"><div class=form-group><label ng-if=!vm.url for=sample>API-URL</label> <input ng-if=!vm.url type=text class=form-control id=sample ng-model=config.apiUrl placeholder=Sonar-URL></div></form>");
+angular.module("adf.widget.sonar").run(["$templateCache", function($templateCache) {$templateCache.put("{widgetsPath}/sonar/src/allProjects/edit.html","<form role=form ng-controller=\"editController as vm\"><div class=form-group><label ng-if=!vm.url for=sample>API-URL</label> <input ng-if=!vm.url type=text class=form-control id=sample ng-model=config.apiUrl placeholder=Sonar-URL></div></form>");
 $templateCache.put("{widgetsPath}/sonar/src/allProjects/view.html","<style type=text/css>\n\n  div.sonar-content, div.sonar-content h1, div.sonar-content h4 {\n    text-align: right;\n    color: white;\n  }\n\n  .coverage {\n    background-color: #fcc700;\n    border-radius: 8px;\n  }\n  .linesOfCode {\n    background-color: #1B7DAA;\n    margin-bottom: 2%;\n    border-radius: 8px;\n  }\n  .linesOfCodePencil {\n    float: left;\n    font-size: 3em;\n    margin-top: 25px;\n  }\n  .coverageTask {\n    float: left;\n    font-size: 3em;\n    margin-top: 25px;\n  }\n</style><div><div class=\"sonar-content col-md-12\"><div ng-if=vm.data.linesOfCode class=\"col-md-12 linesOfCode\"><span class=\"glyphicon glyphicon-pencil linesOfCodePencil\"></span><h1>{{(vm.data.linesOfCode | number)||0}}</h1><h4>Lines of code</h4></div><div ng-if=vm.data.linesOfCode class=\"col-md-12 coverage\"><span class=\"glyphicon glyphicon-tasks coverageTask\"></span><h1>{{(vm.data.coverage | number:2)||0}}%</h1><h4>Average test coverage</h4></div></div><div class=\"alert alert-warning\" ng-if=vm.support>{{vm.support.message}}</div></div>");
+$templateCache.put("{widgetsPath}/sonar/src/chart/edit.html","<style type=text/css></style><form role=form><div class=form-group ng-controller=\"editController as vm\"><label ng-if=!vm.url for=sample>API-URL</label><p ng-if=!vm.url><input class=form-control id=sample ng-model=config.apiUrl placeholder=Sonar-URL type=text ng-change=updateProjects()></p><label for=sample>Project</label> (*Required)<p><input id=project name=project type=text class=form-control autocomplete=off placeholder=\"Choose project\" ng-model=config.project required uib-typeahead=\"project.name for project in vm.projects | limitTo:10 | filter:$viewValue\"></p><label for=sample>Timespan</label><p><label class=radio-inline><input name=timespan ng-model=config.timespan.type type=radio value=dynamic>Dynamic</label> <label class=radio-inline><input name=timespan ng-model=config.timespan.type type=radio value=static>Static</label> <label class=radio-inline><input name=timespan ng-model=config.timespan.type type=radio value=no>None</label></p><div ng-if=\"config.timespan.type==\'static\'\"><p class=input-group><input class=form-control datepicker-options=dateOptions is-open=popup1.opened ng-model=config.timespan.fromDateTime placeholder=von show-button-bar=false type=text uib-datepicker-popup={{format}}> <span class=input-group-btn><button class=\"btn btn-default\" ng-click=open1() type=button><i class=\"glyphicon glyphicon-calendar\"></i></button></span></p><p class=input-group><input class=form-control datepicker-options=dateOptions is-open=popup2.opened ng-model=config.timespan.toDateTime placeholder=bis show-button-bar=false type=text uib-datepicker-popup={{format}}> <span class=input-group-btn><button class=\"btn btn-default\" ng-click=open2() type=button><i class=\"glyphicon glyphicon-calendar\"></i></button></span></p></div><p ng-if=\"config.timespan.type==\'dynamic\'\"><label class=radio-inline><input name=timespan.dynamic ng-model=config.timespan.dynamic type=radio value=week>last week</label> <label class=radio-inline><input name=timespan.dynamic ng-model=config.timespan.dynamic type=radio value=month>last month</label> <label class=radio-inline><input name=timespan.dynamic ng-model=config.timespan.dynamic type=radio value=year>last year</label></p><label for=sample>Metric Selection</label><div class=checkbox><label><input ng-model=config.metrics.linesOfCode type=checkbox>Lines of Code</label></div><div class=checkbox><label><input ng-model=config.metrics.technicalDebt type=checkbox>Technical Debt</label></div><div class=checkbox><label><input ng-model=config.metrics.amountTest type=checkbox>Number Unit-Tests</label></div><div class=checkbox><label><input ng-model=config.metrics.testCoverage type=checkbox>Test Coverage</label></div><div class=checkbox><label><input ng-model=config.metrics.issues type=checkbox>Open Issues</label></div><div class=checkbox><label><input ng-model=config.metrics.rulesviolations type=checkbox>Duplicate Code (%)</label></div></div></form>");
+$templateCache.put("{widgetsPath}/sonar/src/chart/view.html","<div class=\"alert alert-info\" ng-if=!vm.chart>Please configure the widget</div><div ng-if=vm.chart><canvas id=line class=\"chart chart-line\" chart-data=vm.chart.data chart-labels=vm.chart.labels chart-series=vm.chart.series chart-options=vm.chart.options></canvas></div>");
 $templateCache.put("{widgetsPath}/sonar/src/compare/edit.html","<form role=form><div class=form-group ng-controller=\"editController as vm\"><label ng-if=!vm.url for=url>API-URL</label> <input ng-if=!vm.url type=text class=form-control id=url ng-model=config.apiUrl placeholder=Sonar-URL ng-change=updateProjects()> <label for=project1>Choose Project 1</label> <input type=text class=form-control id=project1 ng-model=config.projectname1 ng-required=true placeholder=\"Project 1\" uib-typeahead=\"project.name for project in vm.projects | limitTo:10 | filter:$viewValue\"> <label for=project2>Choose Project 2</label> <input type=text class=form-control id=project2 ng-model=config.projectname2 ng-required=true placeholder=\"Project 2\" uib-typeahead=\"project.name for project in vm.projects | limitTo:10 | filter:$viewValue\"></div></form>");
 $templateCache.put("{widgetsPath}/sonar/src/compare/view.html","<div class=\"alert alert-info\" ng-if=!vm.compareTable>Please configure the widget</div><div ng-if=vm.compareTable class=\"col-md-12 centerText\"><table class=table><tr><th>Metric</th><th>{{vm.projectLeft}}</th><th>{{vm.projectRight}}</th></tr><tr ng-repeat=\"entry in vm.compareTable\"><td>{{entry.metricName}}</td><td>{{entry.projectValLeft}}</td><td>{{entry.projectValRight}}</td></tr></table></div>");
 $templateCache.put("{widgetsPath}/sonar/src/project-progress/edit.html","<form role=form><div class=form-group ng-controller=editController><label for=sample>Project</label> <input type=text class=form-control id=sample ng-model=config.projectname ng-required=true placeholder=\"Project name\"> <label for=sample>Project Timespan</label><p class=input-group><input class=form-control datepicker-options=dateOptions is-open=popup1.opened ng-model=config.projectBeginn placeholder=from show-button-bar=false type=text uib-datepicker-popup={{format}}> <span class=input-group-btn><button class=\"btn btn-default\" ng-click=open1() type=button><i class=\"glyphicon glyphicon-calendar\"></i></button></span></p><p class=input-group><input class=form-control datepicker-options=dateOptions is-open=popup2.opened ng-model=config.projectEnd placeholder=to show-button-bar=false type=text uib-datepicker-popup={{format}}> <span class=input-group-btn><button class=\"btn btn-default\" ng-click=open2() type=button><i class=\"glyphicon glyphicon-calendar\"></i></button></span></p></div></form>");
@@ -188,25 +188,26 @@ sonarADFWidget.controller('qualityCtrl', qualityCtrl);
 
 function qualityCtrl(data) {
     var vm = this;
-    vm.project = data.project.split(':')[1];;
-    vm.url = data.url;
+    if(data!="Please Setup the Widget") {
 
+      vm.project = data.project.split(':')[1];
+      vm.url = data.url;
 
-    angular.forEach(data.quality_index, function (metric) {
+      angular.forEach(data.quality_index, function (metric) {
         if (metric.metric === "coverage") //going through all entries with if/elseif since there could miss some entries. So there is no special order
-            vm.coverage = metric.value;
+          vm.coverage = metric.value;
         else if (metric.metric === "blocker_violations")
-            vm.blocker = metric.value;
+          vm.blocker = metric.value;
         else if (metric.metric === "alert_status") {
-            vm.qualityGateStatus = metric.value;
-        }
-        else if (metric.metric === "sqale_index") {
+          vm.qualityGateStatus = metric.value;
+        } else if (metric.metric === "sqale_index") {
           vm.technicalDept = metric.value;
-        }
-        else if (metric.metric === "vulnerabilities") {
+        } else if (metric.metric === "vulnerabilities") {
           vm.vulnerabilities = metric.value;
         }
-    });
+      });
+    }
+
 }
 qualityCtrl.$inject = ["data"];
 
@@ -383,22 +384,6 @@ function editController($scope, $http, sonarApi, sonarEndpoint) {
 
 
 sonarADFWidget.
-controller('sonarStatsCtrl', sonarStatsCtrl);
-
-function sonarStatsCtrl(data){
-  var vm = this;
-  if (!data.support){
-    vm.support = data;
-  }else{
-    vm.data = data;
-  }
-
-}
-sonarStatsCtrl.$inject = ["data"];
-
-
-
-sonarADFWidget.
   controller('sonarLineChart', sonarLineChart);
 //setup controller
 function sonarLineChart(data, METRIC_NAMES) {
@@ -536,6 +521,22 @@ function editController($scope, sonarApi, sonarEndpoint) {
   }
 }
 editController.$inject = ["$scope", "sonarApi", "sonarEndpoint"];
+
+
+
+sonarADFWidget.
+controller('sonarStatsCtrl', sonarStatsCtrl);
+
+function sonarStatsCtrl(data){
+  var vm = this;
+  if (!data.support){
+    vm.support = data;
+  }else{
+    vm.data = data;
+  }
+
+}
+sonarStatsCtrl.$inject = ["data"];
 
 
 
