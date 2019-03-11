@@ -4,8 +4,9 @@ sonarADFWidget.controller('qualityCtrl', qualityCtrl);
 
 function qualityCtrl(data) {
     var vm = this;
-    vm.project = data.project;
+    vm.project = data.project.split(':')[1];;
     vm.url = data.url;
+
 
     angular.forEach(data.quality_index, function (metric) {
         if (metric.metric === "coverage") //going through all entries with if/elseif since there could miss some entries. So there is no special order

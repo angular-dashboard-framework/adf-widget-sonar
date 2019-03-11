@@ -333,7 +333,7 @@ function sonarApi($http, $q, sonarEndpoint) {
         'Accept': 'application/json'
       }
     }).then(function(response) {
-      return {"project":project,"quality_index":response.data.component.measures, "url":sonarEndpoint};
+      return {"project":project,"quality_index":response.data.component.measures, "url":sonarEndpoint.url};
     });
   }
 

@@ -384,11 +384,8 @@ sonarADFWidget.
 function sonarLineChart(data, METRIC_NAMES) {
   //initialize controller variable
   var vm = this;
-  console.log(data);
-  console.log(METRIC_NAMES);
 
   if (data){
-      console.log("test123");
       vm.chart = createChart();
   }
   function createChart() {
@@ -406,15 +403,11 @@ function sonarLineChart(data, METRIC_NAMES) {
       class: "chart-line",
       options: options
     };
-
     for (var i = 0; i < data.length; i++) {
       chart.series.push(METRIC_NAMES[data[i].metric]);
       chart.data.push(data[i].values);
     }
-
     chart.labels = data[0].dates;
-    console.log(chart);
-
     return chart;
   }
 }

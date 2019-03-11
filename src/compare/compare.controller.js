@@ -4,20 +4,23 @@ sonarADFWidget.controller('compare', compare);
 
 function compare(data) {
   var vm = this;
-  vm.projectLeft = data.projectLeft.split(':')[1];
-  vm.projectRight = data.projectRight.split(':')[1];
-  var projectLeftMetrics = data.resp.projectLeft.data.component.measures;
-  var projectRightMetrics = data.resp.projectRight.data.component.measures;
-  var compareTable = [];
-  angular.forEach(projectLeftMetrics, function (metricLeft) {
-    angular.forEach(projectRightMetrics, function (metricRight) {
-      if (metricRight.metric === metricLeft.metric) {
-        compareTable.push({metricName: metricLeft.metric,
-          projectValLeft: metricLeft.value, projectValRight: metricRight.value});
-      }
+  if(data != "Please Setup the Widget"){
+    vm.projectLeft = data.projectLeft.split(':')[1];
+    vm.projectRight = data.projectRight.split(':')[1];
+    var projectLeftMetrics = data.resp.projectLeft.data.component.measures;
+    var projectRightMetrics = data.resp.projectRight.data.component.measures;
+    var compareTable = [];
+    angular.forEach(projectLeftMetrics, function (metricLeft) {
+      angular.forEach(projectRightMetrics, function (metricRight) {
+        if (metricRight.metric === metricLeft.metric) {
+          compareTable.push({metricName: metricLeft.metric,
+            projectValLeft: metricLeft.value, projectValRight: metricRight.value});
+        }
+      });
     });
-  });
-  vm.compareTable = compareTable;
+    vm.compareTable = compareTable;
+  }
+
 }
 
 sonarADFWidget.controller('editController', editController);
