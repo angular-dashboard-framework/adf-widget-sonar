@@ -6,7 +6,6 @@ sonarADFWidget.
 function sonarLineChart(data, METRIC_NAMES) {
   //initialize controller variable
   var vm = this;
-  console.log(data);
   if (data != "Please Setup the Widget"){
       vm.chart = createChart();
   }
