@@ -28,15 +28,19 @@
 
 <div>
   <div class="sonar-content col-md-12">
-    <div class="col-md-12 linesOfCode">
+
+    <div ng-if="vm.data.linesOfCode" class="col-md-12 linesOfCode">
       <span class="glyphicon glyphicon-pencil linesOfCodePencil"></span>
       <h1>{{(vm.data.linesOfCode | number)||0}}</h1>
       <h4>Lines of code</h4>
     </div>
-    <div class="col-md-12 coverage">
+    <div ng-if="vm.data.linesOfCode" class="col-md-12 coverage">
       <span class="glyphicon glyphicon-tasks coverageTask"></span>
       <h1>{{(vm.data.coverage | number:2)||0}}%</h1>
       <h4>Average test coverage</h4>
     </div>
+  </div>
+  <div class="alert alert-warning" ng-if="vm.support">
+    {{vm.support.message}}
   </div>
 </div>

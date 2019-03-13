@@ -1,18 +1,19 @@
-<div class="alert alert-info" ng-if="!vm.projectLeft">
+<div class="alert alert-info" ng-if="!vm.compareTable">
   Please configure the widget
 </div>
-<div ng-if="vm.projectLeft" class="col-md-12 centerText">
+<div ng-if="vm.compareTable" class="col-md-12 centerText">
+
 
   <table class="table">
     <tr>
       <th>Metric</th>
-      <th>{{vm.projectLeft.data.component.name}}</th>
-      <th>{{vm.projectRight.data.component.name}}</th>
+      <th>{{vm.projectLeft}}</th>
+      <th>{{vm.projectRight}}</th>
     </tr>
-    <tr ng-repeat="metric in vm.projectLeft.data.component.measures">
-      <td>{{vm.METRIC_NAMES[metric.metric]}}</td>
-      <td>{{vm.projectLeft.data.component.measures[$index].value}}</td>
-      <td>{{vm.projectRight.data.component.measures[$index].value}}</td>
+    <tr ng-repeat="entry in vm.compareTable">
+      <td>{{entry.metricName}}</td>
+      <td>{{entry.projectValLeft}}</td>
+      <td>{{entry.projectValRight}}</td>
     </tr>
   </table>
 
