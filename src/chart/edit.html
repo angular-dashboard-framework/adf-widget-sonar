@@ -7,7 +7,7 @@
              ng-change="updateProjects()">
     </p>
     <label for="sample">Project</label>
-    (*Required)
+    (*required)
     <p>
       <input id="project" name="project" type="text" class="form-control" autocomplete="off"
              placeholder="Choose project" ng-model="config.project" required="true"
@@ -26,7 +26,7 @@
     <div ng-if="config.timespan.type=='static'">
       <p class="input-group">
         <input class="form-control" datepicker-options="dateOptions" is-open="popup1.opened"
-               ng-model="config.timespan.fromDateTime" placeholder="von" show-button-bar="false" type="text"
+               ng-model="config.timespan.fromDateTime" placeholder="from" show-button-bar="false" type="text"
                uib-datepicker-popup="{{format}}"/>
         <span class="input-group-btn">
         <button class="btn btn-default" ng-click="open1()" type="button">
@@ -36,7 +36,7 @@
       </p>
       <p class="input-group">
         <input class="form-control" datepicker-options="dateOptions" is-open="popup2.opened"
-               ng-model="config.timespan.toDateTime" placeholder="bis" show-button-bar="false" type="text"
+               ng-model="config.timespan.toDateTime" placeholder="to" show-button-bar="false" type="text"
                uib-datepicker-popup="{{format}}"/>
         <span class="input-group-btn">
         <button class="btn btn-default" ng-click="open2()" type="button">
@@ -47,11 +47,11 @@
     </div>
     <p ng-if="config.timespan.type=='dynamic'">
       <label class="radio-inline">
-        <input name="timespan.dynamic" ng-model="config.timespan.dynamic" type="radio" value="week">last week</label>
+        <input name="timespan.dynamic" ng-model="config.timespan.dynamic" type="radio" value="week">Last Week</label>
       <label class="radio-inline">
-        <input name="timespan.dynamic" ng-model="config.timespan.dynamic" type="radio" value="month">last month</label>
+        <input name="timespan.dynamic" ng-model="config.timespan.dynamic" type="radio" value="month">Last Month</label>
       <label class="radio-inline">
-        <input name="timespan.dynamic" ng-model="config.timespan.dynamic" type="radio" value="year">last year</label>
+        <input name="timespan.dynamic" ng-model="config.timespan.dynamic" type="radio" value="year">Last Year</label>
     </p>
     <label for="sample">Metric Selection</label>
     <div class="checkbox">
