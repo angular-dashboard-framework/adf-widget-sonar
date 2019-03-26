@@ -9,7 +9,8 @@
   ],
   "description": "widget to display sonar statistics",
   "devDependencies": {
-    "gulp": "^3.8.11",
+    "del": "^1.1.1",
+    "gulp": "^3.9.1",
     "gulp-angular-filesort": "^1.1.1",
     "gulp-angular-templatecache": "^1.6.0",
     "gulp-concat": "^2.5.2",
@@ -26,10 +27,9 @@
     "gulp-ng-annotate": "^0.5.2",
     "gulp-rename": "^1.2.0",
     "gulp-replace": "^0.5.3",
-    "ng-annotate-adf-plugin": "^0.1.2",
     "gulp-uglify": "^1.1.0",
     "jshint-stylish": "^1.0.1",
-    "wiredep": "~2.2.2",
-    "del": "^1.1.1"
+    "ng-annotate-adf-plugin": "^0.1.2",
+    "wiredep": "~2.2.2"
   }
 }
