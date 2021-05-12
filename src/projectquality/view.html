@@ -1,26 +1,33 @@
 <style type="text/css">
 
-  div.sonar-content, div.sonar-content h1, div.sonar-content h5 a{
+  div.sonar-content, div.sonar-content p, div.sonar-content h5 a {
     text-align: right;
     color: white;
   }
 
-  h4#headline{
+  div.sonar-content p {
+    font-size: 36px;
+    margin: 20px 0 10px;
+  }
+
+  h3#headline {
     color: white;
     border: 2px solid white;
     padding: 8px;
+    margin-bottom: 15px;
     text-align: center;
+    font-size: 18px;
   }
 
 
-   div.sonar-content .statusQualitygate,div.sonar-content > .codeCoverage,
-   div.sonar-content > .blockerIssues,div.sonar-content >.technicalDept,div.sonar-content >.vulnerabilities {
+  div.sonar-content .statusQualitygate, div.sonar-content > .codeCoverage,
+  div.sonar-content > .blockerIssues, div.sonar-content > .technicalDept, div.sonar-content > .vulnerabilities {
     border: 2px solid white;
     margin-bottom: 2%;
   }
 
-  div.sonar-content >.codeCoverage,div.sonar-content >.technicalDept,div.sonar-content >.blockerIssues,
-  div.sonar-content >.vulnerabilities, div.sonar-content>h4{
+  div.sonar-content > .codeCoverage, div.sonar-content > .technicalDept, div.sonar-content > .blockerIssues,
+  div.sonar-content > .vulnerabilities, div.sonar-content > h3 {
     background-color: #1B7DAA;
   }
 
@@ -46,6 +53,12 @@
   .unknown {
     background-color: #777777;
   }
+
+  .statusQualitygate > h4 {
+    font-size: 30px;
+    margin-top: 20px;
+    margin-bottom: 28px;
+  }
 </style>
 
 
@@ -54,31 +67,31 @@
 </div>
 
 <div class="sonar-content col-md-12" ng-if="vm.project">
-  <h4 id="headline">{{vm.project}}</h4>
+  <h3 id="headline">{{vm.project}}</h3>
   <div ng-switch on="vm.qualityGateStatus">
     <div ng-switch-when="OK">
       <div class="ok col-md-6 statusQualitygate">
         <span class="glyphicon  glyphicon-ok-sign glyphiconStyle"></span>
-        <h1>OK</h1>
+        <h4>OK</h4>
         <h5>Quality Gate</h5>
       </div>
     </div>
     <div ng-switch-when="ERROR">
       <div class="error col-md-6 statusQualitygate">
-        <h2>Failed</h2>
+        <h4>Failed</h4>
         <h5>Quality Gate</h5>
       </div>
     </div>
     <div ng-switch-when="WARNING">
       <div class="warning col-md-6 statusQualitygate">
-        <h2>Warning</h2>
+        <h4>Warning</h4>
         <h5>Quality Gate</h5>
       </div>
     </div>
 
     <div ng-switch-default>
       <div class="unknown col-md-6 statusQualitygate">
-        <h2>unknown</h2>
+        <h4>unknown</h4>
         <h5>Quality Gate</h5>
       </div>
     </div>
@@ -87,24 +100,24 @@
 
   <div class="col-md-6 vulnerabilities">
     <span class="glyphicon  glyphicon glyphicon-lock glyphiconStyle"></span>
-    <h1>{{vm.vulnerabilities}}</h1>
+    <p>{{vm.vulnerabilities}}</p>
     <h5>Vulnerabilities</a></h5>
   </div>
 
 
   <div class="col-md-6 codeCoverage">
     <span class="glyphicon glyphicon-tasks glyphiconStyle"></span>
-    <h1>{{vm.coverage||"/"}}</h1>
+    <p>{{vm.coverage || "/"}}</p>
     <h5>Code Coverage</a></h5>
   </div>
   <div class="col-md-6 blockerIssues">
     <span class="glyphicon glyphicon-exclamation-sign glyphiconStyle"></span>
-    <h1>{{vm.blocker||"/"}}</h1>
+    <p>{{vm.blocker || "/"}}</p>
     <h5>Blocker Issues</a></h5>
   </div>
   <div class="col-md-12 technicalDept">
     <span class="glyphicon glyphicon-time glyphiconStyle"></span>
-    <h1>{{vm.technicalDept+" days" ||"/"}}</h1>
+    <p>{{vm.technicalDept + " days" || "/"}}</p>
     <h5>Technical Dept</a></h5>
   </div>
   <a href="https://docs.sonarqube.org/latest/user-guide/metric-definitions/" class="pull-right">about metrics</a>
