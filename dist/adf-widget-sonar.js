@@ -3,7 +3,7 @@
 //app initialisation with dependencies
 var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.js', 'ui.bootstrap', 'ui.bootstrap.datepicker', 'angular-svg-round-progressbar'])
   .constant("sonarEndpoint", {
-    "url": "https://builds.apache.org/analysis"
+    "url": "https://ecosystem.cloudogu.com/sonar"
   })
   .constant("METRIC_NAMES", {
     "open_issues": "Open Issues",
@@ -165,17 +165,17 @@ var sonarADFWidget = angular.module('adf.widget.sonar', ['adf.provider', 'chart.
 
 angular.module("adf.widget.sonar").run(["$templateCache", function($templateCache) {$templateCache.put("{widgetsPath}/sonar/src/allProjects/edit.html","<form role=form ng-controller=\"editController as vm\"><div class=form-group><label ng-if=!vm.url for=sample>API-URL</label> <input ng-if=!vm.url type=text class=form-control id=sample ng-model=config.apiUrl placeholder=Sonar-URL></div></form>");
 $templateCache.put("{widgetsPath}/sonar/src/allProjects/view.html","<style type=text/css>\n\n  div.sonar-content, div.sonar-content h1, div.sonar-content h4 {\n    text-align: right;\n    color: white;\n  }\n\n  .coverage {\n    background-color: #fcc700;\n    border-radius: 8px;\n  }\n  .linesOfCode {\n    background-color: #1B7DAA;\n    margin-bottom: 2%;\n    border-radius: 8px;\n  }\n  .linesOfCodePencil {\n    float: left;\n    font-size: 3em;\n    margin-top: 25px;\n  }\n  .coverageTask {\n    float: left;\n    font-size: 3em;\n    margin-top: 25px;\n  }\n</style><div><div class=\"sonar-content col-md-12\"><div ng-if=vm.data.linesOfCode class=\"col-md-12 linesOfCode\"><span class=\"glyphicon glyphicon-pencil linesOfCodePencil\"></span><h1>{{(vm.data.linesOfCode | number)||0}}</h1><h4>Lines of code</h4></div><div ng-if=vm.data.linesOfCode class=\"col-md-12 coverage\"><span class=\"glyphicon glyphicon-tasks coverageTask\"></span><h1>{{(vm.data.coverage | number:2)||0}}%</h1><h4>Average test coverage</h4></div></div><div class=\"alert alert-warning\" ng-if=vm.support>{{vm.support.message}}</div></div>");
-$templateCache.put("{widgetsPath}/sonar/src/compare/edit.html","<form role=form><div class=form-group ng-controller=\"editController as vm\"><label ng-if=!vm.url for=url>API-URL</label> <input ng-if=!vm.url type=text class=form-control id=url ng-model=config.apiUrl placeholder=Sonar-URL ng-change=updateProjects()> <label for=project1>Choose Project 1</label> <input type=text class=form-control id=project1 ng-model=config.projectname1 ng-required=true placeholder=\"Project 1\" uib-typeahead=\"project.name for project in vm.projects | limitTo:10 | filter:$viewValue\"> <label for=project2>Choose Project 2</label> <input type=text class=form-control id=project2 ng-model=config.projectname2 ng-required=true placeholder=\"Project 2\" uib-typeahead=\"project.name for project in vm.projects | limitTo:10 | filter:$viewValue\"></div></form>");
-$templateCache.put("{widgetsPath}/sonar/src/compare/view.html","<div class=\"alert alert-info\" ng-if=!vm.compareTable>Please configure the widget</div><div ng-if=vm.compareTable class=\"col-md-12 centerText\"><table class=table><tr><th>Metric</th><th>{{vm.projectLeft}}</th><th>{{vm.projectRight}}</th></tr><tr ng-repeat=\"entry in vm.compareTable\"><td>{{entry.metricName}}</td><td>{{entry.projectValLeft}}</td><td>{{entry.projectValRight}}</td></tr></table></div>");
-$templateCache.put("{widgetsPath}/sonar/src/project-progress/edit.html","<form role=form><div class=form-group ng-controller=editController><label for=sample>Project</label> <input type=text class=form-control id=sample ng-model=config.projectname ng-required=true placeholder=\"Project name\"> <label for=sample>Project Timespan</label><p class=input-group><input class=form-control datepicker-options=dateOptions is-open=popup1.opened ng-model=config.projectBeginn placeholder=from show-button-bar=false type=text uib-datepicker-popup={{format}}> <span class=input-group-btn><button class=\"btn btn-default\" ng-click=open1() type=button><i class=\"glyphicon glyphicon-calendar\"></i></button></span></p><p class=input-group><input class=form-control datepicker-options=dateOptions is-open=popup2.opened ng-model=config.projectEnd placeholder=to show-button-bar=false type=text uib-datepicker-popup={{format}}> <span class=input-group-btn><button class=\"btn btn-default\" ng-click=open2() type=button><i class=\"glyphicon glyphicon-calendar\"></i></button></span></p></div></form>");
-$templateCache.put("{widgetsPath}/sonar/src/project-progress/view.html","<style>\n  .daysLeft {\n    text-align: center;\n    max-height: 700px;\n  }\n\n  .info {\n    width: 65%;\n    margin-left: 17.5%;\n    margin-top: -80%;\n    margin-bottom: 35%;\n  }\n\n</style><div class=\"alert alert-info\" ng-if=!vm.result.daysLeft>Please configure the widget</div><div ng-if=vm.result.daysLeft class=daysLeft><div ng-init=\"progress=vm.progressProperties\"><round-progress max=progress.max current=progress.current color=\"{{ (current / max < 0.75) ? \'1B7DAA\' : \'1B7DAA\' }}\" bgcolor=#F5F5F5 radius=360 stroke=67 semi=false rounded=true clockwise=true responsive=true duration=800 animation=easeInOutQuart animation-delay=0></round-progress></div><div class=info><h1 style=font-size:2em>{{config.projectname}}</h1><h1>{{vm.result.daysLeft}}/{{vm.result.maxDays}}</h1><p>Days left</p></div></div>");
-$templateCache.put("{widgetsPath}/sonar/src/issues/edit.html","<div class=form-group><form role=form><div class=form-group ng-controller=\"editController as vm\"><label ng-if=!vm.url for=sample>API-URL</label> <input ng-if=!vm.url type=text class=form-control ng-model=config.apiUrl placeholder=Sonar-URL></div></form><form role=form><div class=form-group><label for=sample>Sorting</label><select class=form-control id=sample ng-model=config.sorting><option disabled>Select your option</option><option value=sortByEffort>Sorting by Effort</option><option value=sortBySeverity>Sorting by Severity</option></select></div></form></div>");
-$templateCache.put("{widgetsPath}/sonar/src/issues/view.html","<style type=text/css>\n    .content {\n        text-align: left;\n        color: black;\n    }\n\n    .tagContent {\n        color: grey;\n        text-align: right;\n    }\n\n    .sonarIssue {\n        background-color: #F0F0F0;\n        margin-bottom: 20px;\n        border: 1px solid black;\n        padding: 2px;\n        border-radius: 1px;\n    }\n\n    .heading {\n        color: #1874CD;\n        font-size: small;\n        margin-top: 1%;\n    }\n\n    .pre-scrollable.content {\n        max-height: 500px;\n        overflow:scroll;\n    }\n\n</style><div ng-if=!vm.projects class=\"alert alert-info\">You don\'t have any issues.</div><div ng-if=vm.projects class=\"pre-scrollable content\"><div class=\"content col-md-12\"><div ng-repeat=\"project in vm.projects| orderBy: vm.sorting\"><div class=heading><span ng-if=project.project class=\"glyphicon glyphicon-folder-open\"></span> {{project.project}} <span ng-if=project.subProject class=\"glyphicon glyphicon-folder-open\"></span> {{project.subProject}} <span ng-if=project.component class=\"glyphicon glyphicon-file\"></span> {{project.component}}<br></div><div class=sonarIssue ng-repeat=\"issue in project.projectIssue track by $index\"><table width=100%><tr><td width=80% colspan=4><b>{{issue.message}}</b></td><td ng-if=issue.line>L{{issue.line}}</td></tr></table><table width=100% style=min-width:450px><tr><td width=15%>{{issue.type| lowercase}}</td><td width=15%><span ng-if=\"issue.severity == \'MAJOR\'\" class=\"glyphicon glyphicon-chevron-up\"></span> <span ng-if=\"issue.severity == \'MINOR\'\" class=\"glyphicon glyphicon-chevron-down\"></span> <span ng-if=\"issue.severity == \'INFO\'\" class=\"glyphicon glyphicon-arrow-down\"></span> <span ng-if=\"issue.severity == \'CRITICAL\'\" class=\"glyphicon glyphicon-arrow-up\"></span> <span ng-if=\"issue.severity == \'BLOCKER\'\" class=\"glyphicon glyphicon-exclamation-sign\"></span> {{issue.severity| lowercase}}</td><td width=15%>{{issue.status| lowercase}}</td><td width=15% ng-if=issue.effort><span class=\"glyphicon glyphicon-time\"></span> {{issue.effort}} effort</td><td class=tagContent><span ng-if=issue.tag class=\"glyphicon glyphicon-tags\"></span> {{issue.tag}}</td></tr></table></div></div></div></div>");
 $templateCache.put("{widgetsPath}/sonar/src/chart/edit.html","<style type=text/css></style><form role=form><div class=form-group ng-controller=\"editController as vm\"><label ng-if=!vm.url for=sample>API-URL</label><p ng-if=!vm.url><input class=form-control id=sample ng-model=config.apiUrl placeholder=Sonar-URL type=text ng-change=updateProjects()></p><label for=sample>Project</label> (*required)<p><input id=project name=project type=text class=form-control autocomplete=off placeholder=\"Choose project\" ng-model=config.project required uib-typeahead=\"project.name for project in vm.projects | limitTo:10 | filter:$viewValue\"></p><label for=sample>Timespan</label><p><label class=radio-inline><input name=timespan ng-model=config.timespan.type type=radio value=dynamic>Dynamic</label> <label class=radio-inline><input name=timespan ng-model=config.timespan.type type=radio value=static>Static</label> <label class=radio-inline><input name=timespan ng-model=config.timespan.type type=radio value=no>None</label></p><div ng-if=\"config.timespan.type==\'static\'\"><p class=input-group><input class=form-control datepicker-options=dateOptions is-open=popup1.opened ng-model=config.timespan.fromDateTime placeholder=from show-button-bar=false type=text uib-datepicker-popup={{format}}> <span class=input-group-btn><button class=\"btn btn-default\" ng-click=open1() type=button><i class=\"glyphicon glyphicon-calendar\"></i></button></span></p><p class=input-group><input class=form-control datepicker-options=dateOptions is-open=popup2.opened ng-model=config.timespan.toDateTime placeholder=to show-button-bar=false type=text uib-datepicker-popup={{format}}> <span class=input-group-btn><button class=\"btn btn-default\" ng-click=open2() type=button><i class=\"glyphicon glyphicon-calendar\"></i></button></span></p></div><p ng-if=\"config.timespan.type==\'dynamic\'\"><label class=radio-inline><input name=timespan.dynamic ng-model=config.timespan.dynamic type=radio value=week>Last Week</label> <label class=radio-inline><input name=timespan.dynamic ng-model=config.timespan.dynamic type=radio value=month>Last Month</label> <label class=radio-inline><input name=timespan.dynamic ng-model=config.timespan.dynamic type=radio value=year>Last Year</label></p><label for=sample>Metric Selection</label><div class=checkbox><label><input ng-model=config.metrics.linesOfCode type=checkbox>Lines of Code</label></div><div class=checkbox><label><input ng-model=config.metrics.technicalDebt type=checkbox>Technical Debt</label></div><div class=checkbox><label><input ng-model=config.metrics.amountTest type=checkbox>Number Unit-Tests</label></div><div class=checkbox><label><input ng-model=config.metrics.testCoverage type=checkbox>Test Coverage</label></div><div class=checkbox><label><input ng-model=config.metrics.issues type=checkbox>Open Issues</label></div><div class=checkbox><label><input ng-model=config.metrics.rulesviolations type=checkbox>Duplicate Code (%)</label></div></div></form>");
 $templateCache.put("{widgetsPath}/sonar/src/chart/view.html","<div class=\"alert alert-info\" ng-if=!vm.chart>Please configure the widget</div><div ng-if=vm.chart><canvas id=line class=\"chart chart-line\" chart-data=vm.chart.data chart-labels=vm.chart.labels chart-series=vm.chart.series chart-options=vm.chart.options></canvas></div>");
+$templateCache.put("{widgetsPath}/sonar/src/compare/edit.html","<form role=form><div class=form-group ng-controller=\"editController as vm\"><label ng-if=!vm.url for=url>API-URL</label> <input ng-if=!vm.url type=text class=form-control id=url ng-model=config.apiUrl placeholder=Sonar-URL ng-change=updateProjects()> <label for=project1>Choose Project 1</label> <input type=text class=form-control id=project1 ng-model=config.projectname1 ng-required=true placeholder=\"Project 1\" uib-typeahead=\"project.name for project in vm.projects | limitTo:10 | filter:$viewValue\"> <label for=project2>Choose Project 2</label> <input type=text class=form-control id=project2 ng-model=config.projectname2 ng-required=true placeholder=\"Project 2\" uib-typeahead=\"project.name for project in vm.projects | limitTo:10 | filter:$viewValue\"></div></form>");
+$templateCache.put("{widgetsPath}/sonar/src/compare/view.html","<div class=\"alert alert-info\" ng-if=!vm.compareTable>Please configure the widget</div><div ng-if=vm.compareTable class=\"col-md-12 centerText\"><table class=table><tr><th>Metric</th><th>{{vm.projectLeft}}</th><th>{{vm.projectRight}}</th></tr><tr ng-repeat=\"entry in vm.compareTable\"><td>{{entry.metricName}}</td><td>{{entry.projectValLeft}}</td><td>{{entry.projectValRight}}</td></tr></table></div>");
+$templateCache.put("{widgetsPath}/sonar/src/issues/edit.html","<div class=form-group><form role=form><div class=form-group ng-controller=\"editController as vm\"><label ng-if=!vm.url for=sample>API-URL</label> <input ng-if=!vm.url type=text class=form-control ng-model=config.apiUrl placeholder=Sonar-URL></div></form><form role=form><div class=form-group><label for=sample>Sorting</label><select class=form-control id=sample ng-model=config.sorting><option disabled>Select your option</option><option value=sortByEffort>Sorting by Effort</option><option value=sortBySeverity>Sorting by Severity</option></select></div></form></div>");
+$templateCache.put("{widgetsPath}/sonar/src/issues/view.html","<style type=text/css>\n    .content {\n        text-align: left;\n        color: black;\n    }\n\n    .tagContent {\n        color: grey;\n        text-align: right;\n    }\n\n    .sonarIssue {\n        background-color: #F0F0F0;\n        margin-bottom: 20px;\n        border: 1px solid black;\n        padding: 2px;\n        border-radius: 1px;\n    }\n\n    .heading {\n        color: #1874CD;\n        font-size: small;\n        margin-top: 1%;\n    }\n\n    .pre-scrollable.content {\n        max-height: 500px;\n        overflow:scroll;\n    }\n\n</style><div ng-if=!vm.projects class=\"alert alert-info\">You don\'t have any issues.</div><div ng-if=vm.projects class=\"pre-scrollable content\"><div class=\"content col-md-12\"><div ng-repeat=\"project in vm.projects| orderBy: vm.sorting\"><div class=heading><span ng-if=project.project class=\"glyphicon glyphicon-folder-open\"></span> {{project.project}} <span ng-if=project.subProject class=\"glyphicon glyphicon-folder-open\"></span> {{project.subProject}} <span ng-if=project.component class=\"glyphicon glyphicon-file\"></span> {{project.component}}<br></div><div class=sonarIssue ng-repeat=\"issue in project.projectIssue track by $index\"><table width=100%><tr><td width=80% colspan=4><b>{{issue.message}}</b></td><td ng-if=issue.line>L{{issue.line}}</td></tr></table><table width=100% style=min-width:450px><tr><td width=15%>{{issue.type| lowercase}}</td><td width=15%><span ng-if=\"issue.severity == \'MAJOR\'\" class=\"glyphicon glyphicon-chevron-up\"></span> <span ng-if=\"issue.severity == \'MINOR\'\" class=\"glyphicon glyphicon-chevron-down\"></span> <span ng-if=\"issue.severity == \'INFO\'\" class=\"glyphicon glyphicon-arrow-down\"></span> <span ng-if=\"issue.severity == \'CRITICAL\'\" class=\"glyphicon glyphicon-arrow-up\"></span> <span ng-if=\"issue.severity == \'BLOCKER\'\" class=\"glyphicon glyphicon-exclamation-sign\"></span> {{issue.severity| lowercase}}</td><td width=15%>{{issue.status| lowercase}}</td><td width=15% ng-if=issue.effort><span class=\"glyphicon glyphicon-time\"></span> {{issue.effort}} effort</td><td class=tagContent><span ng-if=issue.tag class=\"glyphicon glyphicon-tags\"></span> {{issue.tag}}</td></tr></table></div></div></div></div>");
+$templateCache.put("{widgetsPath}/sonar/src/project-progress/edit.html","<form role=form><div class=form-group ng-controller=editController><label for=sample>Project</label> <input type=text class=form-control id=sample ng-model=config.projectname ng-required=true placeholder=\"Project name\"> <label for=sample>Project Timespan</label><p class=input-group><input class=form-control datepicker-options=dateOptions is-open=popup1.opened ng-model=config.projectBeginn placeholder=from show-button-bar=false type=text uib-datepicker-popup={{format}}> <span class=input-group-btn><button class=\"btn btn-default\" ng-click=open1() type=button><i class=\"glyphicon glyphicon-calendar\"></i></button></span></p><p class=input-group><input class=form-control datepicker-options=dateOptions is-open=popup2.opened ng-model=config.projectEnd placeholder=to show-button-bar=false type=text uib-datepicker-popup={{format}}> <span class=input-group-btn><button class=\"btn btn-default\" ng-click=open2() type=button><i class=\"glyphicon glyphicon-calendar\"></i></button></span></p></div></form>");
+$templateCache.put("{widgetsPath}/sonar/src/project-progress/view.html","<style>\n  .daysLeft {\n    text-align: center;\n    max-height: 700px;\n  }\n\n  .info {\n    width: 65%;\n    margin-left: 17.5%;\n    margin-top: -80%;\n    margin-bottom: 35%;\n  }\n\n</style><div class=\"alert alert-info\" ng-if=!vm.result.daysLeft>Please configure the widget</div><div ng-if=vm.result.daysLeft class=daysLeft><div ng-init=\"progress=vm.progressProperties\"><round-progress max=progress.max current=progress.current color=\"{{ (current / max < 0.75) ? \'1B7DAA\' : \'1B7DAA\' }}\" bgcolor=#F5F5F5 radius=360 stroke=67 semi=false rounded=true clockwise=true responsive=true duration=800 animation=easeInOutQuart animation-delay=0></round-progress></div><div class=info><h1 style=font-size:2em>{{config.projectname}}</h1><h1>{{vm.result.daysLeft}}/{{vm.result.maxDays}}</h1><p>Days left</p></div></div>");
 $templateCache.put("{widgetsPath}/sonar/src/projectquality/edit.html","<style type=text/css></style><form role=form><div class=form-group ng-controller=\"editController as vm\"><label ng-if=!vm.url for=sample>API-URL</label><p ng-if=!vm.url><input class=form-control id=sample ng-model=config.apiUrl placeholder=Sonar-URL type=text ng-change=updateProjects()></p><label for=sample>Project</label> (*required)<p><input id=project name=project type=text class=form-control autocomplete=off placeholder=\"Choose project\" ng-model=config.project required uib-typeahead=\"project.name for project in vm.projects | limitTo:10 | filter:$viewValue\"></p></div></form>");
-$templateCache.put("{widgetsPath}/sonar/src/projectquality/view.html","<style type=text/css>\n\n  div.sonar-content, div.sonar-content h1, div.sonar-content h5 a{\n    text-align: right;\n    color: white;\n  }\n\n  h4#headline{\n    color: white;\n    border: 2px solid white;\n    padding: 8px;\n    text-align: center;\n  }\n\n\n   div.sonar-content .statusQualitygate,div.sonar-content > .codeCoverage,\n   div.sonar-content > .blockerIssues,div.sonar-content >.technicalDept,div.sonar-content >.vulnerabilities {\n    border: 2px solid white;\n    margin-bottom: 2%;\n  }\n\n  div.sonar-content >.codeCoverage,div.sonar-content >.technicalDept,div.sonar-content >.blockerIssues,\n  div.sonar-content >.vulnerabilities, div.sonar-content>h4{\n    background-color: #1B7DAA;\n  }\n\n\n  .glyphiconStyle {\n    float: left;\n    font-size: 2.5em;\n    margin-top: 25px;\n  }\n\n  .error {\n    background-color: #E43B53;\n  }\n\n  .warning {\n    background-color: #DD7800;\n  }\n\n  .ok {\n    background-color: #B5CA00;\n  }\n\n  .unknown {\n    background-color: #777777;\n  }\n</style><div class=\"alert alert-info\" ng-if=!vm.project>Please configure the widget</div><div class=\"sonar-content col-md-12\" ng-if=vm.project><h4 id=headline>{{vm.project}}</h4><div ng-switch on=vm.qualityGateStatus><div ng-switch-when=OK><div class=\"ok col-md-6 statusQualitygate\"><span class=\"glyphicon glyphicon-ok-sign glyphiconStyle\"></span><h1>OK</h1><h5>Quality Gate</h5></div></div><div ng-switch-when=ERROR><div class=\"error col-md-6 statusQualitygate\"><h2>Failed</h2><h5>Quality Gate</h5></div></div><div ng-switch-when=WARNING><div class=\"warning col-md-6 statusQualitygate\"><h2>Warning</h2><h5>Quality Gate</h5></div></div><div ng-switch-default><div class=\"unknown col-md-6 statusQualitygate\"><h2>unknown</h2><h5>Quality Gate</h5></div></div></div><div class=\"col-md-6 vulnerabilities\"><span class=\"glyphicon glyphicon glyphicon-lock glyphiconStyle\"></span><h1>{{vm.vulnerabilities}}</h1><h5>Vulnerabilities</h5></div><div class=\"col-md-6 codeCoverage\"><span class=\"glyphicon glyphicon-tasks glyphiconStyle\"></span><h1>{{vm.coverage||\"/\"}}</h1><h5>Code Coverage</h5></div><div class=\"col-md-6 blockerIssues\"><span class=\"glyphicon glyphicon-exclamation-sign glyphiconStyle\"></span><h1>{{vm.blocker||\"/\"}}</h1><h5>Blocker Issues</h5></div><div class=\"col-md-12 technicalDept\"><span class=\"glyphicon glyphicon-time glyphiconStyle\"></span><h1>{{vm.technicalDept+\" days\" ||\"/\"}}</h1><h5>Technical Dept</h5></div><a href=\"https://docs.sonarqube.org/latest/user-guide/metric-definitions/\" class=pull-right>about metrics</a></div>");
-$templateCache.put("{widgetsPath}/sonar/src/version/view.html","<div><h2>{{vm.version}}</h2></div>");}]);
+$templateCache.put("{widgetsPath}/sonar/src/projectquality/view.html","<style type=text/css>\n\n  div.sonar-content, div.sonar-content p, div.sonar-content h5 a {\n    text-align: right;\n    color: white;\n  }\n\n  div.sonar-content p {\n    font-size: 36px;\n    margin: 20px 0 10px;\n  }\n\n  h3#headline {\n    color: white;\n    border: 2px solid white;\n    padding: 8px;\n    margin-bottom: 15px;\n    text-align: center;\n    font-size: 18px;\n  }\n\n\n  div.sonar-content .statusQualitygate, div.sonar-content > .codeCoverage,\n  div.sonar-content > .blockerIssues, div.sonar-content > .technicalDept, div.sonar-content > .vulnerabilities {\n    border: 2px solid white;\n    margin-bottom: 2%;\n  }\n\n  div.sonar-content > .codeCoverage, div.sonar-content > .technicalDept, div.sonar-content > .blockerIssues,\n  div.sonar-content > .vulnerabilities, div.sonar-content > h3 {\n    background-color: #1B7DAA;\n  }\n\n\n  .glyphiconStyle {\n    float: left;\n    font-size: 2.5em;\n    margin-top: 25px;\n  }\n\n  .error {\n    background-color: #E43B53;\n  }\n\n  .warning {\n    background-color: #DD7800;\n  }\n\n  .ok {\n    background-color: #B5CA00;\n  }\n\n  .unknown {\n    background-color: #777777;\n  }\n\n  .statusQualitygate > h4 {\n    font-size: 30px;\n    margin-top: 20px;\n    margin-bottom: 28px;\n  }\n</style><div class=\"alert alert-info\" ng-if=!vm.project>Please configure the widget</div><div class=\"sonar-content col-md-12\" ng-if=vm.project><h3 id=headline>{{vm.project}}</h3><div ng-switch on=vm.qualityGateStatus><div ng-switch-when=OK><div class=\"ok col-md-6 statusQualitygate\"><span class=\"glyphicon glyphicon-ok-sign glyphiconStyle\"></span><h4>OK</h4><h5>Quality Gate</h5></div></div><div ng-switch-when=ERROR><div class=\"error col-md-6 statusQualitygate\"><h4>Failed</h4><h5>Quality Gate</h5></div></div><div ng-switch-when=WARNING><div class=\"warning col-md-6 statusQualitygate\"><h4>Warning</h4><h5>Quality Gate</h5></div></div><div ng-switch-default><div class=\"unknown col-md-6 statusQualitygate\"><h4>unknown</h4><h5>Quality Gate</h5></div></div></div><div class=\"col-md-6 vulnerabilities\"><span class=\"glyphicon glyphicon glyphicon-lock glyphiconStyle\"></span><p>{{vm.vulnerabilities}}</p><h5>Vulnerabilities</h5></div><div class=\"col-md-6 codeCoverage\"><span class=\"glyphicon glyphicon-tasks glyphiconStyle\"></span><p>{{vm.coverage || \"/\"}}</p><h5>Code Coverage</h5></div><div class=\"col-md-6 blockerIssues\"><span class=\"glyphicon glyphicon-exclamation-sign glyphiconStyle\"></span><p>{{vm.blocker || \"/\"}}</p><h5>Blocker Issues</h5></div><div class=\"col-md-12 technicalDept\"><span class=\"glyphicon glyphicon-time glyphiconStyle\"></span><p>{{vm.technicalDept + \" days\" || \"/\"}}</p><h5>Technical Dept</h5></div><a href=\"https://docs.sonarqube.org/latest/user-guide/metric-definitions/\" class=pull-right>about metrics</a></div>");
+$templateCache.put("{widgetsPath}/sonar/src/version/view.html","<style type=text/css>\n  h3 {\n    font-size: 30px;\n    margin-top: 20px;\n    margin-bottom: 10px;\n  }\n</style><div><h3>{{vm.version}}</h3></div>");}]);
 
 
 sonarADFWidget.controller('version', version);
@@ -215,6 +215,176 @@ function qualityCtrl(data) {
 
 }
 qualityCtrl.$inject = ["data"];
+
+
+
+sonarADFWidget.
+controller('progress', progress);
+
+function progress(data, roundProgressConfig){
+  var vm = this;
+  roundProgressConfig.max = data.maxDays;
+  roundProgressConfig.current = data.daysLeft;
+  vm.result = data;
+  vm.progressProperties=roundProgressConfig;
+}
+progress.$inject = ["data", "roundProgressConfig"];
+
+
+
+sonarADFWidget.
+        controller('sonarIssueCtrl', sonarIssueCtrl);
+
+function sonarIssueCtrl(data, config) {
+    var vm = this;
+
+    if (data.length != 0) {
+
+        angular.forEach(data, function (issue) {
+
+            // Preparing displaying of issue components
+            if (issue.subProject)
+                issue.subProject = issue.subProject.slice(issue.component.search(":") + 1).replace(":", " ");
+            if (issue.project)
+                issue.project = issue.project.slice(issue.component.search(":") + 1).replace(":", " "); //eig wird noch "parent" abgeschnitten, aber keine Ahnung warum!
+            if (issue.component)
+                issue.component = issue.component.slice(issue.component.lastIndexOf(":") + 1);
+
+            if (issue.type)
+                issue.type = issue.type.replace("_", " ");
+
+            for (var i = 0; i < issue.tags.length; i++) {
+                if (i == 0)
+                    issue.tag = issue.tags[i];
+                else
+                    issue.tag = issue.tag + ", " + issue.tags[i];
+            }
+        });
+
+        // sorting the elements by project, subProject and component
+        // has the structure: projects [project, subProject, component, projectIssues[]]
+        vm.projects = new Array();
+        vm.projects[0] = new Object();
+
+        var counter = 0; //counting the projects
+        var counter2 = 1; //counting the projectIssues per project
+        for (var i = 0; i < data.length; i++) {
+
+            if (data[i].status !== "CLOSED") {
+
+                if (!vm.projects[counter].project) { //first initialisation of an object
+                    vm.projects[counter] = new Object();
+                    vm.projects[counter].project = data[i].project;
+                    vm.projects[counter].subProject = data[i].subProject;
+                    vm.projects[counter].component = data[i].component;
+                    vm.projects[counter].projectIssue = new Array();
+                    vm.projects[counter].projectIssue[0] = data[i];
+                } else { //if there is already an object in vm.projects
+                    if (data[i].project === vm.projects[counter].project
+                            && data[i].subProject === vm.projects[counter].subProject
+                            && data[i].component === vm.projects[counter].component) {
+                        vm.projects[counter].projectIssue[counter2] = data[i];
+                        counter2 = counter2 + 1;
+                    } else {
+                        counter = counter + 1;
+                        counter2 = 1;
+                        vm.projects[counter] = new Object();
+                        vm.projects[counter].project = data[i].project;
+                        vm.projects[counter].subProject = data[i].subProject;
+                        vm.projects[counter].component = data[i].component;
+                        vm.projects[counter].projectIssue = new Array;
+                        vm.projects[counter].projectIssue[0] = data[i];
+                    }
+                }
+            }
+        }
+    }
+
+    vm.sorting = function (issue) {
+        if (config.sorting == "sortBySeverity")
+            return vm.sortBySeverity(issue);
+        else
+            return vm.sortByEffort(issue);
+    };
+
+
+    vm.sortBySeverity = function (issue) {
+        var severity = 0; //4=blocker, 3=critical, 2=major, 1=minor, 0=info
+        for (var i = 0; i < issue.projectIssue.length; i++) {
+            if (issue.projectIssue[i].severity === "BLOCKER")
+                severity = 4;
+            else if (issue.projectIssue[i].severity === "CRITICAL" && severity < 3)
+                severity = 3;
+            else if (issue.projectIssue[i].severity === "MAJOR" && severity < 2)
+                severity = 2;
+            else if (issue.projectIssue[i].severity === "MINOR" && severity < 1)
+                severity = 1;
+        }
+        return -severity;
+    };
+
+    vm.sortByEffort = function (issue) {
+        var effort = 0;
+        for (var i = 0; i < issue.projectIssue.length; i++) {
+            if (issue.projectIssue[i].effort && effort < parseInt(issue.projectIssue[i].effort.slice(0, issue.projectIssue[i].effort.search("m"))))
+                effort = parseInt(issue.projectIssue[i].effort.slice(0, issue.projectIssue[i].effort.search("m")));
+        }
+        return -effort;
+    };
+}
+sonarIssueCtrl.$inject = ["data", "config"];
+
+
+
+sonarADFWidget.controller('compare', compare);
+
+function compare(data) {
+  var vm = this;
+  if(data != "Please Setup the Widget"){
+    vm.projectLeft = data.projectLeft.split(':')[1];
+    vm.projectRight = data.projectRight.split(':')[1];
+    var projectLeftMetrics = data.resp.projectLeft.data.component.measures;
+    var projectRightMetrics = data.resp.projectRight.data.component.measures;
+    var compareTable = [];
+    angular.forEach(projectLeftMetrics, function (metricLeft) {
+      angular.forEach(projectRightMetrics, function (metricRight) {
+        if (metricRight.metric === metricLeft.metric) {
+          compareTable.push({metricName: metricLeft.metric,
+            projectValLeft: metricLeft.value, projectValRight: metricRight.value});
+        }
+      });
+    });
+    vm.compareTable = compareTable;
+  }
+
+}
+compare.$inject = ["data"];
+
+sonarADFWidget.controller('editController', editController);
+
+function editController($scope, $http, sonarApi, sonarEndpoint) {
+  var vm = this;
+
+  $scope.updateProjects = function() {
+    var url;
+    if ($scope.config.apiUrl) {
+      url = $scope.config.apiUrl;
+    } else {
+      url = sonarEndpoint.url;
+    }
+    vm.projects = [];
+    sonarApi.getProjects(url).then(function(data) {
+      data.forEach(function(project) {
+        var proj = {
+          name: project.k
+        };
+        vm.projects.push(proj);
+      });
+    });
+  };
+  $scope.updateProjects();
+
+}
 
 
 
@@ -355,177 +525,7 @@ function editController($scope, sonarApi, sonarEndpoint) {
     return '';
   }
 }
-
-
-
-sonarADFWidget.
-        controller('sonarIssueCtrl', sonarIssueCtrl);
-
-function sonarIssueCtrl(data, config) {
-    var vm = this;
-
-    if (data.length != 0) {
-
-        angular.forEach(data, function (issue) {
-
-            // Preparing displaying of issue components
-            if (issue.subProject)
-                issue.subProject = issue.subProject.slice(issue.component.search(":") + 1).replace(":", " ");
-            if (issue.project)
-                issue.project = issue.project.slice(issue.component.search(":") + 1).replace(":", " "); //eig wird noch "parent" abgeschnitten, aber keine Ahnung warum!
-            if (issue.component)
-                issue.component = issue.component.slice(issue.component.lastIndexOf(":") + 1);
-
-            if (issue.type)
-                issue.type = issue.type.replace("_", " ");
-
-            for (var i = 0; i < issue.tags.length; i++) {
-                if (i == 0)
-                    issue.tag = issue.tags[i];
-                else
-                    issue.tag = issue.tag + ", " + issue.tags[i];
-            }
-        });
-
-        // sorting the elements by project, subProject and component
-        // has the structure: projects [project, subProject, component, projectIssues[]]
-        vm.projects = new Array();
-        vm.projects[0] = new Object();
-
-        var counter = 0; //counting the projects
-        var counter2 = 1; //counting the projectIssues per project
-        for (var i = 0; i < data.length; i++) {
-
-            if (data[i].status !== "CLOSED") {
-
-                if (!vm.projects[counter].project) { //first initialisation of an object
-                    vm.projects[counter] = new Object();
-                    vm.projects[counter].project = data[i].project;
-                    vm.projects[counter].subProject = data[i].subProject;
-                    vm.projects[counter].component = data[i].component;
-                    vm.projects[counter].projectIssue = new Array();
-                    vm.projects[counter].projectIssue[0] = data[i];
-                } else { //if there is already an object in vm.projects
-                    if (data[i].project === vm.projects[counter].project
-                            && data[i].subProject === vm.projects[counter].subProject
-                            && data[i].component === vm.projects[counter].component) {
-                        vm.projects[counter].projectIssue[counter2] = data[i];
-                        counter2 = counter2 + 1;
-                    } else {
-                        counter = counter + 1;
-                        counter2 = 1;
-                        vm.projects[counter] = new Object();
-                        vm.projects[counter].project = data[i].project;
-                        vm.projects[counter].subProject = data[i].subProject;
-                        vm.projects[counter].component = data[i].component;
-                        vm.projects[counter].projectIssue = new Array;
-                        vm.projects[counter].projectIssue[0] = data[i];
-                    }
-                }
-            }
-        }
-    }
-
-    vm.sorting = function (issue) {
-        if (config.sorting == "sortBySeverity")
-            return vm.sortBySeverity(issue);
-        else
-            return vm.sortByEffort(issue);
-    };
-
-
-    vm.sortBySeverity = function (issue) {
-        var severity = 0; //4=blocker, 3=critical, 2=major, 1=minor, 0=info
-        for (var i = 0; i < issue.projectIssue.length; i++) {
-            if (issue.projectIssue[i].severity === "BLOCKER")
-                severity = 4;
-            else if (issue.projectIssue[i].severity === "CRITICAL" && severity < 3)
-                severity = 3;
-            else if (issue.projectIssue[i].severity === "MAJOR" && severity < 2)
-                severity = 2;
-            else if (issue.projectIssue[i].severity === "MINOR" && severity < 1)
-                severity = 1;
-        }
-        return -severity;
-    };
-
-    vm.sortByEffort = function (issue) {
-        var effort = 0;
-        for (var i = 0; i < issue.projectIssue.length; i++) {
-            if (issue.projectIssue[i].effort && effort < parseInt(issue.projectIssue[i].effort.slice(0, issue.projectIssue[i].effort.search("m"))))
-                effort = parseInt(issue.projectIssue[i].effort.slice(0, issue.projectIssue[i].effort.search("m")));
-        }
-        return -effort;
-    };
-}
-sonarIssueCtrl.$inject = ["data", "config"];
-
-
-
-sonarADFWidget.
-controller('progress', progress);
-
-function progress(data, roundProgressConfig){
-  var vm = this;
-  roundProgressConfig.max = data.maxDays;
-  roundProgressConfig.current = data.daysLeft;
-  vm.result = data;
-  vm.progressProperties=roundProgressConfig;
-}
-progress.$inject = ["data", "roundProgressConfig"];
-
-
-
-sonarADFWidget.controller('compare', compare);
-
-function compare(data) {
-  var vm = this;
-  if(data != "Please Setup the Widget"){
-    vm.projectLeft = data.projectLeft.split(':')[1];
-    vm.projectRight = data.projectRight.split(':')[1];
-    var projectLeftMetrics = data.resp.projectLeft.data.component.measures;
-    var projectRightMetrics = data.resp.projectRight.data.component.measures;
-    var compareTable = [];
-    angular.forEach(projectLeftMetrics, function (metricLeft) {
-      angular.forEach(projectRightMetrics, function (metricRight) {
-        if (metricRight.metric === metricLeft.metric) {
-          compareTable.push({metricName: metricLeft.metric,
-            projectValLeft: metricLeft.value, projectValRight: metricRight.value});
-        }
-      });
-    });
-    vm.compareTable = compareTable;
-  }
-
-}
-compare.$inject = ["data"];
-
-sonarADFWidget.controller('editController', editController);
-
-function editController($scope, $http, sonarApi, sonarEndpoint) {
-  var vm = this;
-
-  $scope.updateProjects = function() {
-    var url;
-    if ($scope.config.apiUrl) {
-      url = $scope.config.apiUrl;
-    } else {
-      url = sonarEndpoint.url;
-    }
-    vm.projects = [];
-    sonarApi.getProjects(url).then(function(data) {
-      data.forEach(function(project) {
-        var proj = {
-          name: project.k
-        };
-        vm.projects.push(proj);
-      });
-    });
-  };
-  $scope.updateProjects();
-
-}
-editController.$inject = ["$scope", "$http", "sonarApi", "sonarEndpoint"];
+editController.$inject = ["$scope", "sonarApi", "sonarEndpoint"];
 
 
 
